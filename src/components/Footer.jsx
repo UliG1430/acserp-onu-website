@@ -1,21 +1,53 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faTwitter, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
-function Footer() {
+const Footer = () => {
   return (
-    <footer className="bg-blue-900 text-white py-4">
-      <div className="container mx-auto flex flex-col items-center">
-        <p>&copy; {new Date().getFullYear()} Simulacros Educativos. Todos los derechos reservados.</p>
-        <div className="mt-4 flex space-x-6">
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-            <img src="path/to/icon-instagram.png" alt="Instagram" className="w-6 h-6"/>
-          </a>
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-            <img src="path/to/icon-instagram.png" alt="Facebook" className="w-6 h-6"/>
-          </a>
-          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-            <img src="path/to/icon-instagram.png" alt="Twitter" className="w-6 h-6"/>
-          </a>
-        </div>
+    <footer className="bg-blue-900 text-white py-6">
+      <div className="container mx-auto flex justify-center space-x-6">
+        {/* Facebook */}
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon si-facebook group">
+          <span className="icon">
+            <FontAwesomeIcon icon={faFacebookF} className="text-white" />
+          </span>
+          <span className="icon-active">
+            <FontAwesomeIcon icon={faFacebookF} className="text-blue-500" />
+          </span>
+        </a>
+
+        {/* Twitter */}
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon si-twitter group">
+          <span className="icon">
+            <FontAwesomeIcon icon={faTwitter} className="text-white" />
+          </span>
+          <span className="icon-active">
+            <FontAwesomeIcon icon={faTwitter} className="text-blue-400" />
+          </span>
+        </a>
+
+        {/* Instagram */}
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon si-instagram group">
+          <span className="icon">
+            <FontAwesomeIcon icon={faInstagram} className="text-white" />
+          </span>
+          <span className="icon-active">
+            <FontAwesomeIcon icon={faInstagram} className="text-pink-500" />
+          </span>
+        </a>
+
+        {/* YouTube */}
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-icon si-youtube group">
+          <span className="icon">
+            <FontAwesomeIcon icon={faYoutube} className="text-white" />
+          </span>
+          <span className="icon-active">
+            <FontAwesomeIcon icon={faYoutube} className="text-red-500" />
+          </span>
+        </a>
+      </div>
+      <div className="text-center mt-4">
+        <p>© 2024 Asociacionismo Civil Simulacros Educativos Río de la Plata</p>
       </div>
     </footer>
   );
