@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="bg-blue-950 text-white py-6">
       <div className="container mx-auto flex justify-center space-x-6">
@@ -47,7 +49,7 @@ const Footer = () => {
         </a>
       </div>
       <div className="text-center mt-4">
-        <p>© 2024 Asociacion Civil Simulacros Educativos Río de la Plata</p>
+        <p>© {currentYear} Asociacion Civil Simulacros Educativos Río de la Plata</p>
       </div>
     </footer>
   );
