@@ -39,3 +39,17 @@
     transform: translateY(0);
   }
   
+  /* Animación de zoom suave y lento */
+@keyframes zoomIn {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05); /* Zoom-in al 105% */
+  }
+}
+
+.animated-zoom {
+  animation: zoomIn 10s ease-in-out infinite; /* Animación suave, dura 10 segundos y es continua */
+  transition: transform 10s ease-in-out;
+}
