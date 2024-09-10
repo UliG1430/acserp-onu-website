@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 /* Al final de tu archivo de Tailwind CSS */
+@layer base {
+  html {
+    @apply bg-gray-50 text-gray-950;
+  }
+}
 
 .social-icon {
     position: relative;
