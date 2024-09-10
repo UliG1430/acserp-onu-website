@@ -42,15 +42,13 @@ const Photos = () => {
       <div className="w-full px-4 py-12 text-center"> {/* Fondo blanco para esta sección */}
         <h2 className="text-blue-950 text-3xl font-bold mb-6 flex flex-row justify-center items-end">
           {/* Ícono de Google Drive antes del texto */}
-          Mira todas las fotos en nuestra carpeta de
-          <a className="flex flex-row ml-2 items-end justify-around underline underline-offset-auto text-blue-600 hover:text-indigo-300" href={googleDriveLink} target="_blank" rel="noopener noreferrer">
-            Google Drive
-            <svg className="h-10 w-fit ml-2" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
+          Una pequeña muestra de nuestra galería...
+            {/* <svg className="h-10 w-fit ml-2" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
               <path fill="#FFC107" d="M17 6L31 6 45 30 31 30z"></path>
               <path fill="#1976D2" d="M9.875 42L16.938 30 45 30 38 42z"></path>
               <path fill="#4CAF50" d="M3 30.125L9.875 42 24 18 17 6z"></path>
-            </svg>
-          </a>
+            </svg> */}
+          
         </h2> 
 
         {/* Contenedor del iframe con color de fondo personalizado */}
