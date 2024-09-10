@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'; // Importa Router aquí
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import AppRoutes from './routes';
+import AppRoutes from './routes'; // React buscará automáticamente el archivo index.jsx en la carpeta routes
 import Header from './components/Header';
 
 function App() {
@@ -10,9 +10,9 @@ function App() {
     <Router> {/* Envuelve la aplicación con el componente Router */}
       <div className="flex flex-col min-h-screen">
         <Header />
-        <Navbar /> 
+        <Navbar />
         <main className="flex-grow">
-          <AppRoutes /> 
+          <AppRoutes />
         </main>
         <Footer />
       </div>

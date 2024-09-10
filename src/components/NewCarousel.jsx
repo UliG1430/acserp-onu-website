@@ -10,7 +10,7 @@ import noticia3 from "../assets/images/noticia3.JPG";
 
 const newsData = [
   {
-    title: "Noticia 1",
+    title: "Finalizamos las capacitaciones de cara al inicio del Modelo 2024",
     img: noticia1,
     link: "#",
   },

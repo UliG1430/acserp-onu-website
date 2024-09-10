@@ -10,6 +10,11 @@ const Navbar = () => {
     { name: "Recursos", path: "/recursos" },
     { name: "Fotos", path: "/fotos" },
     { name: "Redes", path: "/redes" },
+    {
+      name: "Sumate",
+      path: "https://docs.google.com/forms/d/e/1FAIpQLSddWUwMLDS6Z_-hGnxv65SQspFh21f90LH-as_23oMTZeUX4Q/viewform",
+      target: "_blank", // Añadimos target="_blank" para que se abra en una nueva pestaña
+    },
   ];
 
   const toggleMenu = () => {
@@ -20,7 +25,7 @@ const Navbar = () => {
     <nav className="bg-blue-950 shadow-lg sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-      
+          
           {/* Botón hamburguesa para móvil */}
           <div className="md:hidden">
             <button
@@ -53,7 +58,12 @@ const Navbar = () => {
           {/* Links para pantallas grandes */}
           <div className="hidden md:flex space-x-8 justify-center w-full ml-10">
             {navLinks.map((link) => (
-              <NavLink key={link.name} to={link.path} label={link.name} />
+              <NavLink
+                key={link.name}
+                to={link.path}
+                label={link.name}
+                target={link.target} // Añadimos el atributo target solo si está definido
+              />
             ))}
           </div>
         </div>
@@ -71,6 +81,7 @@ const Navbar = () => {
               key={link.name}
               to={link.path}
               label={link.name}
+              target={link.target} // Añadimos el atributo target solo si está definido
               mobile
               onClick={() => setIsOpen(false)} // Cerrar menú al hacer clic
             />
