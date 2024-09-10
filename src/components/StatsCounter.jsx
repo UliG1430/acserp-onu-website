@@ -10,7 +10,7 @@ const StatsCounter = () => {
   ];
 
   return (
-    <div className="bg-white py-10">
+    <div className="py-10 bg-gray-50">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
         {stats.map((stat) => (
           <div

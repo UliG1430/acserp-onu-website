@@ -8,6 +8,26 @@
     @apply bg-gray-50 text-gray-950;
   }
 }
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #172554;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #0b1b41;
+}
 
 .social-icon {
     position: relative;
@@ -57,4 +77,10 @@
 .animated-zoom {
   animation: zoomIn 10s ease-in-out infinite; /* Animación suave, dura 10 segundos y es continua */
   transition: transform 10s ease-in-out;
+}
+
+/* Animación para que el ícono gire 360 grados al pasar el ratón */
+.rotate-on-hover:hover .fa-google-drive {
+  transform: rotate(360deg);
+  transition: transform 0.5s ease-in-out;
 }
