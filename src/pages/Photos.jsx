@@ -7,7 +7,7 @@ import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'; // Importamo
 
 const Photos = () => {
   const googleDriveLink = "https://drive.google.com/embeddedfolderview?id=1xE8paosqx8vOquGbAuYX9st3GLtAX_8T#grid";
-
+  const googleDriveGeneralLink="https://drive.google.com/drive/folders/1F8iVK5Op6QFQ0tjg254wJaTsOadnszxc"
   // Array de imágenes
   const images = [
     { src: image1, alt: "Foto 1" },
@@ -65,7 +65,7 @@ const Photos = () => {
 
         {/* Botón para acceder a la galería completa con nueva animación */}
         <a
-          href={googleDriveLink}
+          href={googleDriveGeneralLink}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-[#787ac1] rounded-md transition duration-300 ease-in-out transform hover:bg-blue-950 hover:scale-105 hover:shadow-xl rotate-on-hover"
