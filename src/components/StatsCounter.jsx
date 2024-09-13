@@ -5,8 +5,8 @@ const StatsCounter = () => {
   const stats = [
     { id: 1, value: 53450, label: "PARTICIPANTES EN 2023" },
     { id: 2, value: 1857, label: "VOLUNTARIOS EN 2023" },
-    { id: 3, value: 192, label: "LOCALIDADES EN 2023" },
-    { id: 4, value: 21, label: "SEDES Y GRUPOS DE TRABAJO EN 2023" },
+    { id: 3, value: 192, label: "COLEGIOS" },
+    { id: 4, value: 21, label: "MODELOS REALIZADOS" },
   ];
 
   return (

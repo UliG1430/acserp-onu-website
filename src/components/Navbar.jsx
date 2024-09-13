@@ -15,6 +15,8 @@ const Navbar = () => {
       path: "https://docs.google.com/forms/d/e/1FAIpQLSddWUwMLDS6Z_-hGnxv65SQspFh21f90LH-as_23oMTZeUX4Q/viewform",
       target: "_blank", // Añadimos target="_blank" para que se abra en una nueva pestaña
     },
+    { name: "Donaciones", path: "/redes" },
+
   ];
 
   const toggleMenu = () => {
