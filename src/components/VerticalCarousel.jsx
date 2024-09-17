@@ -1,73 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import image1 from '../assets/images/image1.JPG';
-import image2 from '../assets/images/image2.JPG';
-import image3 from '../assets/images/image3.JPG';
-import image4 from '../assets/images/noticia3.JPG';
-import image5 from '../assets/images/noticia2.JPG';
-import image6 from '../assets/images/noticia1.JPG';
-
-const sections = [
-  {
-    title: "Agasajo diplomático",
-    images: [image1, image2],
-  },
-  {
-    title: "Acto de Apertura",
-    images: [image3, image4],
-  },
-  {
-    title: "Sesiones",
-    images: [image5, image6],
-  }
-];
+import React from 'react';
+import Slider from 'react-slick';
+import { useInView } from 'react-intersection-observer';
+import imageAgasajo1 from '../assets/images/agasajo1.jpg';
+import imageAgasajo2 from '../assets/images/agasajo2.jpg';
+import imageAgasajo3 from '../assets/images/agasajo3.jpg';
+import imageApertura1 from '../assets/images/apertura1.jpg';
+import imageApertura2 from '../assets/images/apertura2.jpg';
+import imageApertura3 from '../assets/images/apertura3.jpg';
+import imageSesiones1 from '../assets/images/sesiones1.jpg';
+import imageSesiones2 from '../assets/images/sesiones2.jpg';
+import imageSesiones3 from '../assets/images/sesiones3.jpg';
 
 const VerticalCarousel = () => {
-  const [currentSection, setCurrentSection] = useState(0);
+  const { ref: agasajoRef, inView: agasajoInView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const { ref: aperturaRef, inView: aperturaInView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const { ref: sesionesRef, inView: sesionesInView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSection((prevSection) => (prevSection + 1) % sections.length);
-    }, 5000); // Cambia de sección cada 5 segundos
-    return () => clearInterval(interval);
-  }, []);
+  // Configuración del carrusel
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
 
   return (
-    <div className="w-full max-w-4xl mx-auto overflow-hidden relative">
-      {/* Título de la sección */}
-      <h2 className="text-4xl font-bold text-center text-white mb-6 animate-fade">{sections[currentSection].title}</h2>
+    <div className="min-h-screen bg-[#f0f0f5]">
+      {/* Agasajo Diplomático - Carrusel (Gris) */}
+      <section ref={agasajoRef} className="w-full flex flex-col md:flex-row items-center py-16 md:py-24 border-gray-300">
+        <div className={`w-full md:w-1/2 p-8 ${agasajoInView ? 'animate-fade-in-left' : 'opacity-0'}`}>
+          <Slider {...settings}>
+            <div>
+              <img src={imageAgasajo1} alt="Agasajo Diplomático 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+            <div>
+              <img src={imageAgasajo2} alt="Agasajo Diplomático 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+            <div>
+              <img src={imageAgasajo3} alt="Agasajo Diplomático 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+          </Slider>
+        </div>
+        <div className="w-full md:w-1/2 p-8 text-center md:text-left">
+          <h2 className="text-4xl font-bold text-indigo-950 mb-4">Agasajo Diplomático</h2>
+          <p className="text-lg text-gray-700">El agasajo diplomático es un evento donde los representantes tienen la oportunidad de socializar y establecer conexiones valiosas.</p>
+        </div>
+      </section>
 
-      {/* Carrusel de imágenes */}
-      <div className="grid grid-cols-2 gap-8 transition-transform duration-700 ease-in-out transform">
-        {sections[currentSection].images.map((image, index) => (
-          <div key={index} className="relative overflow-hidden rounded-lg shadow-lg group">
-            <img
-              src={image}
-              alt={`Imagen ${index + 1}`}
-              className="w-full h-64 object-cover transform transition-transform duration-700 ease-in-out group-hover:scale-110"
-            />
-          </div>
-        ))}
-      </div>
+      {/* Acto de Apertura - Carrusel (Azul) */}
+      <section ref={aperturaRef} className="w-full flex flex-col md:flex-row-reverse items-center py-16 md:py-24 bg-blue-950">
+        <div className={`w-full md:w-1/2 p-8 ${aperturaInView ? 'animate-fade-in-right' : 'opacity-0'}`}>
+          <Slider {...settings}>
+            <div>
+              <img src={imageApertura1} alt="Acto de Apertura 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+            <div>
+              <img src={imageApertura2} alt="Acto de Apertura 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+            <div>
+              <img src={imageApertura3} alt="Acto de Apertura 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+          </Slider>
+        </div>
+        <div className="w-full md:w-1/2 p-8 text-center md:text-left">
+          <h2 className="text-4xl font-bold text-white mb-4">Acto de Apertura</h2>
+          <p className="text-lg text-gray-300">El acto de apertura marca el comienzo del evento, con discursos que inspiran a los delegados a dar lo mejor de sí mismos.</p>
+        </div>
+      </section>
 
-      {/* Botones de navegación */}
-      <div className="absolute top-1/2 transform -translate-y-1/2 left-0 right-0 flex justify-between px-4">
-        <button
-          className="text-white bg-indigo-950 px-4 py-2 rounded-full hover:bg-indigo-800"
-          onClick={() =>
-            setCurrentSection((currentSection - 1 + sections.length) % sections.length)
-          }
-        >
-          &#8593; {/* Flecha arriba */}
-        </button>
-        <button
-          className="text-white bg-indigo-950 px-4 py-2 rounded-full hover:bg-indigo-800"
-          onClick={() =>
-            setCurrentSection((currentSection + 1) % sections.length)
-          }
-        >
-          &#8595; {/* Flecha abajo */}
-        </button>
-      </div>
+      {/* Sesiones - Carrusel (Índigo) */}
+      <section ref={sesionesRef} className="w-full flex flex-col md:flex-row items-center py-16 md:py-24 bg-indigo-300">
+        <div className={`w-full md:w-1/2 p-8 ${sesionesInView ? 'animate-fade-in-left' : 'opacity-0'}`}>
+          <Slider {...settings}>
+            <div>
+              <img src={imageSesiones1} alt="Sesiones 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+            <div>
+              <img src={imageSesiones2} alt="Sesiones 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+            <div>
+              <img src={imageSesiones3} alt="Sesiones 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+            </div>
+          </Slider>
+        </div>
+        <div className="w-full md:w-1/2 p-8 text-center md:text-left">
+          <h2 className="text-4xl font-bold text-indigo-950 mb-4">Sesiones</h2>
+          <p className="text-lg text-gray-700">Durante las sesiones, los delegados debaten temas importantes a nivel global, proponiendo soluciones innovadoras.</p>
+        </div>
+      </section>
     </div>
   );
 };

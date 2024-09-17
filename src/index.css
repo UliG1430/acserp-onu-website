@@ -84,3 +84,36 @@
   transform: rotate(360deg);
   transition: transform 0.5s ease-in-out;
 }
+
+/* Fade in from the left with smoother transitions */
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade in from the right with smoother transitions */
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animation classes with slower and smoother effect */
+.animate-fade-in-left {
+  animation: fadeInLeft 1.5s ease-out forwards;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 1.5s ease-out forwards;
+}

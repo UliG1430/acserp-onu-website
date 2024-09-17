@@ -1,20 +1,18 @@
 import React from 'react';
-import image1 from '../assets/images/image1.JPG';
-import image2 from '../assets/images/image2.JPG';
-import image3 from '../assets/images/image3.JPG';
+import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'; // Importamos el ícono de FontAwesome
+import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons';
+import VerticalCarousel from '../components/VerticalCarousel';
 
 const Photos = () => {
+  // Animación para la sección de Google Drive
+  const { ref: googleDriveRef, inView: googleDriveInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
   const googleDriveLink = "https://drive.google.com/embeddedfolderview?id=1xE8paosqx8vOquGbAuYX9st3GLtAX_8T#grid";
   const googleDriveGeneralLink = "https://drive.google.com/drive/folders/1F8iVK5Op6QFQ0tjg254wJaTsOadnszxc";
-
-  // Array de imágenes
-  const images = [
-    { src: image1, alt: "Foto 1" },
-    { src: image2, alt: "Foto 2" },
-    { src: image3, alt: "Foto 3" },
-  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -24,28 +22,16 @@ const Photos = () => {
         <p className="text-indigo-300 text-lg mt-2">Momentos destacados de nuestros simulacros educativos</p>
       </div>
 
-      {/* Sección de galería con fondo violeta */}
-      <div className="w-full px-4 py-12 bg-[#61629b]">
-        <div className="max-w-full grid grid-cols-1 md:grid-cols-3 gap-8 mx-auto px-4 lg:px-32">
-          {images.map((image, index) => (
-            <div key={index} className="relative overflow-hidden rounded-lg shadow-lg group">
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="w-full h-full object-cover transform transition-transform duration-500 ease-in-out group-hover:scale-110"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Sección del Carrusel Vertical */}
+      <VerticalCarousel />
 
       {/* Sección de Google Drive */}
-      <div className="w-full px-4 py-12 text-center">
+      <div ref={googleDriveRef} className={`w-full px-4 py-12 text-center transition-opacity duration-1000 ${googleDriveInView ? 'opacity-100' : 'opacity-0'}`}>
         <h2 className="text-blue-950 text-3xl font-bold mb-6 flex flex-row justify-center items-center rotate-on-hover">
           <FontAwesomeIcon
             icon={faGoogleDrive}
-            className="mr-3 text-blue-600 fa-google-drive" 
-            style={{ fontSize: '32px' }} 
+            className="mr-3 text-blue-600 fa-google-drive"
+            style={{ fontSize: '32px' }}
           />
           Fotos VI Edición del Modelo Público Más Grande del País
         </h2>
