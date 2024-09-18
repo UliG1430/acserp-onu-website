@@ -3,6 +3,31 @@
 @tailwind utilities;
 
 /* Al final de tu archivo de Tailwind CSS */
+@layer base {
+  html {
+    @apply bg-gray-50 text-gray-950;
+  }
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #172554;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #0b1b41;
+}
 
 .social-icon {
     position: relative;
@@ -52,4 +77,43 @@
 .animated-zoom {
   animation: zoomIn 10s ease-in-out infinite; /* Animación suave, dura 10 segundos y es continua */
   transition: transform 10s ease-in-out;
+}
+
+/* Animación para que el ícono gire 360 grados al pasar el ratón */
+.rotate-on-hover:hover .fa-google-drive {
+  transform: rotate(360deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Fade in from the left with smoother transitions */
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade in from the right with smoother transitions */
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animation classes with slower and smoother effect */
+.animate-fade-in-left {
+  animation: fadeInLeft 1.5s ease-out forwards;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 1.5s ease-out forwards;
 }

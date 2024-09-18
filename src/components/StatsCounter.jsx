@@ -5,12 +5,12 @@ const StatsCounter = () => {
   const stats = [
     { id: 1, value: 53450, label: "PARTICIPANTES EN 2023" },
     { id: 2, value: 1857, label: "VOLUNTARIOS EN 2023" },
-    { id: 3, value: 192, label: "LOCALIDADES EN 2023" },
-    { id: 4, value: 21, label: "SEDES Y GRUPOS DE TRABAJO EN 2023" },
+    { id: 3, value: 192, label: "COLEGIOS" },
+    { id: 4, value: 21, label: "MODELOS REALIZADOS" },
   ];
 
   return (
-    <div className="bg-white py-10">
+    <div className="py-10 bg-gray-50">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
         {stats.map((stat) => (
           <div

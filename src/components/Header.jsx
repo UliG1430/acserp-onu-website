@@ -4,11 +4,13 @@ import Navbar from './Navbar';
 
 const Header = () => {
   return (
-    <header className="bg-white">
-      <div className="container mx-auto flex justify-center items-center py-4 border-b border-gray-300">
-        <img src={logo} alt="Simulacros Educativos Rio de la Plata" className="h-16" />
-      </div>
-    </header>
+    <a href="./">
+      <header className="">
+        <div className="container mx-auto flex justify-center items-center py-4 border-b border-gray-300">
+          <img src={logo} alt="Simulacros Educativos Rio de la Plata" className="h-16" />
+        </div>
+      </header>
+    </a>
   );
 }
 
