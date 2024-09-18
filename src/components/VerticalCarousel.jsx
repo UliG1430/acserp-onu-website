@@ -20,11 +20,11 @@ const VerticalCarousel = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 1000,  // Animación más lenta
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 5000,  // Más tiempo entre cambios de slide
   };
 
   return (
@@ -44,7 +44,7 @@ const VerticalCarousel = () => {
             </div>
           </Slider>
         </div>
-        <div className="w-full md:w-1/2 p-8 text-center md:text-left">
+        <div className={`w-full md:w-1/2 p-8 text-center md:text-left ${agasajoInView ? 'animate-fade-in-left' : 'opacity-0'}`}>
           <h2 className="text-4xl font-bold text-indigo-950 mb-4">Agasajo Diplomático</h2>
           <p className="text-lg text-gray-700">El agasajo diplomático es un evento donde los representantes tienen la oportunidad de socializar y establecer conexiones valiosas.</p>
         </div>
@@ -65,7 +65,7 @@ const VerticalCarousel = () => {
             </div>
           </Slider>
         </div>
-        <div className="w-full md:w-1/2 p-8 text-center md:text-left">
+        <div className={`w-full md:w-1/2 p-8 text-center md:text-left ${aperturaInView ? 'animate-fade-in-right' : 'opacity-0'}`}>
           <h2 className="text-4xl font-bold text-white mb-4">Acto de Apertura</h2>
           <p className="text-lg text-gray-300">El acto de apertura marca el comienzo del evento, con discursos que inspiran a los delegados a dar lo mejor de sí mismos.</p>
         </div>
@@ -86,7 +86,7 @@ const VerticalCarousel = () => {
             </div>
           </Slider>
         </div>
-        <div className="w-full md:w-1/2 p-8 text-center md:text-left">
+        <div className={`w-full md:w-1/2 p-8 text-center md:text-left ${sesionesInView ? 'animate-fade-in-left' : 'opacity-0'}`}>
           <h2 className="text-4xl font-bold text-indigo-950 mb-4">Sesiones</h2>
           <p className="text-lg text-gray-700">Durante las sesiones, los delegados debaten temas importantes a nivel global, proponiendo soluciones innovadoras.</p>
         </div>
