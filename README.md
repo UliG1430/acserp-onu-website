@@ -62,8 +62,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-## Contact
-
 For any inquiries or issues, feel free to reach out to me:
 
 - **Email**: geymonatulises@gmail.com
