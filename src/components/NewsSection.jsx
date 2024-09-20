@@ -18,7 +18,7 @@ const additionalNews = [
   {
     title: "Jornada de voluntariado social",
     summary: "Nuestros colaboradores participan en la jornada anual de voluntariado.",
-    link: "#",
+    link: "https://www.0221.com.ar/nota/2023-6-16-14-54-0-sorprendente-participacion-de-los-estudiantes-de-escuelas-de-la-plata-en-el-modelo-onu",
     img: "https://via.placeholder.com/400x250",
   },
 ];
