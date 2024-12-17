@@ -21,6 +21,12 @@ const additionalNews = [
     link: "https://www.0221.com.ar/nota/2023-6-16-14-54-0-sorprendente-participacion-de-los-estudiantes-de-escuelas-de-la-plata-en-el-modelo-onu",
     img: "https://via.placeholder.com/400x250",
   },
+  {
+    title: "El Modelo ONU de La Plata obtuvo el Premio Homero Manzi",
+    summary: "Tras un año cargado de actividades, como los seis modelos preparatorios de junio, la gala benéfica...",
+    link: "https://www.0221.com.ar/nota/2023-6-16-14-54-0-sorprendente-participacion-de-los-estudiantes-de-escuelas-de-la-plata-en-el-modelo-onu",
+    img: "https://via.placeholder.com/400x250",
+  },
 ];
 
 // Función para truncar el texto y agregar "..."
