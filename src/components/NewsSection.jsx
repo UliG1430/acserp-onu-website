@@ -6,8 +6,10 @@ const additionalNews = [
   {
     title: "Seguinos en nuestro canal de YouTube",
     summary: "Suscribite a nuestro canal de YouTube para acceder a capacitaciones y recursos.",
-    link: "#",
+    link: "https://www.youtube.com/@modeloonulaplata",
     img: news1,
+    target: "_blank",
+
   },
   {
     title: "Convenio con Fundacion ONU",

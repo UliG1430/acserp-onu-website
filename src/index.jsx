@@ -9,3 +9,10 @@ root.render(
     <App /> 
   </React.StrictMode>
 );
+
+//MVP
+// 1. NUESTRA HISTORIA
+// 2. NOTICIA PREMIOS HOMERO MANZI
+// 3. NOTICIAS CARRUSEL
+// 4. DONACIONES
+// 5. REDES
