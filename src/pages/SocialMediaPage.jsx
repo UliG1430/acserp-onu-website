@@ -1,5 +1,6 @@
 import React from "react";
 import InstagramFeed from "../components/InstagramFeed";
+import TikTokFeed from "../components/TikTokFeed";
 
 const SocialMediaPage = () => {
   return (
@@ -10,37 +11,19 @@ const SocialMediaPage = () => {
         </h1>
 
         {/* TikTok Section */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">TikTok</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Inserta videos de TikTok usando su iframe embebido */}
-            <iframe
-              src="https://vm.tiktok.com/ZMkB7X1Jv/"
-              title="TikTok Video 1"
-              className="w-full h-72 rounded-lg shadow-lg"
-              allow="autoplay; encrypted-media"
-            ></iframe>
-            <iframe
-              src="https://vm.tiktok.com/ZMkB7UPnq/"
-              title="TikTok Video 2"
-              className="w-full h-72 rounded-lg shadow-lg"
-              allow="autoplay; encrypted-media"
-            ></iframe>
-          
-          </div>
-        </div>
+        <TikTokFeed />
 
         {/* Instagram Section */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">Instagram</h2>
-          <InstagramFeed />
+          <InstagramFeed /> {/* Usa tu componente InstagramFeed */}
         </div>
 
         {/* YouTube Section */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">YouTube</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Inserta videos del canal de YouTube */}
+            {/* Inserta videos de YouTube */}
             <iframe
               src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Video 1
               title="YouTube Video 1"
