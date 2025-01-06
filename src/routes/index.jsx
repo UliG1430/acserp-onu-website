@@ -7,6 +7,7 @@ import Photos from '../pages/Photos';
 import Model from '../pages/Model';
 import ACSERPPage from '../pages/ACSERPPage';
 import SocialMediaPage from '../pages/SocialMediaPage';
+import DonationsPage from '../pages/DonationsPage';
 
 function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ function AppRoutes() {
       <Route path="/modelo" element={<Model />} /> 
       <Route path="*" element={<NotFound />} />
       <Route path="/redes" element={<SocialMediaPage />} /> 
+      <Route path="/donaciones" element={<DonationsPage />} /> 
 
     </Routes>
   );

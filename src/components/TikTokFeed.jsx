@@ -4,7 +4,7 @@ import { TikTokEmbed } from "react-social-media-embed";
 const TikTokFeed = () => {
   // Lista de URLs de los videos de TikTok
   const tikTokLinks = [
-    "https://vm.tiktok.com/ZMkB7X1Jv/",
+    "https://vm.tiktok.com/ZMkBvAK77/",
     "https://vm.tiktok.com/ZMkB7UPnq/",
   ];
 

@@ -18,10 +18,6 @@ const InstagramFeed = () => {
             url="https://www.instagram.com/p/CuiNh86szHv/?igsh=MWF6cXI4YmpkNjc1NQ==" // Otra publicación
             width="100%"
           />
-          <InstagramEmbed
-            url="https://www.instagram.com/p/CRRBfCwHq4H/" // Otra publicación
-            width="100%"
-          />
         </div>
       </div>
     </section>
