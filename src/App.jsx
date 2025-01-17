@@ -6,10 +6,12 @@ import AppRoutes from './routes'; // React buscará automáticamente el archivo 
 import Header from './components/Header';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <Router> {/* Envuelve la aplicación con el componente Router */}
+    <ScrollToTop/>
       <div className="flex flex-col min-h-screen">
         <Header />
         <Navbar />
