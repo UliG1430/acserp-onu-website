@@ -1,27 +1,38 @@
 import React from "react";
 import { TikTokEmbed } from "react-social-media-embed";
+import { motion } from "framer-motion";
+
+// Variantes de animación
+const fadeInVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
+};
 
 const TikTokFeed = () => {
-  // Lista de URLs de los videos de TikTok
   const tikTokLinks = [
-    "https://vm.tiktok.com/ZMkBvAK77/",
-    "https://vm.tiktok.com/ZMkB7UPnq/",
+    "https://www.tiktok.com/@modeloonulp/video/7216504495075757318",
+    "https://www.tiktok.com/@modeloonulp/video/7148959086824967430",
+    "https://www.tiktok.com/@modeloonulp/video/7419156281115544837",
   ];
 
   return (
-    <section className="mb-16">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">TikTok</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Renderiza los videos de TikTok */}
-        {tikTokLinks.map((link, index) => (
-          <TikTokEmbed
-            key={index}
-            url={link}
-            width="100%"
-          />
-        ))}
-      </div>
-    </section>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+    >
+      {tikTokLinks.map((link, index) => (
+        <motion.div
+          key={index}
+          variants={fadeInVariant}
+          whileHover={{ scale: 1.05, rotate: 1 }}
+          transition={{ duration: 0.3 }}
+          className="overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+        >
+          <TikTokEmbed url={link} width="100%" />
+        </motion.div>
+      ))}
+    </motion.div>
   );
 };
 
