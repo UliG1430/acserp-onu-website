@@ -1,30 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import news1 from "../assets/images/youtube.jpeg";
-import news2 from "../assets/images/news2.png";
-
-const additionalNews = [
-  {
-    title: "Seguinos en nuestro canal de YouTube",
-    summary: "Suscribite a nuestro canal de YouTube para acceder a capacitaciones y recursos.",
-    link: "https://www.youtube.com/@modeloonulaplata",
-    img: news1,
-    target: "_blank",
-
-  },
-  {
-    title: "Convenio con Fundacion ONU",
-    summary: "Tenemos el honor de anunciar que la Fundación de Naciones Unidas (@unfoundation) ha reconocido a nuestra Organización.",
-    link: "#",
-    img: news2,
-  },
-  {
-    title: "Jornada de voluntariado social",
-    summary: "Nuestros colaboradores participan en la jornada anual de voluntariado.",
-    link: "#",
-    img: "https://via.placeholder.com/400x250",
-  },
-];
-
+import { Link } from "react-router-dom"; // Para enlaces dinámicos
+import newsData from "../assets/noticias/newsData.js";
 // Función para truncar el texto y agregar "..."
 const truncateText = (text, length) => {
   if (text.length > length) {
@@ -37,7 +13,7 @@ const NewsSection = () => {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Usamos IntersectionObserver para detectar cuándo la sección entra en vista
+  // Usamos IntersectionObserver para animaciones de entrada
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -73,10 +49,11 @@ const NewsSection = () => {
         Últimas Noticias
       </h2>
 
+      {/* Grid de noticias */}
       <div className="grid md:grid-cols-3 gap-8">
-        {additionalNews.map((news, index) => (
+        {newsData.map((news, index) => (
           <div
-            key={index}
+            key={news.id}
             className={`bg-white shadow-lg rounded-lg overflow-hidden transform transition-all duration-[2000ms] ease-out hover:scale-105 hover:shadow-2xl ${
               isVisible
                 ? "opacity-100 translate-y-0"
@@ -86,13 +63,14 @@ const NewsSection = () => {
               transitionDelay: `${index * 0.3}s`, // Agregamos un retraso para cada tarjeta
             }}
           >
-            {/* Imagen */}
+            {/* Imagen de la noticia */}
             <img
               src={news.img}
               alt={news.title}
               className="w-full h-48 object-cover rounded-t-lg mb-2"
             />
 
+            {/* Contenido de la noticia */}
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-4 text-gray-900">
                 {news.title}
@@ -100,12 +78,12 @@ const NewsSection = () => {
               <p className="text-gray-700 mb-4">
                 {truncateText(news.summary, 100)}
               </p>
-              <a
-                href={news.link}
+              <Link
+                to={`/noticias/${news.id}`} // Enlace dinámico a la página de detalle
                 className="text-blue-600 hover:text-blue-800 font-semibold"
               >
                 Leer más
-              </a>
+              </Link>
             </div>
           </div>
         ))}
