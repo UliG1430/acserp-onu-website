@@ -4,20 +4,23 @@ import { useInView } from "react-intersection-observer";
 const DonationsPage = () => {
   const donationLinks = [
     {
-      label: "Donar $5000",
-      description: "Contribuí con $5000 y apoyá la educacion gratuita, publica y de calidad.",
-      url: "https://www.mercadopago.com.ar/checkout/v1/payment/redirect/d1b6b4a2-e55a-4d4d-b16c-0d3647af1479/payment-option-form-v2/?source=link&preference-id=1904693867-dc50117b-876f-4873-bae0-706fe0ca73cc&router-request-id=cdb25244-d49e-42b7-89cc-77e691342a8a&p=7254c06c0a2c45b31bdf5cad2db2adc1",
+      label: "Donar $2000",
+      description: "Contribuí con $2000 y apoyá la educacion gratuita, publica y de calidad.",
+      url: "https://www.mercadopago.com.ar/checkout/v1/payment/redirect/?source=link&preference-id=1904693867-e2ca0481-63ed-4cb8-9ac0-9b716a07147c&router-request-id=c3029624-d8b0-493c-93be-40ed63daeab8",
     },
     {
       label: "Donar $3000",
       description: "Contribuí con $3000 y apoyá la educacion gratuita, publica y de calidad.",
       url: "https://www.mercadopago.com.ar/payment-link/v1/redirect?preference-id=1904693867-163a4a73-71a7-4d79-a859-58a20e22b842&source=link",
     },
+    
     {
-      label: "Donar $2000",
-      description: "Contribuí con $2000 y apoyá la educacion gratuita, publica y de calidad.",
-      url: "https://www.mercadopago.com.ar/checkout/v1/payment/redirect/?source=link&preference-id=1904693867-e2ca0481-63ed-4cb8-9ac0-9b716a07147c&router-request-id=c3029624-d8b0-493c-93be-40ed63daeab8",
+      label: "Donar $5000",
+      description: "Contribuí con $5000 y apoyá la educacion gratuita, publica y de calidad.",
+      url: "https://www.mercadopago.com.ar/checkout/v1/payment/redirect/d1b6b4a2-e55a-4d4d-b16c-0d3647af1479/payment-option-form-v2/?source=link&preference-id=1904693867-dc50117b-876f-4873-bae0-706fe0ca73cc&router-request-id=cdb25244-d49e-42b7-89cc-77e691342a8a&p=7254c06c0a2c45b31bdf5cad2db2adc1",
     },
+
+
     {
       label: "Donación Voluntaria",
       description: "Elige el monto a voluntad y apoyá la educacion gratuita, publica y de calidad.",
