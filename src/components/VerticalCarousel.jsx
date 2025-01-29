@@ -1,15 +1,15 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { useInView } from 'react-intersection-observer';
-import imageAgasajo1 from '../assets/images/agasajo1.jpg';
-import imageAgasajo2 from '../assets/images/agasajo2.jpg';
-import imageAgasajo3 from '../assets/images/agasajo3.jpg';
-import imageApertura1 from '../assets/images/apertura1.jpg';
-import imageApertura2 from '../assets/images/apertura2.jpg';
-import imageApertura3 from '../assets/images/apertura3.jpg';
-import imageSesiones1 from '../assets/images/sesiones1.jpg';
-import imageSesiones2 from '../assets/images/sesiones2.jpg';
-import imageSesiones3 from '../assets/images/sesiones3.jpg';
+import imageAgasajo1 from '../assets/images/agasajo1.JPG';
+import imageAgasajo2 from '../assets/images/agasajo2.JPG';
+import imageAgasajo3 from '../assets/images/agasajo3.JPG';
+import imageApertura1 from '../assets/images/apertura1.JPG';
+import imageApertura2 from '../assets/images/apertura2.JPG';
+import imageApertura3 from '../assets/images/apertura3.JPG';
+import imageSesiones1 from '../assets/images/sesiones1.JPG';
+import imageSesiones2 from '../assets/images/sesiones2.JPG';
+import imageSesiones3 from '../assets/images/sesiones3.JPG';
 
 const VerticalCarousel = () => {
   const { ref: agasajoRef, inView: agasajoInView } = useInView({ triggerOnce: true, threshold: 0.1 });
