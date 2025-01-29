@@ -1,29 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
-
-import { NextArrow, PrevArrow } from "./CarouselArrow"; // Flechas
-
-import noticia1 from "../assets/images/noticia1.JPG";
-import noticia2 from "../assets/images/noticia2.JPG";
-import noticia3 from "../assets/images/noticia3.JPG";
-
-const newsData = [
-  {
-    title: "Finalizamos las capacitaciones de cara al inicio del Modelo 2024",
-    img: noticia1,
-    link: "#",
-  },
-  {
-    title: "Noticia 2",
-    img: noticia2,
-    link: "#",
-  },
-  {
-    title: "Noticia 3",
-    img: noticia3,
-    link: "#",
-  },
-];
+import { NextArrow, PrevArrow } from "./CarouselArrow"; // Flechas personalizadas
+import newsData from "../assets/noticias/newsData"; // Importamos las noticias dinámicamente
 
 const NewsCarousel = () => {
   const settings = {
@@ -43,15 +21,15 @@ const NewsCarousel = () => {
       <Slider {...settings}>
         {newsData.map((news, index) => (
           <div key={index} className="relative h-[500px] overflow-hidden">
-            <a href={news.link} className="block w-full h-full">
+            <a href={`/noticias/${news.id}`} className="block w-full h-full">
               <div className="relative h-full w-full">
-                {/* Efecto de zoom-in lento en todas las imágenes */}
+                {/* Imagen de la noticia */}
                 <img
                   src={news.img}
                   alt={news.title}
                   className="w-full h-full object-cover animated-zoom"
                 />
-                {/* Fondo opaco y título */}
+                {/* Fondo oscuro con título */}
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                   <h3 className="text-3xl font-bold text-white text-center">
                     {news.title}

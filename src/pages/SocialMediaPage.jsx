@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import InstagramFeed from "../components/InstagramFeed";
 import TikTokFeed from "../components/TikTokFeed";
 import LinkedInFeed from "../components/LinkedInFeed";
@@ -63,14 +63,15 @@ const SocialMediaPage = () => {
           <InstagramFeed />
         </motion.div>
 
-          {/* LinkedIn Section */}
-          <motion.div variants={fadeInVariant} className="mb-16 p-8 bg-white shadow-lg rounded-xl">
+        {/* LinkedIn Section */}
+        <motion.div variants={fadeInVariant} className="mb-16 p-8 bg-white shadow-lg rounded-xl">
           <motion.h2 whileHover={{ opacity: 0.8, scale: 1.02 }} transition={{ duration: 0.3 }}
             className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer">
             <FaLinkedin className="text-blue-700 mr-3 text-4xl" /> LinkedIn
           </motion.h2>
           <LinkedInFeed /> 
         </motion.div>
+
         {/* YouTube Section */}
         <motion.div variants={fadeInVariant} className="p-8 bg-white shadow-lg rounded-xl">
           <motion.h2 whileHover={{ opacity: 0.8, scale: 1.02 }} transition={{ duration: 0.3 }} className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer">
@@ -89,20 +90,22 @@ const SocialMediaPage = () => {
         </motion.div>
       </div>
 
-      {/* Botón flotante para volver arriba */}
-      {showScrollButton && (
-        <motion.button
-          onClick={scrollToTop}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.2 }}
-          className="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
-        >
-          <FaArrowUp size={24} />
-        </motion.button>
-      )}
+      {/* Botón flotante para volver arriba con animación de entrada y salida */}
+      <AnimatePresence>
+        {showScrollButton && (
+          <motion.button
+            onClick={scrollToTop}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 0.3 }}
+            className="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+          >
+            <FaArrowUp size={24} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 };

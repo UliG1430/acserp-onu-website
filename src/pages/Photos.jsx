@@ -22,8 +22,8 @@ const Photos = () => {
         <p className="text-indigo-300 text-lg mt-2">Momentos destacados de nuestros simulacros educativos</p>
       </div>
 
-      {/* Sección del Carrusel Vertical */}
-      <VerticalCarousel />
+      {/* Sección del Carrusel Vertical - Ahora con el orden correcto */}
+      <VerticalCarousel sections={["apertura", "sesiones", "agasajo"]} /> 
 
       {/* Sección de Google Drive */}
       <div ref={googleDriveRef} className={`w-full px-4 py-12 text-center transition-opacity duration-1000 ${googleDriveInView ? 'opacity-100' : 'opacity-0'}`}>
@@ -33,7 +33,7 @@ const Photos = () => {
             className="mr-3 text-blue-600 fa-google-drive"
             style={{ fontSize: '32px' }}
           />
-          Fotos VI Edición del Modelo Público Más Grande del País
+          Fotos VII Edición del Modelo Público Más Grande del País
         </h2>
 
         <div className="bg-[#e0e0f8] rounded-lg shadow-lg p-4 mb-4">
