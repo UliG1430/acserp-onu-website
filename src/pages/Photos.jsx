@@ -11,8 +11,8 @@ const Photos = () => {
     threshold: 0.2,
   });
 
-  const googleDriveLink = "https://drive.google.com/embeddedfolderview?id=1xE8paosqx8vOquGbAuYX9st3GLtAX_8T#grid";
-  const googleDriveGeneralLink = "https://drive.google.com/drive/folders/1F8iVK5Op6QFQ0tjg254wJaTsOadnszxc";
+  const googleDriveLink = "https://drive.google.com/embeddedfolderview?id=1MBZn4nV7mB8i9KxA_Tiypgrsy9qXrkpk#grid";
+  const googleDriveGeneralLink = "https://drive.google.com/drive/folders/1lUwofFDsJk68XDpKdA-3HrZAPSjKmOa6";
 
   return (
     <div className="min-h-screen bg-white">
