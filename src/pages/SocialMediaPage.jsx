@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import InstagramFeed from "../components/InstagramFeed";
 import TikTokFeed from "../components/TikTokFeed";
 import LinkedInFeed from "../components/LinkedInFeed";
-import { FaInstagram, FaYoutube, FaArrowUp, FaLinkedin } from "react-icons/fa";
-import TikTokLogo from "../assets/logos/tiktok_icon.svg"; 
+import ScrollToTopButton from "../components/ScrollToTopButton";
+import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
+import TikTokLogo from "../assets/logos/tiktok_icon.svg";
 
 // Variantes de animación
 const fadeInVariant = {
@@ -13,22 +14,6 @@ const fadeInVariant = {
 };
 
 const SocialMediaPage = () => {
-  const [showScrollButton, setShowScrollButton] = useState(false);
-
-  // Detectar el scroll y mostrar/ocultar el botón
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollButton(window.scrollY > 300);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Función para volver arriba
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
     <motion.section
       initial="hidden"
@@ -78,34 +63,31 @@ const SocialMediaPage = () => {
             <FaYoutube className="text-red-600 mr-3 text-4xl" /> YouTube
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[ { id: "tF21F8CxBMk", title: "Consejo de Seguridad - Modelo ONU LP" },
+            {[ 
+              { id: "tF21F8CxBMk", title: "Consejo de Seguridad - Modelo ONU LP" },
               { id: "jYaxIVlTqck", title: "Procedimientos Generales - Modelo ONU LP" },
               { id: "jhtznz0ktmo", title: "Capacitación STI - Modelo ONU LP" },
             ].map((video, index) => (
-              <motion.div key={index} whileHover={{ scale: 1.05, rotate: 1 }} transition={{ duration: 0.3 }} className="overflow-hidden rounded-lg shadow-lg transition-transform duration-300">
-                <iframe src={`https://www.youtube.com/embed/${video.id}`} title={video.title} className="w-full h-72 rounded-lg" allow="autoplay; encrypted-media"></iframe>
+              <motion.div 
+                key={index} 
+                whileHover={{ scale: 1.05, rotate: 1 }} 
+                transition={{ duration: 0.3 }} 
+                className="overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+              >
+                <iframe 
+                  src={`https://www.youtube.com/embed/${video.id}`} 
+                  title={video.title} 
+                  className="w-full h-72 rounded-lg" 
+                  allow="autoplay; encrypted-media">
+                </iframe>
               </motion.div>
             ))}
           </div>
         </motion.div>
       </div>
 
-      {/* Botón flotante para volver arriba con animación de entrada y salida */}
-      <AnimatePresence>
-        {showScrollButton && (
-          <motion.button
-            onClick={scrollToTop}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.3 }}
-            className="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
-          >
-            <FaArrowUp size={24} />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {/* Botón flotante reutilizable para volver arriba */}
+      <ScrollToTopButton />
     </motion.section>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Animaciones
 import newsData from "../assets/noticias/newsData";
+import ScrollToTopButton from "../components/ScrollToTopButton";
 
 const NewsDetail = () => {
   const { id } = useParams();
@@ -167,6 +168,7 @@ const NewsDetail = () => {
           Volver a Inicio
         </Link>
       </motion.div>
+      <ScrollToTopButton/>
     </div>
   );
 };

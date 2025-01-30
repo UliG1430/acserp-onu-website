@@ -3,6 +3,7 @@ import acserp_amnistia from "../images/acserp_amnistia.jpg";
 import acserp_aministia2 from "../images/acserp_amnistia2.jpg";
 import acserp_aministia3 from "../images/acserp_amnistia3.jpg";
 import concejo_deliberante from "../images/concejo_deliberante.jpg";
+import concejo_deliberante2 from "../images/concejo_deliberante2.jpg";
 import gala_benefica from "../images/gala_benefica.jpg";
 const newsData = [
   {
@@ -32,7 +33,8 @@ Seguimos construyendo puentes con instituciones comprometidas con los derechos h
       url:acserp_aministia3,
       description:"Camilo Leavi, presidente de la ACSERP, exponiendo sobre la importancia de la educación en derechos humanos"
     }
-    ]
+    ],
+    carouselImg:concejo_deliberante2,
 
   },
   {
