@@ -1,7 +1,13 @@
 import React from "react";
 import Slider from "react-slick";
-import { NextArrow, PrevArrow } from "./CarouselArrow"; // Flechas personalizadas
-import newsData from "../assets/noticias/newsData"; // Importamos las noticias dinámicamente
+import { motion } from "framer-motion"; 
+import { NextArrow, PrevArrow } from "./CarouselArrow"; 
+import newsData from "../assets/noticias/newsData"; 
+
+const slideVariant = {
+  hidden: { opacity: 0, x: 100 }, 
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+};
 
 const NewsCarousel = () => {
   const settings = {
@@ -17,29 +23,41 @@ const NewsCarousel = () => {
   };
 
   return (
-    <div className="relative w-screen mt-0 overflow-hidden">
-      <Slider {...settings}>
-        {newsData.map((news, index) => (
-          <div key={index} className="relative h-[500px] overflow-hidden">
-            <a href={`/noticias/${news.id}`} className="block w-full h-full">
-              <div className="relative h-full w-full">
-                {/* Imagen de la noticia */}
-                <img
-                  src={news.img}
-                  alt={news.title}
-                  className="w-full h-full object-cover animated-zoom"
-                />
-                {/* Fondo oscuro con título */}
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                  <h3 className="text-3xl font-bold text-white text-center">
-                    {news.title}
-                  </h3>
-                </div>
-              </div>
-            </a>
-          </div>
-        ))}
-      </Slider>
+    <div className="relative overflow-x-hidden">
+      <div className="w-full max-w-full mx-auto">
+        <Slider {...settings}>
+          {newsData.map((news, index) => (
+            <div key={index} className="relative h-[500px] overflow-hidden">
+              <a href={`/noticias/${news.id}`} className="block w-full h-full">
+                <motion.div
+                  variants={slideVariant}
+                  initial="hidden"
+                  animate="visible"
+                  className="relative h-full w-full"
+                >
+                  {/* Imagen de la noticia */}
+                  <img
+                    src={news.img}
+                    alt={news.title}
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Fondo oscuro y título */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+                  >
+                    <h3 className="text-3xl font-bold text-white text-center">
+                      {news.title}
+                    </h3>
+                  </motion.div>
+                </motion.div>
+              </a>
+            </div>
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 };

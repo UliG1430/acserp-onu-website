@@ -34,7 +34,7 @@ Seguimos construyendo puentes con instituciones comprometidas con los derechos h
       description:"Camilo Leavi, presidente de la ACSERP, exponiendo sobre la importancia de la educación en derechos humanos"
     }
     ],
-    carouselImg:concejo_deliberante2,
+    carouselImg:concejo_deliberante2
 
   },
   {
