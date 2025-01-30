@@ -1,11 +1,10 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import InstagramFeed from "../components/InstagramFeed";
 import TikTokFeed from "../components/TikTokFeed";
 import LinkedInFeed from "../components/LinkedInFeed";
-import ScrollToTopButton from "../components/ScrollToTopButton";
-import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
-import TikTokLogo from "../assets/logos/tiktok_icon.svg";
+import { FaInstagram, FaYoutube, FaArrowUp, FaLinkedin } from "react-icons/fa";
+import TikTokLogo from "../assets/logos/tiktok_icon.svg"; 
 
 // Variantes de animación
 const fadeInVariant = {
@@ -14,6 +13,27 @@ const fadeInVariant = {
 };
 
 const SocialMediaPage = () => {
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  // Detectar el scroll y mostrar/ocultar el botón
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollButton(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Función para volver arriba
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Función para redirigir a la URL
+  const handleRedirect = (url) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <motion.section
       initial="hidden"
@@ -34,7 +54,12 @@ const SocialMediaPage = () => {
 
         {/* TikTok Section */}
         <motion.div variants={fadeInVariant} className="mb-16 p-8 bg-white shadow-lg rounded-xl">
-          <motion.h2 whileHover={{ opacity: 0.8, scale: 1.02 }} transition={{ duration: 0.3 }} className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer">
+          <motion.h2 
+            onClick={() => handleRedirect("https://www.tiktok.com/@modeloonulp")}
+            whileHover={{ opacity: 0.8, scale: 1.02 }} 
+            transition={{ duration: 0.3 }} 
+            className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer"
+          >
             <img src={TikTokLogo} alt="TikTok" className="w-8 h-8 mr-3" /> TikTok
           </motion.h2>
           <TikTokFeed />
@@ -42,7 +67,12 @@ const SocialMediaPage = () => {
 
         {/* Instagram Section */}
         <motion.div variants={fadeInVariant} className="mb-16 p-8 bg-white shadow-lg rounded-xl">
-          <motion.h2 whileHover={{ opacity: 0.8, scale: 1.02 }} transition={{ duration: 0.3 }} className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer">
+          <motion.h2 
+            onClick={() => handleRedirect("https://www.instagram.com/modeloonulp/?hl=es")}
+            whileHover={{ opacity: 0.8, scale: 1.02 }} 
+            transition={{ duration: 0.3 }} 
+            className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer"
+          >
             <FaInstagram className="text-pink-500 mr-3 text-4xl" /> Instagram
           </motion.h2>
           <InstagramFeed />
@@ -50,8 +80,12 @@ const SocialMediaPage = () => {
 
         {/* LinkedIn Section */}
         <motion.div variants={fadeInVariant} className="mb-16 p-8 bg-white shadow-lg rounded-xl">
-          <motion.h2 whileHover={{ opacity: 0.8, scale: 1.02 }} transition={{ duration: 0.3 }}
-            className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer">
+          <motion.h2 
+            onClick={() => handleRedirect("https://www.linkedin.com/in/simulacros-educativos-r%C3%ADo-de-la-plata-b45698230/")}
+            whileHover={{ opacity: 0.8, scale: 1.02 }} 
+            transition={{ duration: 0.3 }} 
+            className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer"
+          >
             <FaLinkedin className="text-blue-700 mr-3 text-4xl" /> LinkedIn
           </motion.h2>
           <LinkedInFeed /> 
@@ -59,7 +93,12 @@ const SocialMediaPage = () => {
 
         {/* YouTube Section */}
         <motion.div variants={fadeInVariant} className="p-8 bg-white shadow-lg rounded-xl">
-          <motion.h2 whileHover={{ opacity: 0.8, scale: 1.02 }} transition={{ duration: 0.3 }} className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer">
+          <motion.h2 
+            onClick={() => handleRedirect("https://www.youtube.com/@modeloonulaplata")}
+            whileHover={{ opacity: 0.8, scale: 1.02 }} 
+            transition={{ duration: 0.3 }} 
+            className="text-3xl font-bold text-gray-900 flex items-center mb-6 cursor-pointer"
+          >
             <FaYoutube className="text-red-600 mr-3 text-4xl" /> YouTube
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -86,8 +125,22 @@ const SocialMediaPage = () => {
         </motion.div>
       </div>
 
-      {/* Botón flotante reutilizable para volver arriba */}
-      <ScrollToTopButton />
+      {/* Botón flotante para volver arriba con animación de entrada y salida */}
+      <AnimatePresence>
+        {showScrollButton && (
+          <motion.button
+            onClick={scrollToTop}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 0.3 }}
+            className="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+          >
+            <FaArrowUp size={24} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 };
