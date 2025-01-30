@@ -7,16 +7,19 @@ const Navbar = () => {
     { name: "Inicio", path: "/" },
     { name: "ACSERP", path: "/acserp" },
     { name: "Modelo", path: "/modelo" },
-    { name: "Recursos", path: "/recursos" },
+    { name: "Recursos", 
+      path: "https://drive.google.com/drive/folders/1I3VcyWMO3rW2JoXUAf0-Gf9PIl-I0xMl", 
+      target: "_blank" 
+  },
     { name: "Fotos", path: "/fotos" },
     { name: "Redes", path: "/redes" },
+
+    { name: "Donaciones", path: "/donaciones" },
     {
       name: "Sumate",
       path: "https://docs.google.com/forms/d/e/1FAIpQLSddWUwMLDS6Z_-hGnxv65SQspFh21f90LH-as_23oMTZeUX4Q/viewform",
       target: "_blank", // Añadimos target="_blank" para que se abra en una nueva pestaña
     },
-    { name: "Donaciones", path: "/donaciones" },
-
   ];
 
   const toggleMenu = () => {
@@ -58,7 +61,8 @@ const Navbar = () => {
           </div>
 
           {/* Links para pantallas grandes */}
-          <div className="hidden md:flex space-x-8 justify-center w-full ml-10">
+          <div className="hidden md:flex space-x-8 justify-center w-full ml-10 navbar-links">
+          
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}

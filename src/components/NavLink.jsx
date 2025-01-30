@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const NavLink = ({ to, label, mobile, onClick }) => {
+const NavLink = ({ to, label, mobile, onClick, className }) => {
   // Detectamos si el enlace es externo (comienza con http)
   const isExternal = to.startsWith('http');
 
@@ -9,11 +9,11 @@ const NavLink = ({ to, label, mobile, onClick }) => {
     return (
       <a
         href={to}
-        className={`text-white hover:transition duration-300 ease-in-out transform hover:scale-110 hover:translate-y-1 ${
+        className={`${className} text-white hover:transition duration-300 ease-in-out transform hover:scale-110 hover:translate-y-1 ${
           mobile ? 'block px-3 py-2 rounded-md text-base font-medium' : ''
         }`}
-        target="_blank" // Abrir en nueva pestaña
-        rel="noopener noreferrer" // Buena práctica para enlaces externos
+        target="_blank" 
+        rel="noopener noreferrer"
         onClick={onClick}
       >
         {label}
@@ -24,10 +24,10 @@ const NavLink = ({ to, label, mobile, onClick }) => {
   return (
     <Link
       to={to}
-      className={`text-white hover:transition duration-300 ease-in-out transform hover:scale-110 hover:translate-y-1 ${
+      className={`${className} text-white hover:transition duration-300 ease-in-out transform hover:scale-110 hover:translate-y-1 ${
         mobile ? 'block px-3 py-2 rounded-md text-base font-medium' : ''
       }`}
-      onClick={onClick} // Usamos onClick para cerrar el menú móvil si es necesario
+      onClick={onClick}
     >
       {label}
     </Link>

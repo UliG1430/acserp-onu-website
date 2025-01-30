@@ -49,7 +49,7 @@ const Footer = () => {
         </a>
       </div>
       <div className="text-center mt-4">
-        <p>© {currentYear} Asociacion Civil Simulacros Educativos Río de la Plata</p>
+        <p>© {currentYear} Asociación Civil Simulacros Educativos Río de la Plata</p>
       </div>
     </footer>
   );
