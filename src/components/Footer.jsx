@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faInstagram, faYoutube, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faInstagram, faYoutube, faXTwitter,faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -51,7 +51,25 @@ const Footer = () => {
 
       <div className="text-center mt-4">
         <p>© {currentYear} Asociación Civil Simulacros Educativos Río de la Plata</p>
+        <p className="text-sm mt-2 flex justify-center items-center">
+          Desarrollado por 
+          <a 
+            href="https://github.com/UliG1430" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="font-bold text-blue-400 hover:text-blue-500 cursor-pointer ml-1 flex items-center group"
+          >
+            <span className="transition-all duration-300 ease-in-out group-hover:-translate-y-1 group-hover:scale-105">
+              Ulises Geymonat
+            </span>
+            <FontAwesomeIcon 
+              icon={faGithub} 
+              className="ml-2 text-xl transition-all duration-300 ease-in-out group-hover:-translate-y-1 group-hover:scale-105" 
+            />
+          </a>
+        </p>
       </div>
+
     </footer>
   );
 };
