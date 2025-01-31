@@ -1,11 +1,11 @@
 import React from "react";
 import Slider from "react-slick";
-import { motion } from "framer-motion"; 
-import { NextArrow, PrevArrow } from "./CarouselArrow"; 
-import newsData from "../assets/noticias/newsData"; 
+import { motion } from "framer-motion";
+import { NextArrow, PrevArrow } from "./CarouselArrow";
+import newsData from "../assets/noticias/newsData";
 
 const slideVariant = {
-  hidden: { opacity: 0, x: 100 }, 
+  hidden: { opacity: 0, x: 100 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
 };
 
@@ -23,24 +23,27 @@ const NewsCarousel = () => {
   };
 
   return (
-    <div className="relative overflow-x-hidden">
+    <div className="relative overflow-hidden">
       <div className="w-full max-w-full mx-auto">
         <Slider {...settings}>
           {newsData.map((news, index) => (
-            <div key={index} className="relative h-[500px] overflow-hidden">
+            <div key={index} className="relative overflow-hidden">
               <a href={`/noticias/${news.id}`} className="block w-full h-full">
                 <motion.div
                   variants={slideVariant}
                   initial="hidden"
                   animate="visible"
-                  className="relative h-full w-full"
+                  className="relative w-full h-full"
                 >
-                  {/* Imagen de la noticia */}
-                  <img
-                    src={news.img}
-                    alt={news.title}
-                    className="w-full h-full object-cover"
-                  />
+                  {/* Imagen con animación automática de zoom-in suave */}
+                  <div className="overflow-hidden">
+                    <img
+                      src={news.img}
+                      alt={news.title}
+                      className="w-full h-[600px] object-cover animate-zoom"
+                    />
+                  </div>
+
                   {/* Fondo oscuro y título */}
                   <motion.div
                     initial={{ opacity: 0 }}
