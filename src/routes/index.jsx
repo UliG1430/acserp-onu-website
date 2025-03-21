@@ -37,3 +37,4 @@ function AppRoutes() {
 }
 
 export default AppRoutes;
+//rutas
