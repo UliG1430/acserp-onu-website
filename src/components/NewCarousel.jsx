@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import { motion } from "framer-motion";
 import { NextArrow, PrevArrow } from "./CarouselArrow";
 import newsData from "../assets/noticias/newsData";
+import LazyImage from "./LazyImage";
 
 const slideVariant = {
   hidden: { opacity: 0, x: 100 },
@@ -37,7 +38,7 @@ const NewsCarousel = () => {
                 >
                   {/* Imagen con animación automática de zoom-in suave */}
                   <div className="overflow-hidden">
-                    <img
+                    <LazyImage
                       src={news.img}
                       alt={news.title}
                       className="w-full h-[600px] object-cover animate-zoom"

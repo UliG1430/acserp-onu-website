@@ -3,6 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons';
 import VerticalCarousel from '../components/VerticalCarousel';
+import SEOHelmet from '../components/SEOHelmet';
 
 const Photos = () => {
   // Animación para la sección de Google Drive
@@ -16,6 +17,14 @@ const Photos = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* SEO Helmet */}
+      <SEOHelmet 
+        title="Galería de Fotos - Modelo ONU La Plata" 
+        description="Explora los momentos destacados de nuestros simulacros educativos en la galería de fotos del Modelo ONU La Plata."
+        url="https://acserp.org.ar/fotos"
+        image="https://acserp.org.ar/og-image.png"
+      />
+
       {/* Encabezado de la sección */}
       <div className="text-center py-12 bg-indigo-950">
         <h1 className="text-white text-4xl font-bold">Galería de Fotos</h1>

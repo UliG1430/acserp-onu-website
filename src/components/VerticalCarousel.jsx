@@ -1,46 +1,46 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { useInView } from 'react-intersection-observer';
-import imageAgasajo1 from '../assets/images/agasajo1.JPG';
-import imageAgasajo2 from '../assets/images/agasajo2.JPG';
-import imageAgasajo3 from '../assets/images/agasajo3.JPG';
-import imageApertura1 from '../assets/images/apertura1.JPG';
-import imageApertura2 from '../assets/images/apertura2.JPG';
-import imageApertura3 from '../assets/images/apertura3.JPG';
-import imageSesiones1 from '../assets/images/sesiones1.JPG';
-import imageSesiones2 from '../assets/images/sesiones2.JPG';
-import imageSesiones3 from '../assets/images/sesiones3.JPG';
+import LazyImage from './LazyImage';
+
+import imageAgasajo1 from '../assets/images/agasajo1.jpg';
+import imageAgasajo2 from '../assets/images/agasajo2.jpg';
+import imageAgasajo3 from '../assets/images/agasajo3.jpg';
+import imageApertura1 from '../assets/images/apertura1.jpg';
+import imageApertura2 from '../assets/images/apertura2.jpg';
+import imageApertura3 from '../assets/images/apertura3.jpg';
+import imageSesiones1 from '../assets/images/sesiones1.jpg';
+import imageSesiones2 from '../assets/images/sesiones2.jpg';
+import imageSesiones3 from '../assets/images/sesiones3.jpg';
 
 const VerticalCarousel = () => {
   const { ref: aperturaRef, inView: aperturaInView } = useInView({ triggerOnce: true, threshold: 0.1 });
   const { ref: sesionesRef, inView: sesionesInView } = useInView({ triggerOnce: true, threshold: 0.1 });
   const { ref: agasajoRef, inView: agasajoInView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
-  // Configuración del carrusel
   const settings = {
     dots: true,
     infinite: true,
-    speed: 1000, // Animación más lenta
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000, // Más tiempo entre cambios de slide
+    autoplaySpeed: 5000,
   };
 
   return (
     <div className="min-h-screen bg-[#f0f0f5]">
-      {/* Acto de Apertura - Carrusel (Azul Oscuro) */}
       <section ref={aperturaRef} className="w-full flex flex-col md:flex-row items-center py-16 md:py-24 border-gray-300">
         <div className={`w-full md:w-1/2 p-8 ${aperturaInView ? 'animate-fade-in-left' : 'opacity-0'}`}>
           <Slider {...settings}>
             <div>
-              <img src={imageApertura1} alt="Acto de Apertura 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageApertura1} alt="Acto de Apertura 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
             <div>
-              <img src={imageApertura2} alt="Acto de Apertura 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageApertura2} alt="Acto de Apertura 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
             <div>
-              <img src={imageApertura3} alt="Acto de Apertura 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageApertura3} alt="Acto de Apertura 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
           </Slider>
         </div>
@@ -50,18 +50,17 @@ const VerticalCarousel = () => {
         </div>
       </section>
 
-      {/* Sesiones - Carrusel (Azul Oscuro) */}
       <section ref={sesionesRef} className="w-full flex flex-col md:flex-row-reverse items-center py-16 md:py-24 bg-blue-950">
         <div className={`w-full md:w-1/2 p-8 ${sesionesInView ? 'animate-fade-in-right' : 'opacity-0'}`}>
           <Slider {...settings}>
             <div>
-              <img src={imageSesiones1} alt="Sesiones 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageSesiones1} alt="Sesiones 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
             <div>
-              <img src={imageSesiones2} alt="Sesiones 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageSesiones2} alt="Sesiones 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
             <div>
-              <img src={imageSesiones3} alt="Sesiones 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageSesiones3} alt="Sesiones 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
           </Slider>
         </div>
@@ -71,18 +70,17 @@ const VerticalCarousel = () => {
         </div>
       </section>
 
-      {/* Agasajo Diplomático - Carrusel (Índigo) */}
       <section ref={agasajoRef} className="w-full flex flex-col md:flex-row items-center py-16 md:py-24 bg-indigo-300">
         <div className={`w-full md:w-1/2 p-8 ${agasajoInView ? 'animate-fade-in-left' : 'opacity-0'}`}>
           <Slider {...settings}>
             <div>
-              <img src={imageAgasajo1} alt="Agasajo Diplomático 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageAgasajo1} alt="Agasajo Diplomático 1" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
             <div>
-              <img src={imageAgasajo2} alt="Agasajo Diplomático 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageAgasajo2} alt="Agasajo Diplomático 2" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
             <div>
-              <img src={imageAgasajo3} alt="Agasajo Diplomático 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
+              <LazyImage src={imageAgasajo3} alt="Agasajo Diplomático 3" className="w-full h-[450px] object-cover rounded-lg shadow-lg" />
             </div>
           </Slider>
         </div>

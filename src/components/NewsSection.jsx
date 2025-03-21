@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom"; 
 import newsData from "../assets/noticias/newsData.js";
+import LazyImage from "../components/LazyImage"; // Asegúrate de tener este componente creado
 
 const truncateText = (text, length) => {
   if (text.length > length) {
@@ -61,7 +62,7 @@ const NewsSection = () => {
             }}
           >
             {/* Imagen de la noticia */}
-            <img
+            <LazyImage
               src={news.img}
               alt={news.title}
               className="w-full h-48 object-cover rounded-t-lg"

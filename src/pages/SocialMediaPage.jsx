@@ -5,6 +5,7 @@ import TikTokFeed from "../components/TikTokFeed";
 import LinkedInFeed from "../components/LinkedInFeed";
 import { FaInstagram, FaYoutube, FaArrowUp, FaLinkedin } from "react-icons/fa";
 import TikTokLogo from "../assets/logos/tiktok_icon.svg"; 
+import SEOHelmet from "../components/SEOHelmet"; // Importamos el componente SEOHelmet
 
 // Variantes de animación
 const fadeInVariant = {
@@ -15,7 +16,6 @@ const fadeInVariant = {
 const SocialMediaPage = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  // Detectar el scroll y mostrar/ocultar el botón
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollButton(window.scrollY > 300);
@@ -24,12 +24,10 @@ const SocialMediaPage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Función para volver arriba
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Función para redirigir a la URL
   const handleRedirect = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
@@ -40,8 +38,15 @@ const SocialMediaPage = () => {
       animate="visible"
       className="py-16 bg-gradient-to-b from-blue-100 via-gray-100 to-blue-50 relative"
     >
+      {/* SEO Helmet */}
+      <SEOHelmet
+        title="Nuestras Redes Sociales - Modelo ONU La Plata"
+        description="Seguinos en nuestras redes sociales para estar al día con todas las novedades del Modelo ONU La Plata."
+        url="https://acserp.org.ar/redes"
+        image="https://acserp.org.ar/og-image.png"
+      />
+
       <div className="max-w-6xl mx-auto px-6">
-        {/* Título Principal */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

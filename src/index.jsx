@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App'; // Importamos el App principal
+import App from './App';
+import { HelmetProvider } from 'react-helmet-async'; // ✅
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App /> 
+    <HelmetProvider> {/* ✅ Provee el contexto a toda la app */}
+      <App />
+    </HelmetProvider>
   </React.StrictMode>
 );
+
 
 //MVP
 // 1. NUESTRA HISTORIA

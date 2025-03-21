@@ -1,10 +1,11 @@
+// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  assetsInclude: ['**/*.JPG'], // Esto es para que Vite incluya las imágenes en la carp
+  assetsInclude: ['**/*.JPG', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.webp'], // incluí también otras extensiones
   server: {
-    open: true, // Esto abre automáticamente el navegador cuando inicies el servidor
-  }
+    open: true,
+  },
 });

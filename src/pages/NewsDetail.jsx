@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Animaciones
 import newsData from "../assets/noticias/newsData";
 import ScrollToTopButton from "../components/ScrollToTopButton";
+import SEOHelmet from "../components/SEOHelmet"; // Importamos SEOHelmet
 
 const NewsDetail = () => {
   const { id } = useParams();
@@ -30,7 +31,6 @@ const NewsDetail = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Detectar cuando la sección de noticias recomendadas entra en pantalla
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -50,6 +50,14 @@ const NewsDetail = () => {
 
   return (
     <div className="max-w-4xl mx-auto py-16 px-4">
+      {/* SEO Helmet */}
+      <SEOHelmet 
+        title={news.title} 
+        description={news.summary || "Lee esta noticia sobre el Modelo ONU La Plata"} 
+        url={`https://acserp.org.ar/noticias/${news.id}`} 
+        image={news.img} 
+      />
+
       {/* Encabezado */}
       <header className="mb-8">
         <motion.h1
@@ -168,7 +176,9 @@ const NewsDetail = () => {
           Volver a Inicio
         </Link>
       </motion.div>
-      <ScrollToTopButton/>
+
+      {/* Botón Scroll Arriba */}
+      <ScrollToTopButton />
     </div>
   );
 };
