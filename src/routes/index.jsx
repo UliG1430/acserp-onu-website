@@ -25,7 +25,7 @@ function AppRoutes() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/fotos" element={<Photos />} />
-          <Route path="/modelo" element={<Model />} />
+          <Route path="/organos" element={<Model />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/redes" element={<SocialMediaPage />} />
           <Route path="/donaciones" element={<DonationsPage />} />
@@ -37,4 +37,4 @@ function AppRoutes() {
 }
 
 export default AppRoutes;
-//rutas
+//rutas de la aplicación
