@@ -3,6 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons';
 import VerticalCarousel from '../components/VerticalCarousel';
+import SEOHelmet from '../components/SEOHelmet';
 
 const Photos = () => {
   // Animación para la sección de Google Drive
@@ -11,19 +12,27 @@ const Photos = () => {
     threshold: 0.2,
   });
 
-  const googleDriveLink = "https://drive.google.com/embeddedfolderview?id=1xE8paosqx8vOquGbAuYX9st3GLtAX_8T#grid";
-  const googleDriveGeneralLink = "https://drive.google.com/drive/folders/1F8iVK5Op6QFQ0tjg254wJaTsOadnszxc";
+  const googleDriveLink = "https://drive.google.com/embeddedfolderview?id=1MBZn4nV7mB8i9KxA_Tiypgrsy9qXrkpk#grid";
+  const googleDriveGeneralLink = "https://drive.google.com/drive/folders/1lUwofFDsJk68XDpKdA-3HrZAPSjKmOa6";
 
   return (
     <div className="min-h-screen bg-white">
+      {/* SEO Helmet */}
+      <SEOHelmet 
+        title="Galería de Fotos - Modelo ONU La Plata" 
+        description="Explora los momentos destacados de nuestros simulacros educativos en la galería de fotos del Modelo ONU La Plata."
+        url="https://acserp.org.ar/fotos"
+        image="https://acserp.org.ar/og-image.png"
+      />
+
       {/* Encabezado de la sección */}
       <div className="text-center py-12 bg-indigo-950">
         <h1 className="text-white text-4xl font-bold">Galería de Fotos</h1>
         <p className="text-indigo-300 text-lg mt-2">Momentos destacados de nuestros simulacros educativos</p>
       </div>
 
-      {/* Sección del Carrusel Vertical */}
-      <VerticalCarousel />
+      {/* Sección del Carrusel Vertical - Ahora con el orden correcto */}
+      <VerticalCarousel sections={["apertura", "sesiones", "agasajo"]} /> 
 
       {/* Sección de Google Drive */}
       <div ref={googleDriveRef} className={`w-full px-4 py-12 text-center transition-opacity duration-1000 ${googleDriveInView ? 'opacity-100' : 'opacity-0'}`}>
@@ -33,7 +42,7 @@ const Photos = () => {
             className="mr-3 text-blue-600 fa-google-drive"
             style={{ fontSize: '32px' }}
           />
-          Fotos VI Edición del Modelo Público Más Grande del País
+          Fotos VII Edición del Modelo Público Más Grande del País
         </h2>
 
         <div className="bg-[#e0e0f8] rounded-lg shadow-lg p-4 mb-4">

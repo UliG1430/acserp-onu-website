@@ -1,29 +1,14 @@
 import React from "react";
 import Slider from "react-slick";
+import { motion } from "framer-motion";
+import { NextArrow, PrevArrow } from "./CarouselArrow";
+import newsData from "../assets/noticias/newsData";
+import LazyImage from "./LazyImage";
 
-import { NextArrow, PrevArrow } from "./CarouselArrow"; // Flechas
-
-import noticia1 from "../assets/images/noticia1.JPG";
-import noticia2 from "../assets/images/noticia2.JPG";
-import noticia3 from "../assets/images/noticia3.JPG";
-
-const newsData = [
-  {
-    title: "Finalizamos las capacitaciones de cara al inicio del Modelo 2024",
-    img: noticia1,
-    link: "#",
-  },
-  {
-    title: "Noticia 2",
-    img: noticia2,
-    link: "#",
-  },
-  {
-    title: "Noticia 3",
-    img: noticia3,
-    link: "#",
-  },
-];
+const slideVariant = {
+  hidden: { opacity: 0, x: 100 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+};
 
 const NewsCarousel = () => {
   const settings = {
@@ -39,29 +24,44 @@ const NewsCarousel = () => {
   };
 
   return (
-    <div className="relative w-screen mt-0 overflow-hidden">
-      <Slider {...settings}>
-        {newsData.map((news, index) => (
-          <div key={index} className="relative h-[500px] overflow-hidden">
-            <a href={news.link} className="block w-full h-full">
-              <div className="relative h-full w-full">
-                {/* Efecto de zoom-in lento en todas las imágenes */}
-                <img
-                  src={news.img}
-                  alt={news.title}
-                  className="w-full h-full object-cover animated-zoom"
-                />
-                {/* Fondo opaco y título */}
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                  <h3 className="text-3xl font-bold text-white text-center">
-                    {news.title}
-                  </h3>
-                </div>
-              </div>
-            </a>
-          </div>
-        ))}
-      </Slider>
+    <div className="relative overflow-hidden">
+      <div className="w-full max-w-full mx-auto">
+        <Slider {...settings}>
+          {newsData.map((news, index) => (
+            <div key={index} className="relative overflow-hidden">
+              <a href={`/noticias/${news.id}`} className="block w-full h-full">
+                <motion.div
+                  variants={slideVariant}
+                  initial="hidden"
+                  animate="visible"
+                  className="relative w-full h-full"
+                >
+                  {/* Imagen con animación automática de zoom-in suave */}
+                  <div className="overflow-hidden">
+                    <LazyImage
+                      src={news.img}
+                      alt={news.title}
+                      className="w-full h-[600px] object-cover animate-zoom"
+                    />
+                  </div>
+
+                  {/* Fondo oscuro y título */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+                  >
+                    <h3 className="text-3xl font-bold text-white text-center">
+                      {news.title}
+                    </h3>
+                  </motion.div>
+                </motion.div>
+              </a>
+            </div>
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 };
