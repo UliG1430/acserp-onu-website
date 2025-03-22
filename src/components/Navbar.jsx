@@ -7,7 +7,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Inicio", path: "/" },
     { name: "ACSERP", path: "/acserp" },
-    { name: "Modelo", path: "/modelo" },
+    { name: "Órganos", path: "/organos" },
     { name: "Recursos", path: "https://drive.google.com/drive/folders/1I3VcyWMO3rW2JoXUAf0-Gf9PIl-I0xMl", target: "_blank" },
     { name: "Fotos", path: "/fotos" },
     { name: "Redes", path: "/redes" },
