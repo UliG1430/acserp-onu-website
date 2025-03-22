@@ -1,0 +1,17 @@
+<!-- public/sitemap.xml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://acserp.org.ar/</loc></url>
+  <url><loc>https://acserp.org.ar/acserp</loc></url>
+  <url><loc>https://acserp.org.ar/about</loc></url>
+  <url><loc>https://acserp.org.ar/contact</loc></url>
+  <url><loc>https://acserp.org.ar/fotos</loc></url>
+  <url><loc>https://acserp.org.ar/organos</loc></url>
+  <url><loc>https://acserp.org.ar/redes</loc></url>
+  <url><loc>https://acserp.org.ar/donaciones</loc></url>
+
+  <!-- Noticias (IDs estáticos por ahora) -->
+  <url><loc>https://acserp.org.ar/noticias/1</loc></url>
+  <url><loc>https://acserp.org.ar/noticias/2</loc></url>
+  <url><loc>https://acserp.org.ar/noticias/3</loc></url>
+</urlset>

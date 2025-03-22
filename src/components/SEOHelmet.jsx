@@ -30,6 +30,23 @@ const SEOHelmet = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+
+      {/* Datos estructurados de la organización */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Asociación Civil Simulacros Educativos Río de La Plata",
+          alternateName: "ACSERP",
+          url: "https://acserp.org.ar",
+          logo: "https://acserp.org.ar/og-image.png",
+          sameAs: [
+            "https://www.instagram.com/modeloonulp/",
+            "https://www.linkedin.com/in/simulacros-educativos-r%C3%ADo-de-la-plata-b45698230/",
+            "https://www.youtube.com/@modeloonulaplata"
+          ]
+        })}
+      </script>
     </Helmet>
   );
 };
