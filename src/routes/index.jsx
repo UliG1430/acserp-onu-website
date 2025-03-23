@@ -10,6 +10,7 @@ import ACSERPPage from "../pages/ACSERPPage";
 import SocialMediaPage from "../pages/SocialMediaPage";
 import DonationsPage from "../pages/DonationsPage";
 import NewsDetail from "../pages/NewsDetail";
+import Resources from "../pages/Resources";
 import ScrollToTop from "../components/ScrollToTop"; // Para cargar siempre desde arriba
 
 function AppRoutes() {
@@ -29,6 +30,7 @@ function AppRoutes() {
           <Route path="*" element={<NotFound />} />
           <Route path="/redes" element={<SocialMediaPage />} />
           <Route path="/donaciones" element={<DonationsPage />} />
+          <Route path="/recursos" element={<Resources />} />
           <Route path="/noticias/:id" element={<NewsDetail />} /> {/* Detalle de noticia */}
         </Routes>
       </AnimatePresence>

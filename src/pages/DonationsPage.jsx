@@ -1,6 +1,7 @@
 import React from "react";
 import { useInView } from "react-intersection-observer";
-import SEOHelmet from "../components/SEOHelmet"; // Importamos el componente SEOHelmet
+import SEOHelmet from "../components/SEOHelmet";
+import heroDonaciones from "../assets/images/image3.jpg"; // Asegúrate de tener esta imagen
 
 const DonationsPage = () => {
   const donationLinks = [
@@ -27,18 +28,28 @@ const DonationsPage = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="bg-white min-h-screen">
       <SEOHelmet 
         title="Donaciones - Modelo ONU La Plata" 
         description="Contribuí al Modelo ONU La Plata y apoyá la educación pública y gratuita con tu donación."
       />
-      
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-blue-950 text-center mb-8">
-          ¡Hacé tu aporte al Modelo ONU más grande del país!
-        </h1>
 
-        {/* Opciones de Donación */}
+      {/* Hero Image con Overlay */}
+      <div className="relative w-full h-[50vh]">
+        <img
+          src={heroDonaciones}
+          alt="Donaciones ONU Modelo"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center">
+          <h1 className="text-white text-4xl font-bold text-center px-4">
+            ¡Hacé tu aporte al Modelo ONU más grande del país!
+          </h1>
+        </div>
+      </div>
+
+      {/* Opciones de Donación */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {donationLinks.map((donation, index) => {
             const { ref, inView } = useInView({
@@ -64,7 +75,7 @@ const DonationsPage = () => {
                   href={donation.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 py-2 bg-blue-950 text-white font-bold rounded-md shadow hover:bg-blue-800 transition-colors duration-300"
+                  className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-blue-950 rounded-md transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 hover:shadow-xl"
                 >
                   Donar Ahora
                 </a>

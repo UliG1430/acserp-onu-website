@@ -8,7 +8,7 @@ const Navbar = () => {
     { name: "Inicio", path: "/" },
     { name: "ACSERP", path: "/acserp" },
     { name: "Órganos", path: "/organos" },
-    { name: "Recursos", path: "https://drive.google.com/drive/folders/1I3VcyWMO3rW2JoXUAf0-Gf9PIl-I0xMl", target: "_blank" },
+    { name: "Recursos", path: "/recursos", target: "_blank" },
     { name: "Fotos", path: "/fotos" },
     { name: "Redes", path: "/redes" },
     { name: "Donaciones", path: "/donaciones" },
