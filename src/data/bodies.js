@@ -89,7 +89,7 @@ export const bodies = [
   },
   {
     id: 13,
-    nombre: "Secretaría de Tecnología e Innovación",
+    nombre: "Sala de Tratados Internacionales",
     logo: stiLogo,
     descripcion: "La Secretaría de Tecnología e Innovación promueve el desarrollo y la aplicación de tecnologías innovadoras en las Naciones Unidas, apoyando la modernización y el crecimiento tecnológico global."
   },
