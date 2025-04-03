@@ -1,7 +1,7 @@
 import React from "react";
 import { useInView } from "react-intersection-observer";
 import SEOHelmet from "../components/SEOHelmet";
-import heroDonaciones from "../assets/images/image3.jpg"; // Asegúrate de tener esta imagen
+import heroDonaciones from "../assets/images/image3.JPG"; // Asegúrate de tener esta imagen
 
 const DonationsPage = () => {
   const donationLinks = [
