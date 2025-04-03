@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons';
 import SEOHelmet from '../components/SEOHelmet';
-import recursoBanner from '../assets/images/image1.jpg';
+import recursoBanner from '../assets/images/image1.JPG';
 
 const Recursos = () => {
   const { ref: driveRef, inView: driveInView } = useInView({ triggerOnce: true, threshold: 0.2 });
