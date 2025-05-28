@@ -65,7 +65,7 @@ const NewsSection = () => {
         </button>
 
         {/* Carrusel */}
-        <div className="overflow-hidden">
+        <div className="overflow-visible">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPage}
@@ -75,11 +75,9 @@ const NewsSection = () => {
               variants={{
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.05 } },
-                exit: {
-                  transition: { staggerChildren: 0.03, staggerDirection: -1 },
-                },
+                exit: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
               }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 px-2"
             >
               {paginatedNews.map((news) => (
                 <Link key={news.id} to={`/noticias/${news.id}`} className="block">
@@ -101,8 +99,9 @@ const NewsSection = () => {
                       scale: 1.05,
                       boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
                     }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="bg-white rounded-lg overflow-hidden transition duration-300 cursor-pointer h-full flex flex-col"
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    style={{ willChange: "transform" }}
+                    className="bg-white rounded-lg transition duration-300 cursor-pointer h-full flex flex-col"
                   >
                     <LazyImage
                       src={news.img}
