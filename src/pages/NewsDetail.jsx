@@ -49,7 +49,7 @@ const NewsDetail = () => {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto py-16 px-4">
+    <div className="max-w-4xl mx-auto py-8 px-4">
       {/* SEO Helmet */}
       <SEOHelmet 
         title={news.title} 
@@ -83,42 +83,41 @@ const NewsDetail = () => {
           alt={news.title}
           className="w-full h-auto rounded-lg shadow-lg"
         />
-        <figcaption className="text-gray-500 text-sm mt-2 text-center">
-          Imagen principal
-        </figcaption>
+       
       </motion.figure>
 
       {/* Contenido con Imágenes Alternadas */}
-      <section className="space-y-8">
-        {paragraphs.map((paragraph, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: index * 0.2 }}
-            className={`flex flex-col ${
-              index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-            } items-start gap-4`}
-          >
-            <p className="text-lg leading-relaxed text-gray-800 flex-1">{paragraph}</p>
+     {/* Contenido con Imágenes Alternadas */}
+<section className="space-y-8">
+  {paragraphs.map((paragraph, index) => (
+    <motion.div
+      key={index}
+      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8, delay: index * 0.2 }}
+      className={`flex flex-col ${
+        index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+      } items-start gap-4`}
+    >
+      <p className="text-lg leading-relaxed text-gray-800 flex-1">{paragraph}</p>
 
-            {/* Imagen Adicional */}
-            {news.additionalImages && news.additionalImages[index] && (
-              <figure className="flex-shrink-0 w-full md:w-1/3">
-                <motion.img
-                  src={news.additionalImages[index].url}
-                  alt={`Imagen adicional ${index + 1}`}
-                  className="w-full h-auto rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-                  whileHover={{ scale: 1.05 }}
-                />
-                <figcaption className="text-gray-600 text-sm mt-2 text-center">
-                  {news.additionalImages[index].description}
-                </figcaption>
-              </figure>
-            )}
-          </motion.div>
-        ))}
-      </section>
+      {/* Mostrar imagen adicional solo a partir del segundo párrafo */}
+      {news.additionalImages && index > 0 && news.additionalImages[index - 1] && (
+        <figure className="flex-shrink-0 w-full md:w-1/3">
+          <motion.img
+            src={news.additionalImages[index - 1].url}
+            alt={`Imagen adicional ${index}`}
+            className="w-full h-auto rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+            whileHover={{ scale: 1.05 }}
+          />
+          <figcaption className="text-gray-600 text-sm mt-2 text-center">
+            {news.additionalImages[index - 1].description}
+          </figcaption>
+        </figure>
+      )}
+    </motion.div>
+  ))}
+</section>
 
       {/* 🔥 Noticias Recomendadas con Animaciones */}
       <section id="recommended-news" className="mt-16">

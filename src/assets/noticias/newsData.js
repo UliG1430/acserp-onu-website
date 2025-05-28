@@ -5,6 +5,12 @@ import acserp_aministia3 from "../images/acserp_amnistia3.jpg";
 import concejo_deliberante from "../images/concejo_deliberante.jpg";
 import concejo_deliberante2 from "../images/concejo_deliberante2.jpg";
 import gala_benefica from "../images/gala_benefica.jpg";
+import homero_manzi from "../images/homero_manzi.jpg";
+
+import firma1 from "../images/firma1.jpg";
+import firma2 from "../images/firma2.jpg";
+import firma3 from "../images/firma3.jpg";
+
 const newsData = [
   {
     id: 1,
@@ -23,7 +29,7 @@ Seguimos construyendo puentes con instituciones comprometidas con los derechos h
 ¡Por más espacios de diálogo, aprendizaje y trabajo conjunto!
     `,
     date: "Lunes, 7 de Octubre de 2024",
-    img: acserp_amnistia, // Ruta de imagen corregida
+    img: acserp_amnistia, 
     additionalImages: [
     {
       url:acserp_aministia2,
@@ -84,6 +90,124 @@ Desde la ACSERP, seguimos comprometidos con la formación de los jóvenes y con 
     date: "Lunes, 5 de Agosto de 2024",
     img: gala_benefica,
   },
+  {
+    id: 4,
+    title: "La ACSERP confirmó las sedes de los modelos preparatorios de junio",
+    summary:
+      "La Asociación Civil Simulacros Educativos Río de la Plata confirmó oficialmente las sedes donde se llevarán a cabo los modelos preparatorios...",
+    content: `
+   La Asociación Civil Simulacros Educativos Río de la Plata confirmó oficialmente las sedes donde se llevarán a cabo los modelos preparatorios de Naciones Unidas durante el mes de junio. Estos encuentros, pensados como instancias clave en el proceso formativo de miles de estudiantes, se desarrollarán en distintas zonas de la ciudad de La Plata y alrededores, con el objetivo de acercar la experiencia de los Modelos ONU a cada rincón del territorio.
+El cronograma queda conformado de la siguiente manera:
+	•	2 y 3 de junio | Modelo Zona Centro 1 | Edificio Sergio Karakachoff – UNLP
+	•	5 y 6 de junio | Modelo Zona Centro 2 | Cámara de Diputados de la Provincia de Buenos Aires
+	•	9 y 10 de junio | Modelo City Bell | Club Banco Provincia
+	•	12 y 13 de junio | Modelo Zona Sur | Colegio Castañeda
+	•	23 y 24 de junio | Modelo Zona Norte | Club Universitario
+	•	26 y 27 de junio | Modelo Zona Centro 3 | Colegio de la Abogacía de La Plata
+Estas sedes representan espacios institucionales y comunitarios con los que la Asociación mantiene vínculos sólidos, y que abren sus puertas de manera desinteresada para que miles de estudiantes puedan debatir, aprender y disfrutar, mientras se forman como ciudadanos comprometidos con los desafíos del mundo actual.
+Agradecemos profundamente a cada institución que colabora año tras año con este proyecto educativo. Su compromiso con la formación de jóvenes, con la promoción de la participación democrática y con la defensa de la educación pública y transformadora es clave para que esta experiencia siga creciendo y llegando a más estudiantes.
+
+    `,
+    date: "Lunes, 21 de abril de 2025",
+    img: gala_benefica,
+  },
+  {
+    id: 5,
+    title: "El Modelo ONU de La Plata obtuvo el Premio Homero Manzi",
+    summary:
+      "Tras un año cargado de actividades, como los seis modelos preparatorios de junio, la gala benéfica de agosto y...",
+    content: `
+   Tras un año cargado de actividades, como los seis modelos preparatorios de junio, la gala benéfica de agosto y el VII Modelo Intercolegial de Naciones Unidas de La Plata, nos complace anunciar que el pasado lunes 2 de diciembre fuimos distinguidos con el prestigioso Premio Homero Manzi en la categoría de Educación y Juventud. La ceremonia tuvo lugar en el histórico Coliseo Podestá, en un evento cargado de emociones y reconocimientos.
+
+El Premio Homero Manzi, otorgado por el Centro Cultural y Biblioteca Popular Homero Manzi, en conjunto con la Municipalidad de La Plata y el Coliseo Podestá, es un galardón iniciado por el Dr. Pedro López, fundador de la institución hace más de 40 años, con el fin de reconocer la labor de personalidades, instituciones y figuras en los ámbitos de la cultura, el arte, la ciencia, el deporte, la educación y el ámbito social.
+
+Queremos aprovechar esta ocasión para expresar nuestro más profundo y sentido agradecimiento tanto a las instituciones educativas y sus profesores, como también a los estudiantes y sus familias, quienes año tras año con	fían plenamente en la actividad educativa, pública y gratuita más importante del país.
+
+Asimismo, extendemos nuestro reconocimiento y gratitud a todos los voluntarios del Modelo ONU de La Plata, cuyo esfuerzo, dedicación y compromiso son el corazón de esta iniciativa. Gracias a su trabajo incansable, hemos logrado alcanzar y superar nuestras metas, inspirando a miles de jóvenes y promoviendo valores fundamentales como el diálogo, la cooperación y la inclusión.
+
+Este premio no solo representa un logro, sino también un impulso para seguir creciendo. Nos invita a redoblar nuestro compromiso con la educación y con la formación de futuras generaciones.
+
+¡Gracias a todos por ser parte de este sueño colectivo! Juntos seguiremos construyendo un futuro mejor.
+
+
+    `,
+    date: "Viernes, Diciembre 6 de 2024",
+    img: homero_manzi,
+  },
+  {
+    id: 6,
+    title: "¡Ya están abiertas las inscripciones para los preparatorios de Junio!",
+    summary:
+      "La Asociación Civil Simulacros Educativos Río de la Plata informa que desde hoy, lunes 7 de abril, y hasta el viernes 18 del mismo mes...",
+    content: `
+  La Asociación Civil Simulacros Educativos Río de la Plata informa que desde hoy, lunes 7 de abril, y hasta el viernes 18 del mismo mes, se encuentran abiertas las inscripciones para participar de los Modelos ONU preparatorios que se desarrollarán durante el mes de junio en distintas sedes de la ciudad y la región.
+El proceso continuará con la asignación de preparatorios, que tendrá lugar entre el 28 de abril y el 2 de mayo. Luego, entre el 5 y el 9 de mayo, se dará a conocer la presentación oficial de tópicos para cada órgano.
+Desde ese momento, y hasta la semana previa al inicio de los modelos, la Asociación llevará adelante capacitaciones para futuros delegados, orientadas a acompañar el proceso formativo y garantizar una experiencia enriquecedora para todos los estudiantes.
+En caso de querer sumarse o conseguir más información, pueden escribirnos a:
+ modeloonulp@gmail.com
+Invitamos a escuelas y docentes a completar el formulario de inscripción y ser parte de la experiencia educativa más grande del país.
+    `,
+    date: "Lunes, 7 de abril de 2025",
+    img: homero_manzi,
+  },
+  {
+    id: 7,
+    title: "La UNLP y la Asociación Civil Simulacros Educativos Río de la Plata firmaron un convenio de cooperación institucional",
+    summary:
+      "El pasado lunes, la Asociación Civil Simulacros Educativos Río de la Plata dio un nuevo paso en su compromiso con la educación pública y...",
+    content: `
+El pasado lunes, la Asociación Civil Simulacros Educativos Río de la Plata dio un nuevo paso
+en su compromiso con la educación pública y transformadora. El presidente de nuestra
+Asociación, Camilo Leavi Blázquez, firmó un convenio de cooperación con el presidente de la
+Universidad Nacional de La Plata, Martín López Armengol.
+Este acuerdo marca un hito en la historia de nuestra organización, consolidando el vínculo
+institucional con una de las universidades más prestigiosas del país. A través de este convenio,
+la UNLP brindará apoyo para el desarrollo de futuras acciones impulsadas por nuestra
+Asociación, especialmente aquellas vinculadas a la promoción de actividades de simulación
+educativa orientadas a enriquecer la formación de estudiantes de nivel medio y superior.
+La firma de este convenio representa el reconocimiento al trabajo sostenido y comprometido
+que desde hace años venimos realizando en la ciudad y la región, organizando simulacros de
+Naciones Unidas y otras experiencias educativas que promueven el pensamiento crítico, el
+trabajo en equipo, la expresión oral y escrita, y el compromiso con los grandes temas de la
+agenda internacional: la paz y la seguridad, los derechos humanos, el medio ambiente, la
+equidad de género, los asuntos humanitarios y jurídicos.
+En Simulacros Educativos Río de la Plata reafirmamos nuestra misión de construir espacios de
+participación juvenil, democráticos y federales, con el objetivo de seguir ampliando derechos a
+través de la educación. Este convenio con la Universidad Nacional de La Plata no solo fortalece
+nuestra proyección institucional, sino que también renueva nuestra convicción de que otra
+forma de aprender —y de transformar el mundo— es posible.
+    `,
+    date: "Viernes, 14 de Agosto de 2023",
+    img: firma1,
+    additionalImages: [
+      {
+        url:firma2,
+      },
+      {
+        url:firma3,
+      }
+      ],
+
+  },
+  {
+    id: 8,
+    title: " La ACSERP le dio la bienvenida a sus nuevos voluntarios",
+    summary:
+      "Este viernes, la Asociación Civil Simulacros Educativos Río de la Plata llevó a cabo una reunión de bienvenida con los nuevos voluntarios seleccionados para..",
+    content: `
+    Este viernes, la Asociación Civil Simulacros Educativos Río de la Plata llevó a cabo una reunión de bienvenida con los nuevos voluntarios seleccionados para integrar el equipo de organización de los preparatorios que se desarrollarán en el mes de junio. El encuentro tuvo lugar en el Edificio Sergio Karakachoff, perteneciente a la Universidad Nacional de La Plata, institución con la cual la asociación mantiene una estrecha relación institucional.
+La jornada fue encabezada por la Dra. Micaela Mendivil y por los distintos coordinadores de las áreas de trabajo de la asociación, quienes presentaron la estructura organizativa de los simulacros realizados por ACSERP, compartieron experiencias de años anteriores y detallaron cuáles serán los objetivos para este nuevo ciclo.
+El eje central del encuentro fue promover la integración del equipo y dar a conocer las tareas específicas que llevarán adelante durante los preparatorios, los cuales contarán con la participación de miles de estudiantes de diversas escuelas secundarias de toda la región.
+La reunión también fue una oportunidad para presentar los valores que definen a nuestra asociación: el profundo compromiso con una educación pública, gratuita y transformadora; la promoción de la cooperación internacional; y la resolución pacífica de los conflictos.
+Desde la Asociación Civil Simulacros Educativos Río de la Plata agradecemos a cada una y cada uno de los más de 60 voluntarios que decidieron sumarse a nuestra organización y reafirmamos nuestro compromiso con la educación como herramienta de cambio.
+
+    `,
+    date:"Viernes, 4 de Abril de 2025"
+  }
+  
+  
+  
+  
   // Resto de noticias...
 ];
 
