@@ -2,13 +2,17 @@ import React, { useEffect } from "react";
 
 const DonarOnlineWidget = () => {
   useEffect(() => {
-    const scriptId = "donaronline-script";
+    const scriptId = "donaronline-widget-script";
     if (!document.getElementById(scriptId)) {
       const script = document.createElement("script");
-      script.src = "https://donaronline.org/widget.js";
       script.id = scriptId;
+      script.src = "https://donaronline.org/widget.js";
       script.async = true;
       document.body.appendChild(script);
+    } else {
+      if (window.DonarOnlineWidget?.init) {
+        window.DonarOnlineWidget.init();
+      }
     }
   }, []);
 
