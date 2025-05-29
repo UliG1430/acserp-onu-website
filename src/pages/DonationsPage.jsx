@@ -2,9 +2,8 @@ import React from "react";
 import { useInView } from "react-intersection-observer";
 import SEOHelmet from "../components/SEOHelmet";
 import LazyImage from "../components/LazyImage";
-import DonarOnlineIframe from "../components/DonarOnlineIframe"; 
-import heroDonaciones from "../assets/images/image3.JPG";
 import DonarOnlineWidget from "../components/DonarOnlineWidget";
+import heroDonaciones from "../assets/images/image3.JPG";
 
 const DonationsPage = () => {
   const donationLinks = [
@@ -51,9 +50,18 @@ const DonationsPage = () => {
         </div>
       </div>
 
-      {/* Nueva sección: Suscripción Donar Online */}
-      <DonarOnlineWidget />
-      {/* Sección clásica de donaciones únicas */}
+      {/* Sección 1: Suscripción mensual DonarOnline */}
+      <div className="max-w-4xl mx-auto px-4 py-16">
+        <h2 className="text-3xl font-semibold text-blue-950 mb-6 text-center">
+          Aporte mensual vía DonarOnline
+        </h2>
+        <DonarOnlineWidget
+          slug="simulacros-educativos-rio-de-la-plata/la-actividad-educativa-publica-y-gratuita-mas-grande-de-argentina-te-necesita"
+          color="#0f172a"
+        />
+      </div>
+
+      {/* Sección 2: Donación única vía MercadoPago */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h2 className="text-3xl font-bold text-center text-blue-950 mb-10">
           Donaciones únicas vía MercadoPago
