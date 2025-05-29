@@ -11,7 +11,7 @@ const DonarOnlineIframe = () => {
 
         <div className="w-full max-w-3xl mx-auto rounded-lg overflow-hidden shadow-2xl">
           <iframe
-            src="https://donaronline.org/simulacros-educativos-rio-de-la-plata/la-actividad-educativa-publica-y-gratuita-mas-grande-de-argentina-te-necesita/widget"
+            src="https://donaronline.org/simulacros-educativos-rio-de-la-plata/la-actividad-educativa-publica-y-gratuita-mas-grande-de-argentina-te-necesita"
             title="DonarOnline Formulario"
             width="100%"
             height="820"
