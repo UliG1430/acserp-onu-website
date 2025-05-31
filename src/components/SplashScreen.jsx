@@ -43,7 +43,7 @@ const SplashScreen = ({ show }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 1 }}
           >
-            Modelo ONU La Plata 2025
+            Asociación Civil Simulacros Educativos Río de La Plata
           </motion.p>
 
           {/* Confetti */}
