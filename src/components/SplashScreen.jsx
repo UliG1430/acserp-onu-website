@@ -1,50 +1,64 @@
 // src/components/SplashScreen.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../assets/logos/blank_logos/logo_white.png"; // ✅ Asegurate de importar el logo correctamente
+import Confetti from "react-confetti-boom";
+import logo from "../assets/logos/blank_logos/logo_white.png";
 
-const SplashScreen = () => {
-  const [show, setShow] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShow(false), 3000); // 3 segundos
-    return () => clearTimeout(timer);
-  }, []);
-
+const SplashScreen = ({ show }) => {
   return (
     <AnimatePresence>
       {show && (
         <motion.div
+          key="splash"
           className="fixed inset-0 bg-blue-950 text-white z-50 flex flex-col items-center justify-center"
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1 }}
         >
+          {/* Logo */}
           <motion.img
             src={logo}
             alt="Modelo ONU"
-            className="w-28 h-auto mb-4 object-contain"
-            initial={{ scale: 0.7, opacity: 0 }}
+            className="w-36 md:w-44 h-auto mb-6 object-contain"
+            initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           />
+
+          {/* Título */}
           <motion.h1
-            className="text-3xl md:text-4xl font-bold tracking-wide text-center"
+            className="text-3xl md:text-5xl font-extrabold tracking-tight text-center leading-tight"
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3, duration: 1 }}
           >
             ¡Bienvenidos a nuestra nueva página web!
           </motion.h1>
+
+          {/* Subtítulo */}
           <motion.p
-            className="text-sm text-blue-100 mt-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
+            className="text-base md:text-lg text-blue-200 mt-4 font-light tracking-wide italic"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 1 }}
           >
             Modelo ONU La Plata 2025
           </motion.p>
+
+          {/* Confetti */}
+          <Confetti
+            mode="boom"
+            particleCount={80}
+            colors={["#FFFFFF", "#A0C4FF", "#787AC1"]}
+            effectCount={1}
+            effectInterval={3000}
+            fadeOutHeight={0.8}
+            launchSpeed={1}
+            spreadDeg={60}
+            shapeSize={8}
+            opacityDeltaMultiplier={1}
+          />
         </motion.div>
       )}
     </AnimatePresence>
