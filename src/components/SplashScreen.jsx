@@ -39,7 +39,8 @@ const SplashScreen = ({ show }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 1 }}
           >
-ACSERP 2025          </motion.p>
+            Asociación Civil Simulacros Educativos Río de La Plata
+          </motion.p>
 
           <Confetti
             mode="boom"
