@@ -1,4 +1,3 @@
-// src/components/SplashScreen.jsx
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "react-confetti-boom";
@@ -10,13 +9,12 @@ const SplashScreen = ({ show }) => {
       {show && (
         <motion.div
           key="splash"
-          className="fixed inset-0 bg-blue-950 text-white z-50 flex flex-col items-center justify-center"
+          className="fixed inset-0 bg-blue-950 text-white z-50 flex flex-col items-center justify-center px-4 text-center"
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1 }}
         >
-          {/* Logo */}
           <motion.img
             src={logo}
             alt="Modelo ONU"
@@ -26,7 +24,6 @@ const SplashScreen = ({ show }) => {
             transition={{ duration: 0.8, ease: "easeOut" }}
           />
 
-          {/* Título */}
           <motion.h1
             className="text-3xl md:text-5xl font-extrabold tracking-tight text-center leading-tight"
             initial={{ y: 30, opacity: 0 }}
@@ -36,17 +33,14 @@ const SplashScreen = ({ show }) => {
             ¡Bienvenidos a nuestra nueva página web!
           </motion.h1>
 
-          {/* Subtítulo */}
           <motion.p
-            className="text-base md:text-lg text-blue-200 mt-4 font-light tracking-wide italic"
+            className="text-sm sm:text-base md:text-lg text-blue-200 mt-4 font-light tracking-wide italic max-w-xs sm:max-w-md md:max-w-lg text-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 1 }}
           >
-            Asociación Civil Simulacros Educativos Río de La Plata
-          </motion.p>
+ACSERP 2025          </motion.p>
 
-          {/* Confetti */}
           <Confetti
             mode="boom"
             particleCount={80}
