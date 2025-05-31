@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { NextArrow, PrevArrow } from "./CarouselArrow";
 import newsData from "../assets/noticias/newsData";
 import LazyImage from "./LazyImage";
+import parseDate from "../utils/parseDate"; // ✅ IMPORTACIÓN AQUÍ
 
 const slideVariant = {
   hidden: { opacity: 0, x: 100 },
@@ -23,11 +24,14 @@ const NewsCarousel = () => {
     prevArrow: <PrevArrow />,
   };
 
+  // ✅ ORDENAR POR FECHA (más recientes primero)
+  const sortedNews = [...newsData].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+
   return (
     <div className="relative overflow-hidden">
       <div className="w-full max-w-full mx-auto">
         <Slider {...settings}>
-          {newsData.map((news, index) => (
+          {sortedNews.map((news, index) => (
             <div key={index} className="relative overflow-hidden">
               <a href={`/noticias/${news.id}`} className="block w-full h-full">
                 <motion.div
@@ -36,7 +40,6 @@ const NewsCarousel = () => {
                   animate="visible"
                   className="relative w-full h-full"
                 >
-                  {/* Imagen con animación automática de zoom-in suave */}
                   <div className="overflow-hidden">
                     <LazyImage
                       src={news.img}
@@ -45,7 +48,6 @@ const NewsCarousel = () => {
                     />
                   </div>
 
-                  {/* Fondo oscuro y título */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

@@ -5,8 +5,6 @@ import newsData from "../assets/noticias/newsData.js";
 import LazyImage from "../components/LazyImage";
 import parseDate from "../utils/parseDate";
 
-const ITEMS_PER_PAGE = 6;
-
 const sortedNewsData = [...newsData].sort((a, b) => {
   return parseDate(b.date) - parseDate(a.date);
 });
@@ -17,11 +15,21 @@ const NewsSection = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  const totalPages = Math.ceil(sortedNewsData.length / ITEMS_PER_PAGE);
+  // 👇 Responsivo: 2 noticias por página en mobile, 6 en desktop
+  const getItemsPerPage = () => (window.innerWidth < 768 ? 2 : 6);
+  const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage());
+
+  useEffect(() => {
+    const handleResize = () => setItemsPerPage(getItemsPerPage());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const totalPages = Math.ceil(sortedNewsData.length / itemsPerPage);
 
   const paginatedNews = sortedNewsData.slice(
-    currentPage * ITEMS_PER_PAGE,
-    (currentPage + 1) * ITEMS_PER_PAGE
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
   );
 
   useEffect(() => {
@@ -80,9 +88,13 @@ const NewsSection = () => {
               variants={{
                 hidden: {},
                 visible: { transition: { staggerChildren: 0.05 } },
-                exit: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
+                exit: {
+                  transition: { staggerChildren: 0.03, staggerDirection: -1 },
+                },
               }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 px-2"
+              className={`grid grid-cols-1 ${
+                itemsPerPage <= 2 ? "sm:grid-cols-2" : "md:grid-cols-3 lg:grid-cols-3"
+              } gap-8 px-2`}
             >
               {paginatedNews.map((news) => (
                 <Link key={news.id} to={`/noticias/${news.id}`} className="block">
@@ -96,6 +108,7 @@ const NewsSection = () => {
                       scale: 1.05,
                       boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
                     }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
                     className="bg-white rounded-lg transition duration-300 cursor-pointer h-full flex flex-col"
                   >
                     <LazyImage
@@ -126,6 +139,7 @@ const NewsSection = () => {
           ›
         </button>
       </div>
+
 
       {/* Paginación */}
       <div className="flex justify-center mt-6 space-x-2">

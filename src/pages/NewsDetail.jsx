@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion"; // Animaciones
+import { motion } from "framer-motion";
 import newsData from "../assets/noticias/newsData";
 import ScrollToTopButton from "../components/ScrollToTopButton";
-import SEOHelmet from "../components/SEOHelmet"; // Importamos SEOHelmet
+import SEOHelmet from "../components/SEOHelmet";
 
 const NewsDetail = () => {
   const { id } = useParams();
@@ -18,16 +18,12 @@ const NewsDetail = () => {
     );
   }
 
-  // Filtrar noticias recomendadas (excluyendo la actual)
   const recommendedNews = newsData
     .filter((item) => item.id !== news.id)
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
 
-  // Divide el contenido en párrafos
   const paragraphs = news.content.trim().split("\n").filter((p) => p);
-
-  // Estado para controlar la animación al hacer scroll
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -49,8 +45,7 @@ const NewsDetail = () => {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
-      {/* SEO Helmet */}
+    <div className="max-w-6xl mx-auto py-8 px-4">
       <SEOHelmet 
         title={news.title} 
         description={news.summary || "Lee esta noticia sobre el Modelo ONU La Plata"} 
@@ -81,46 +76,46 @@ const NewsDetail = () => {
         <img
           src={news.img}
           alt={news.title}
-          className="w-full h-auto rounded-lg shadow-lg"
+          className="w-full h-[600px] object-cover rounded-lg shadow-lg"
         />
-       
       </motion.figure>
 
-      {/* Contenido con Imágenes Alternadas */}
-     {/* Contenido con Imágenes Alternadas */}
-<section className="space-y-8">
-  {paragraphs.map((paragraph, index) => (
-    <motion.div
-      key={index}
-      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, delay: index * 0.2 }}
-      className={`flex flex-col ${
-        index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-      } items-start gap-4`}
-    >
-      <p className="text-lg leading-relaxed text-gray-800 flex-1">{paragraph}</p>
+      {/* Contenido y Galería */}
+      <section className="space-y-12">
+        {paragraphs.map((paragraph, index) => (
+          <div key={index} className="space-y-6">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="text-lg leading-relaxed text-gray-800"
+            >
+              {paragraph}
+            </motion.p>
 
-      {/* Mostrar imagen adicional solo a partir del segundo párrafo */}
-      {news.additionalImages && index > 0 && news.additionalImages[index - 1] && (
-        <figure className="flex-shrink-0 w-full md:w-1/3">
-          <motion.img
-            src={news.additionalImages[index - 1].url}
-            alt={`Imagen adicional ${index}`}
-            className="w-full h-auto rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-            whileHover={{ scale: 1.05 }}
-          />
-          <figcaption className="text-gray-600 text-sm mt-2 text-center">
-            {news.additionalImages[index - 1].description}
-          </figcaption>
-        </figure>
-      )}
-    </motion.div>
-  ))}
-</section>
+            {/* Imagen secundaria debajo del párrafo */}
+            {news.additionalImages && index > 0 && news.additionalImages[index - 1] && (
+              <motion.figure
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+              >
+                <img
+                  src={news.additionalImages[index - 1].url}
+                  alt={`Imagen ${index}`}
+                  className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
+                />
+                <figcaption className="text-gray-600 text-sm mt-2 text-center">
+                  {news.additionalImages[index - 1].description}
+                </figcaption>
+              </motion.figure>
+            )}
+          </div>
+        ))}
+      </section>
 
-      {/* 🔥 Noticias Recomendadas con Animaciones */}
-      <section id="recommended-news" className="mt-16">
+      {/* Noticias Recomendadas */}
+      <section id="recommended-news" className="mt-20">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -161,7 +156,7 @@ const NewsDetail = () => {
         </motion.div>
       </section>
 
-      {/* Botón Volver */}
+      {/* Volver */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -176,7 +171,6 @@ const NewsDetail = () => {
         </Link>
       </motion.div>
 
-      {/* Botón Scroll Arriba */}
       <ScrollToTopButton />
     </div>
   );

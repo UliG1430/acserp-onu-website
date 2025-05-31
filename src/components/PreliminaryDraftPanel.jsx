@@ -10,7 +10,7 @@ const PreliminaryDraftPanel = ({ onClose }) => {
   return (
     <div className="h-full w-full bg-white overflow-y-auto p-6">
       <h2 className="text-2xl font-bold text-blue-950 mb-6 text-center">
-        Seleccioná un órgano para ver el anteproyecto
+        Anteproyectos
       </h2>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

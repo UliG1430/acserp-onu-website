@@ -4,12 +4,17 @@ import acserp_aministia2 from "../images/acserp_amnistia2.jpg";
 import acserp_aministia3 from "../images/acserp_amnistia3.jpg";
 import concejo_deliberante from "../images/concejo_deliberante.jpg";
 import concejo_deliberante2 from "../images/concejo_deliberante2.jpg";
-import gala_benefica from "../images/gala_benefica.jpg";
+import gala_benefica from "../images/gala_benefica.jpeg";
+import gala_benefica2 from "../images/gala_benefica2.jpg";
 import homero_manzi from "../images/homero_manzi.jpg";
-
+import preparatorios1 from "../images/preparatorios1.jpeg";
+import preparatorios2 from "../images/preparatorios2.jpeg"; 
 import firma1 from "../images/firma1.jpg";
 import firma2 from "../images/firma2.jpg";
 import firma3 from "../images/firma3.jpg";
+import inscripciones_preparatorios2 from "../images/inscripciones_preparatorios2.jpeg";
+import inscripciones_preparatorios1 from "../images/inscripciones_preparatorios.jpeg";
+import voluntarios from "../images/voluntarios.jpg";
 
 const newsData = [
   {
@@ -89,6 +94,11 @@ Desde la ACSERP, seguimos comprometidos con la formación de los jóvenes y con 
     `,
     date: "Lunes, 5 de Agosto de 2024",
     img: gala_benefica,
+    additionalImages: [
+      {
+        url:gala_benefica2,
+      }
+    ],
   },
   {
     id: 4,
@@ -109,7 +119,8 @@ Agradecemos profundamente a cada institución que colabora año tras año con es
 
     `,
     date: "Lunes, 21 de abril de 2025",
-    img: gala_benefica,
+    img: preparatorios1,
+    
   },
   {
     id: 5,
@@ -148,7 +159,12 @@ En caso de querer sumarse o conseguir más información, pueden escribirnos a:
 Invitamos a escuelas y docentes a completar el formulario de inscripción y ser parte de la experiencia educativa más grande del país.
     `,
     date: "Lunes, 7 de abril de 2025",
-    img: homero_manzi,
+    img: inscripciones_preparatorios1,
+    additionalImages: [
+      {
+        url: inscripciones_preparatorios2,
+      }
+    ],
   },
   {
     id: 7,
@@ -202,7 +218,8 @@ La reunión también fue una oportunidad para presentar los valores que definen 
 Desde la Asociación Civil Simulacros Educativos Río de la Plata agradecemos a cada una y cada uno de los más de 60 voluntarios que decidieron sumarse a nuestra organización y reafirmamos nuestro compromiso con la educación como herramienta de cambio.
 
     `,
-    date:"Viernes, 4 de Abril de 2025"
+    date:"Viernes, 4 de Abril de 2025",
+    img: voluntarios,
   }
   
   
