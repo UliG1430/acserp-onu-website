@@ -3,28 +3,33 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import newsData from "../assets/noticias/newsData.js";
 import LazyImage from "../components/LazyImage";
+import parseDate from "../utils/parseDate";
 
 const ITEMS_PER_PAGE = 6;
+
+const sortedNewsData = [...newsData].sort((a, b) => {
+  return parseDate(b.date) - parseDate(a.date);
+});
 
 const NewsSection = () => {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [direction, setDirection] = useState(0); // -1 (prev), 1 (next)
+  const [direction, setDirection] = useState(0);
 
-  const totalPages = Math.ceil(newsData.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(sortedNewsData.length / ITEMS_PER_PAGE);
 
-  const paginatedNews = newsData.slice(
+  const paginatedNews = sortedNewsData.slice(
     currentPage * ITEMS_PER_PAGE,
     (currentPage + 1) * ITEMS_PER_PAGE
   );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(entries[0].target);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.3 }
@@ -84,23 +89,13 @@ const NewsSection = () => {
                   <motion.div
                     variants={{
                       hidden: { opacity: 0, y: 30 },
-                      visible: {
-                        opacity: 1,
-                        y: 0,
-                        transition: { duration: 0.3 },
-                      },
-                      exit: {
-                        opacity: 0,
-                        y: -20,
-                        transition: { duration: 0.2 },
-                      },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+                      exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
                     }}
                     whileHover={{
                       scale: 1.05,
                       boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
                     }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    style={{ willChange: "transform" }}
                     className="bg-white rounded-lg transition duration-300 cursor-pointer h-full flex flex-col"
                   >
                     <LazyImage
@@ -111,12 +106,8 @@ const NewsSection = () => {
                     <div className="p-6 bg-white rounded-b-lg text-blue-950 flex flex-col flex-grow">
                       <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
                       <p className="text-gray-500 text-sm mb-2">{news.date}</p>
-                      <p className="text-gray-700 mb-4 line-clamp-4">
-                        {news.summary}
-                      </p>
-                      <span className="text-blue-600 font-semibold mt-auto">
-                        Leer más
-                      </span>
+                      <p className="text-gray-700 mb-4 line-clamp-4">{news.summary}</p>
+                      <span className="text-blue-600 font-semibold mt-auto">Leer más</span>
                     </div>
                   </motion.div>
                 </Link>
@@ -136,7 +127,7 @@ const NewsSection = () => {
         </button>
       </div>
 
-      {/* Puntos de navegación */}
+      {/* Paginación */}
       <div className="flex justify-center mt-6 space-x-2">
         {Array.from({ length: totalPages }).map((_, i) => (
           <button

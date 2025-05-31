@@ -10,17 +10,20 @@ import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
-    <Router> {/* Envuelve la aplicación con el componente Router */}
-    <ScrollToTop/>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <Navbar />
-        <main className="flex-grow">
-          <AppRoutes />
-        </main>
-        <Footer />
-      </div>
-    </Router>
+<Router>
+  <ScrollToTop />
+  <div className="w-full overflow-x-hidden">
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <Navbar />
+      <main className="flex-grow">
+        <AppRoutes />
+      </main>
+      <Footer />
+    </div>
+  </div>
+</Router>
+
   );
 }
 

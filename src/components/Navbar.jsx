@@ -14,7 +14,7 @@ const Navbar = () => {
     { name: "Donaciones", path: "/donaciones" },
     {
       name: "Sumate",
-      path: "https://docs.google.com/forms/d/e/1FAIpQLSddWUwMLDS6Z_-hGnxv65SQspFh21f90LH-as_23oMTZeUX4Q/viewform",
+      path: "https://docs.google.com/forms/d/e/1FAIpQLSdSs6OBExmEBdEZiWE9vbNZXVkc92WqEZcmVkZpclx1AucDFw/viewform",
       target: "_blank",
     },
   ];
