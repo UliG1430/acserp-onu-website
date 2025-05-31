@@ -78,55 +78,7 @@ const DonationsPage = () => {
         </a>
       </div>
 
-      {/* MercadoPago */}
-      <div className="bg-white text-blue-950 w-full py-16 px-4 text-center">
-        <h3 className="text-2xl md:text-3xl font-bold mb-4">Donaciones únicas vía MercadoPago</h3>
-        <p className="max-w-3xl mx-auto mb-6 text-gray-700">
-          También podés colaborar de forma puntual con uno de los siguientes montos. Elegí la opción que prefieras.
-        </p>
-        <button
-          onClick={() => setShowModal(true)}
-          className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-blue-950 rounded-full transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 hover:shadow-xl"
-        >
-          <FontAwesomeIcon icon={faCreditCard} className="mr-2" />
-          Ver opciones de donación
-        </button>
-      </div>
-
-      {/* Modal de MercadoPago */}
-      {showModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
-    <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-xl transform transition-all duration-500 scale-95 opacity-0 animate-fade-in-up">
-      <h3 className="text-2xl font-bold text-blue-950 mb-6 text-center">
-        Elegí un monto para donar
-      </h3>
-      <div className="space-y-4">
-  {mercadoPagoOptions.map((opt, index) => (
-    <a
-      key={index}
-      href={opt.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block border border-blue-200 rounded-lg p-4 bg-white hover:shadow-lg hover:border-blue-500 transition duration-300"
-    >
-      <h4 className="font-semibold text-blue-950 text-lg mb-1">{opt.label}</h4>
-      <p className="text-gray-600 text-sm">{opt.description}</p>
-    </a>
-  ))}
-</div>
-
-      <div className="text-center mt-8">
-        <button
-          onClick={() => setShowModal(false)}
-          className="bg-blue-950 text-white px-6 py-2 rounded-full hover:bg-blue-800 transition"
-        >
-          Cerrar
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+    
     </section>
   );
 };

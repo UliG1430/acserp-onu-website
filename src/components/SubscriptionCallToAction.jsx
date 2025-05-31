@@ -10,7 +10,7 @@ const SubscriptionCallToAction = () => {
           <FontAwesomeIcon icon={faHeart} className="text-red-400 text-5xl animate-bounce-slow" />
         </div>
         <h2 className="text-3xl md:text-4xl font-bold">
-          Sumate al impulso que transforma.
+        ¡LA ACTIVIDAD EDUCATIVA PÚBLICA Y GRATUITA MÁS GRANDE DE ARGENTINA TE NECESITA!
         </h2>
         <p className="text-lg md:text-xl max-w-3xl text-blue-100 leading-relaxed">
           Con tu aporte mensual, acompañás al Modelo ONU público más grande del país en su misión de llevar educación transformadora a miles de estudiantes cada año.

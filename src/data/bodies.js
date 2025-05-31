@@ -19,7 +19,7 @@ export const bodies = [
     id: 13,
     nombre: "Sala de Tratados Internacionales de las Naciones Unidas",
     logo: stiLogo,
-    descripcion: "La Secretaría de Tecnología e Innovación promueve el desarrollo y la aplicación de tecnologías innovadoras en las Naciones Unidas, apoyando la modernización y el crecimiento tecnológico global."
+    descripcion: "La Sala de Tratados Internacionales es el espacio central para la diplomacia multilateral, donde los Estados negocian acuerdos clave sobre temas como cambio climático, desarme, derechos humanos y comercio. Actúa como foro de diálogo, consenso y formalización de compromisos internacionales, promoviendo la cooperación global y un orden basado en reglas."
   },
   {
     id: 2,
