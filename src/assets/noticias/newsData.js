@@ -15,6 +15,11 @@ import firma3 from "../images/firma3.jpg";
 import inscripciones_preparatorios2 from "../images/inscripciones_preparatorios2.jpeg";
 import inscripciones_preparatorios1 from "../images/inscripciones_preparatorios.jpeg";
 import voluntarios from "../images/voluntarios.jpg";
+import preparatoriosFin1 from "../images/preparatoriosFin1.JPG";  
+import preparatoriosFin2 from "../images/preparatoriosFin2.jpg";
+import preparatoriosFin3 from "../images/preparatoriosFin3.jpg";
+import preparatoriosFin4 from "../images/preparatoriosFin4.jpeg";
+import preparatoriosFin5 from "../images/preparatoriosFin5.jpg";
 
 const newsData = [
   {
@@ -220,6 +225,34 @@ Desde la Asociación Civil Simulacros Educativos Río de la Plata agradecemos a 
     `,
     date:"Viernes, 4 de Abril de 2025",
     img: voluntarios,
+  },
+    {
+    id: 9,
+    title: "¡Finalizó una nueva edición de los Modelos Preparatorios ONU en La Plata!",
+    summary:
+      "Durante todo el mes de junio, más de 2000 estudiantes de 80 colegios secundarios participaron en los Modelos Preparatorios de Naciones Unid...",
+    content: `
+Durante todo el mes de junio, más de 2000 estudiantes de 80 colegios secundarios participaron en los Modelos Preparatorios de Naciones Unidas organizados por la Asociación Civil Simulacros Educativos Río de la Plata (ACSERP) en La Plata.
+Estas instancias formativas se dieron en el marco de la preparación para el gran Modelo Intercolegial de Naciones Unidas de La Plata, el proyecto educativo celebrado anualmente en la República de los Niños que busca formar a jóvenes en habilidades clave como la argumentación, la oratoria, la redacción y el pensamiento crítico.
+Fueron seis sedes las que recibieron a los estudiantes secundarios durante este mes: el Edificio Karakachoff de la UNLP, el Anexo de la Cámara de Diputados, el Club Banco Provincia, el colegio CEF Padre Castañeda, el Club Universitario de La Plata, y el Colegio de la Abogacía de La Plata. 
+Los órganos de las Naciones Unidas que fueron simulados en los Preparatorios fueron la Asamblea General, la Sala de Tratados Internacionales y el Consejo de Seguridad, de manera tal que los estudiantes pudieron familiarizarse con los distintos procedimientos que caracterizan los simulacros educativos de la organización. Los tópicos debatidos fueron, respectivamente, “Crisis hídrica: escasez, contaminación y gobernanza ineficaz”, “La industria agropecuaria: libertad, dependencia y tensiones geopolíticas" y “Conflictos subsidiarios: injerencia extranjera como motor de disputas internas”.
+Esta nueva edición de los Modelos Preparatorios de la ACSERP marca un nuevo récord de participación, ampliando de manera considerable la cantidad de colegios secundarios y estudiantes que se inscribieron en comparación con 2024 y sus correspondientes simulacros. Las actividades llevadas a cabo a lo largo del primer semestre del ciclo lectivo no hacen más que consolidar esta propuesta experimental, con vistas a seguir promoviendo la educación pública, gratuita y de calidad.
+
+    `,
+    date: "Lunes, 30 de Junio de 2025",
+    img: preparatoriosFin1,
+    additionalImages: [
+      {
+        url: preparatoriosFin2,
+      },
+      {
+        url: preparatoriosFin4,
+      },
+      {
+        url: preparatoriosFin5,
+      }
+      ],
+
   }
   
   
