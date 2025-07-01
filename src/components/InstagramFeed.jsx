@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 const InstagramFeed = () => {
   const posts = [
+    "https://www.instagram.com/p/DLlTQFePdfw/",
     "https://www.instagram.com/p/DAjykIcsv-O/",
-    "https://www.instagram.com/p/CuiNh86szHv/",
-    "https://www.instagram.com/p/Cwycvf9smHM/"
+    "https://www.instagram.com/p/DLit0e8unXV/"
   ];
 
   return (

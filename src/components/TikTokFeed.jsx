@@ -10,9 +10,9 @@ const fadeInVariant = {
 
 const TikTokFeed = () => {
   const tikTokLinks = [
+    "https://www.tiktok.com/@modeloonulp/video/7515939053162859781",
     "https://www.tiktok.com/@modeloonulp/video/7216504495075757318",
-    "https://www.tiktok.com/@modeloonulp/video/7148959086824967430",
-    "https://www.tiktok.com/@modeloonulp/video/7419156281115544837",
+    "https://www.tiktok.com/@modeloonulp/video/7420543059194105094",
   ];
 
   return (
