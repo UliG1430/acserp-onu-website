@@ -20,6 +20,9 @@ import preparatoriosFin2 from "../images/preparatoriosFin2.jpg";
 import preparatoriosFin3 from "../images/preparatoriosFin3.jpg";
 import preparatoriosFin4 from "../images/preparatoriosFin4.jpeg";
 import preparatoriosFin5 from "../images/preparatoriosFin5.jpg";
+import inscripciones2025_1 from "../images/inscripciones2025_1.JPG";
+import inscripciones2025_2 from "../images/inscripciones2025_2.JPG";
+import inscripciones2025_3 from "../images/inscripciones2025_3.JPG";
 
 const newsData = [
   {
@@ -252,6 +255,30 @@ Esta nueva edición de los Modelos Preparatorios de la ACSERP marca un nuevo ré
         url: preparatoriosFin5,
       }
       ],
+
+  },
+      {
+    id: 10,
+    title: "Abrieron las inscripciones para el VIII Modelo ONU La Plata",
+    summary:
+      "Entre los días 23 y 26 de septiembre de 2025 se celebrará el VIII Modelo Intercolegial de Naciones Unidas de La Plata. La propuesta educativa insignia de la Asociación Civil Simulacros Educativos Río de la Plata (ACSERP) se llevará a cabo nuevamente en la República de los Niños los días miércoles 24, jueves 25 y viernes 26 de septiembre. Asimismo, el martes 23 se dará inicio formal a las sesiones de la ONU con el Acto de Apertura, y la noche del juev...",
+    content: `
+Entre los días 23 y 26 de septiembre de 2025 se celebrará el VIII Modelo Intercolegial de Naciones Unidas de La Plata. La propuesta educativa insignia de la Asociación Civil Simulacros Educativos Río de la Plata (ACSERP) se llevará a cabo nuevamente en la República de los Niños los días miércoles 24, jueves 25 y viernes 26 de septiembre. Asimismo, el martes 23 se dará inicio formal a las sesiones de la ONU con el Acto de Apertura, y la noche del jueves acogerá el tradicional Agasajo Diplomático.
+¡Las inscripciones a la actividad se encuentran abiertas para toda la comunidad educativa! Tal como es habitual en las actividades organizadas por la ACSERP, las inscripciones son de carácter público y totalmente gratuitas, sin ningún tipo de arancel para los estudiantes ni para los establecimientos participantes. Las mismas serán entre el martes 1 de julio y el miércoles 9 de julio (inclusive), y deberán ser realizadas por docentes o directivos de las instituciones que desean participar del Modelo. El formulario de inscripción ya está disponible y puede solicitarse a través del correo modeloonulp@gmail.com. 
+El proyecto, al igual que en su anterior edición, contará con quince órganos de las Naciones Unidas. Ellos serán el escenario de diversos debates que conforman la agenda política, económica y social, y serán abordados por los estudiantes secundarios que representarán distintas delegaciones.
+Desde 2016, el equipo organizador apuesta por la educación pública, gratuita y de calidad a través del Modelo ONU La Plata. A diferencia de otras actividades similares, las características publicidad y gratuidad de este simulacro educativo permiten conjugar masividad con excelencia académica. El Modelo más convocante de Argentina espera contar nuevamente con más de 2000 inscriptos y colegios de distintos rincones del país.
+
+    `,
+    date: "Martes, 1 de Julio de 2025",
+    img: inscripciones2025_1,
+    additionalImages: [
+      {
+        url: inscripciones2025_2,
+      },
+      {
+        url: inscripciones2025_3,
+      },
+      ]
 
   }
   
