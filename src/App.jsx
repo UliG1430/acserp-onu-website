@@ -7,7 +7,7 @@ import Header from './components/Header';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ScrollToTop from './components/ScrollToTop';
-
+import CountdownDisplay from './components/CountDownDisplay'; // Asegúrate de que la ruta sea correcta
 function App() {
   return (
 <Router>
