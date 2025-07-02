@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import SEOHelmet from "../components/SEOHelmet";
 import LazyImage from "../components/LazyImage";
-import heroDonaciones from "../assets/images/image3.JPG";
+import heroDonaciones from "../assets/images/image3.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
 

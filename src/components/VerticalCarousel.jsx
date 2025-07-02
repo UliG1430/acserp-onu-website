@@ -3,15 +3,16 @@ import Slider from 'react-slick';
 import { useInView } from 'react-intersection-observer';
 import LazyImage from './LazyImage';
 
-import imageAgasajo1 from '../assets/images/agasajo1.JPG';
-import imageAgasajo2 from '../assets/images/agasajo2.JPG';
-import imageAgasajo3 from '../assets/images/agasajo3.JPG';
-import imageApertura1 from '../assets/images/apertura1.JPG';
-import imageApertura2 from '../assets/images/apertura2.JPG';
-import imageApertura3 from '../assets/images/apertura3.JPG';
-import imageSesiones1 from '../assets/images/sesiones1.JPG';
-import imageSesiones2 from '../assets/images/sesiones2.JPG';
-import imageSesiones3 from '../assets/images/sesiones3.JPG';
+import imageAgasajo1 from '../assets/images/agasajo1.webp';
+import imageAgasajo2 from '../assets/images/agasajo2.webp';
+import imageAgasajo3 from '../assets/images/agasajo3.webp';
+import imageApertura1 from '../assets/images/apertura1.webp';
+import imageApertura2 from '../assets/images/apertura2.webp';
+import imageApertura3 from '../assets/images/apertura3.webp';
+import imageSesiones1 from '../assets/images/sesiones1.webp';
+import imageSesiones2 from '../assets/images/sesiones2.webp';
+import imageSesiones3 from '../assets/images/sesiones3.webp';
+
 
 const VerticalCarousel = () => {
   const { ref: aperturaRef, inView: aperturaInView } = useInView({ triggerOnce: true, threshold: 0.1 });

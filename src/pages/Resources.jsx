@@ -5,7 +5,7 @@ import { faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 import SEOHelmet from "../components/SEOHelmet";
-import recursoBanner from "../assets/images/image1.JPG";
+import recursoBanner from "../assets/images/image1.webp";
 import SlideOverTrigger from "../components/SlideOverTrigger";
 import SlideOverTriggerTopics from "../components/SlideOverTriggerTopics";
 import { motion } from "framer-motion";

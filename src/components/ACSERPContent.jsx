@@ -1,8 +1,8 @@
 import React from "react";
-import img1 from "../assets/images/acserp1.jpeg";
-import img2 from "../assets/images/acserp2.jpeg";
-import img3 from "../assets/images/acserp3.jpeg";
-import img8 from "../assets/images/acserp8.jpeg";
+import img1 from "../assets/images/acserp1.webp";
+import img2 from "../assets/images/acserp2.webp";
+import img3 from "../assets/images/acserp3.webp";
+import img8 from "../assets/images/acserp8.webp";
 
 const secciones = [
   {
