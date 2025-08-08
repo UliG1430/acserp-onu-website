@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import newsData from "../assets/noticias/newsData";
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import SEOHelmet from "../components/SEOHelmet";
+import YouTubeEmbed from "../components/YouTubeEmbed";
 
 const NewsDetail = () => {
   const { id } = useParams();
@@ -113,6 +114,16 @@ const NewsDetail = () => {
           </div>
         ))}
       </section>
+
+      {/* Video de YouTube (si existe) */}
+      {news.youtubeId && (
+        <section className="mt-12">
+          <YouTubeEmbed 
+            videoId={news.youtubeId} 
+            title={`Video: ${news.title}`}
+          />
+        </section>
+      )}
 
       {/* Noticias Recomendadas */}
       <section id="recommended-news" className="mt-20">

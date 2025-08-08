@@ -23,7 +23,19 @@ import preparatoriosFin5 from "../images/preparatoriosFin5.webp";
 import inscripciones2025_1 from "../images/inscripciones2025_1.webp";
 import inscripciones2025_2 from "../images/inscripciones2025_2.webp";
 import inscripciones2025_3 from "../images/inscripciones2025_3.webp";
-
+import primerareu2025_1 from "../images/primerareu2025_1.webp";
+import primerareu2025_2 from "../images/primerareu2025_2.webp";
+import primerareu2025_3 from "../images/primerareu2025_3.webp";
+import camiloGinebra_1 from "../images/camilo_ginebra_1.webp";
+import camiloGinebra_2 from "../images/camilo_ginebra_2.webp";
+import camiloGinebra_3 from "../images/camilo_ginebra_3.webp";
+import camiloGinebra_4 from "../images/camilo_ginebra_4.webp";
+import noticias13 from "../images/noticia13.webp";
+import noticias13_2 from "../images/noticia13_2.webp";
+import noticias13_3 from "../images/noticia13_3.webp";
+import noticias14 from "../images/noticia14.webp";
+import noticias14_2 from "../images/noticia14_2.webp";
+import noticias14_3 from "../images/noticia14_3.webp";
 
 const newsData = [
   {
@@ -281,6 +293,125 @@ Desde 2016, el equipo organizador apuesta por la educación pública, gratuita y
       },
       ]
 
+  },
+  {
+    id: 11,
+    title: "¡Primera reunión de cara a la VIII edición del MONULP!",
+    summary:
+      "El día sábado 12 de julio de 2025 se llevó a cabo en la República de los Niños la primera reunión orientada a la organización de la octava edición del Modelo Intercolegial de Naciones Unidas de La Plata. El objetivo de la misma fue la conformación de los equipos de trabajo y el establecimiento de los lineamientos generales que se seguirán durante los próximos tres meses.",
+    content: `
+    
+El día sábado 12 de julio de 2025 se llevó a cabo en la República de los Niños la primera reunión orientada a la organización de la octava edición del Modelo Intercolegial de Naciones Unidas de La Plata. El objetivo de la misma fue la conformación de los equipos de trabajo y el establecimiento de los lineamientos generales que se seguirán durante los próximos tres meses. 
+
+Junio no fue un mes más para los y las estudiantes de la región: La Plata fue escenario de los Modelos Preparatorios que la Asociación Civil Simulacros Educativos Río de La Plata organiza, con el claro objetivo de que cada vez sean más los participantes que conozcan la actividad y cuenten con una instancia de práctica previa a la edición general. Pero habiendo ejecutado exitosamente las seis actividades, los miembros de la ACSERP ya trabajan en miras a la última semana del mes de septiembre. 
+
+La reunión tuvo lugar en la República de los Niños, que desde 2018 recibe a miles de estudiantes secundarios que durante tres días participan de la actividad educativa más convocante del país. La octava edición del Modelo Intercolegial de Naciones Unidas de La Plata tendrá lugar los días 24, 25 y 26 de septiembre y espera contar con más de 2.000 participantes de más de 100 colegios de la región e incluso de otras provincias. 
+
+En este caso, el motivo del encuentro fue realizar un balance de las actividades realizadas en el mes de junio y conformar los nuevos grupos de trabajo, que incluyen a las Mesas Presidenciales, el Cuerpo de Ujieres y el Comité Creativo. Todo ello es posible gracias a que la actividad es llevada a cabo por un numeroso grupo de voluntarios, compuesto de estudiantes universitarios y jóvenes graduados de entre 18 y 25 años. Para esta edición el número asciende a 170 personas, en su gran mayoría ex participantes, que eligen, de forma desinteresada, seguir aportando para que la actividad educativa experimental, pública y gratuita más grande de la República Argentina pueda realizarse nuevamente.
+
+Con las tareas ya asignadas y los lineamientos generales establecidos, el trabajo rumbo a septiembre ya está en marcha. Durante las próximas semanas se desarrollarán nuevas propuestas, instancias de capacitación, actividades internas de formación y espacios de coordinación que permitirán consolidar el trabajo de cada área y garantizar una octava edición renovada, dinámica y a la altura del entusiasmo de quienes participan.  
+    
+    `,
+        date:"Lunes, 14 de Julio de 2025",
+    img: primerareu2025_1,
+    additionalImages: [
+      {
+        url: primerareu2025_2,
+      },
+      {
+        url: primerareu2025_3,
+      }
+    ],
+    
+
+  },
+  {
+    id: 12,
+    title: "El Presidente de la ACSERP representó a Argentina en la Global Shapers Annual Summit",
+    summary:
+      "Entre el 9 y el 11 de julio tuvo lugar en Ginebra la Global Shapers Anual Summit, un evento que reunió en la sede del Foro Económico Mundial (WEF) a más de 500 jóvenes de más de 150 países. El Presidente de la Asociación Civil Simulacros Educativos Río de La Plata, Camilo Leavi Blázquez, fue seleccionado para representar a la Ciudad de Buenos Aires.",
+    content: `Entre el 9 y el 11 de julio tuvo lugar en Ginebra la Global Shapers Anual Summit, un evento que reunió en la sede del Foro Económico Mundial (WEF) a más de 500 jóvenes de más de 150 países. El Presidente de la Asociación Civil Simulacros Educativos Río de La Plata, Camilo Leavi Blázquez, fue seleccionado para representar a la Ciudad de Buenos Aires.
+
+La Global Shapers Community es una red internacional de jóvenes líderes impulsada por el Foro Económico Mundial, que busca empoderar a personas de entre 18 y 30 años para que generen un impacto positivo en sus comunidades. Con presencia en más de 150 países y más de 500 ciudades, la iniciativa reúne a jóvenes comprometidos con los desafíos sociales, ambientales y económicos de su entorno local.
+
+Organizados en hubs locales, los llamados Shapers desarrollan proyectos con foco en temas como el cambio climático, la inclusión social, la educación, la salud mental o la innovación tecnológica. Aunque cada grupo funciona de manera autónoma, todos forman parte de una red global que promueve el liderazgo joven y la acción colectiva. El Presidente de la ACSERP, Camilo Leavi Blázquez, fue recientemente elegido como Curador del hub Buenos Aires, por lo que durante estos días tuvo la tarea de representar al equipo ante los otros Shapers, compartiendo proyectos e ideas y apostando al trabajo multilateral. La iniciativa combina paneles sobre tecnología, clima, salud, educación e igualdad, con talleres interactivos, sesiones de networking y mesas de debate. 
+
+“Fue una experiencia muy enriquecedora. Algo que me resonó mucho fue que para la edición 2025, el Foro Económico Mundial propuso la temática “Next Gen Now”, un concepto que refleja a la perfección uno de los mayores ideales del Modelo ONU: el tiempo de los jóvenes es ahora. Fue muy gratificante saber que una de las organizaciones internacionales más importantes del mundo, como lo es el Foro Económico Mundial, incluye en su agenda una cuestión sobre la que en la ACSERP venimos trabajando hace ya 10 años. Es una gran motivación para seguir apostando a espacios que permitan que las futuras generaciones sigan capacitándose y potenciando sus ideas”, comentó Camilo. 
+
+Su participación representó una oportunidad para tejer redes con jóvenes de distintos contextos geográficos y culturales, intercambiar prácticas y abrir nuevas puertas a colaboraciones internacionales. La presencia del Presidente de la Asociación en la Global Shapers Annual Summit reafirma el compromiso de la ACSERP con la formación de líderes jóvenes con conciencia social y vocación transformadora. La inclusión de voces latinoamericanas en estos foros es fundamental para visibilizar los desafíos estructurales que atraviesa nuestra región y poner en valor las respuestas que surgen, con creatividad, compromiso y trabajo en conjunto. 
+
+Desde la Asociación celebramos la participación de Camilo como un reconocimiento a su trayectoria personal y al trabajo colectivo y sostenido que viene realizando con la organización. Felicitamos su representación y compromiso, y renovamos el orgullo de contar con jóvenes líderes que proyectan su trabajo más allá de las fronteras. 
+`,
+    date: "Martes, 15 de Julio de 2025",
+    img: camiloGinebra_1,
+    additionalImages: [
+      {
+        url: camiloGinebra_2,
+      },
+      {
+        url: camiloGinebra_3,
+      },
+      {
+        url: camiloGinebra_4,
+      }
+    ],
+
+  },
+  {
+    id: 13,
+    title: "Ya se encuentran asignados los países para la VIII edición del Modelo ONU La Plata",
+    summary:
+      "Desde el día de la fecha se encuentran asignados los países para la octava edición del Modelo Intercolegial de Naciones Unidas de La Plata, organizado por la Asociación Civil Simulacros Educativos Río de La Plata...",
+    content: `
+Desde el día de la fecha se encuentran asignados los países para la octava edición del Modelo Intercolegial de Naciones Unidas de La Plata, organizado por la Asociación Civil Simulacros Educativos Río de La Plata. Habiendo completado esta etapa, los y las estudiantes ya pueden empezar a estudiar y prepararse para el mes de septiembre. 
+
+Las 110 instituciones educativas que se inscribieron a la octava edición del Modelo ONU de La Plata ya cuentan con los países que representarán durante los días 24, 25 y 26 de septiembre. Esto les permitirá empezar a recopilar información sobre la historia general del país, su situación social, económica y política y sus lazos con otras naciones, entre otros datos que les permitirán desenvolverse a lo largo de las sesiones del Órgano de las Naciones Unidas en el que participen.
+
+Cada país es representado por una delegación, es decir, un grupo de estudiantes que se ponen en el lugar de un cuerpo diplomático que asiste a las sesiones ordinarias de la Organización de las Naciones Unidas. Los miembros de la delegación representan a la misma ante los Órganos de la ONU, es decir, las distintas entidades que la componen y dentro de las que se tratan temáticas especiales. Para este año, los 2043 estudiantes secundarios inscriptos se dividirán en 200 delegaciones de entre 3 y 17 miembros, de acuerdo a la cantidad de órganos en que tengan representación. 
+
+Las delegaciones abarcan a los 193 Estados Miembros de la ONU, a los Estados Observadores Permanentes - Palestina y Santa Sede - y a organizaciones internacionales como Amnistía Internacional, Cruz Roja, Human Rights Watch, el Banco Mundial y el Fondo Monetario Internacional. Los Estados Observadores Permanentes y las organizaciones internacionales mencionadas pueden participar de los debates como cualquier otra delegación, con la salvedad de que no pueden votar Anteproyectos de Resolución. 
+
+El Modelo de Naciones Unidas es una actividad educativa que impulsa una forma distinta de aprender y de formarse, que motiva la investigación, la redacción y el pensamiento crítico. Con la publicación de las asignaciones de países, comienza una nueva etapa de preparación y estudio para los más de dos mil estudiantes que participarán este año, donde jóvenes de toda la región asumirán el desafío de representar a la comunidad internacional y reflexionar sobre los grandes temas de la agenda global.
+    `,
+    date: "Viernes, 18 de julio de 2025",
+    img: noticias13,
+    additionalImages: [
+      {
+        url: noticias13_2,
+      },
+      {
+        url: noticias13_3,
+      }
+    ],
+  },
+  {
+    id: 14,
+    title: "¡La ACSERP presentó al Modelo ONU en el streaming de 0221!",
+    summary:
+      "Durante la mañana del día 30 de julio, miembros del Equipo de Coordinación de la Asociación Simulacros Educativos Río de la Plata asistieron junto a delegados ganadores de los Modelos Preparatorios a No es una copia, el programa de streaming de la agencia de noticias 0221...",
+    content: `
+Durante la mañana del día 30 de julio, miembros del Equipo de Coordinación de la Asociación Simulacros Educativos Río de la Plata asistieron junto a delegados ganadores de los Modelos Preparatorios a No es una copia, el programa de streaming de la agencia de noticias 0221. A lo largo de la nota, hablaron sobre la actividad e incluso hicieron una demostración de lo que se vive en un día de sesiones. Este año se espera contar con más de dos mil delegados de más de cien instituciones educativas, y los medios de comunicación empiezan a hacerse eco de un fenómeno que hace años marca la agenda educativa local.
+
+En esta oportunidad, Pedro Crisorio y Micaela Mendivil, Coordinadores Generales de la actividad, asistieron al media hub de la agencia de noticias 0221 a presentar la actividad, contar de qué trata y adelantar las novedades de lo que será la edición de septiembre. Estuvieron acompañados, a su vez, por un grupo de jóvenes estudiantes del CEF Padre Castañeda que tuvieron una destacada participación en los Modelos Preparatorios: Amparo Ivanec, Ignacio Prieu, Mateo Rodríguez y Taina Rosales. Los alumnos contaron cómo conocieron la actividad, qué significa para ellos y cómo se están preparando para la edición general, en la que representarán a la delegación de la Federación Rusa. Al ser consultados sobre sus sensaciones, todos coincidieron en que "la ONU se volvió una forma más bonita de estudiar".
+
+Los jóvenes y los Coordinadores, invitaron al equipo de No es una copia, Matías Lojo, Virginia Gil y Nicolás Latini, a ponerse en el lugar de un delegado del Modelo ONU de La Plata y participar de una sesión de las Naciones Unidas. Explicando aspectos como el modo de expresarse o la forma de actuar, se logró una dinámica muy similar a la que tiene lugar en las actividades organizadas por la ACSERP. En ese marco, Matías Lojo destacó que "Yo creo que aprendés, jugás y ficcionás, algo que también te da coyuntura de la realidad".
+
+Por su parte, Micaela Mendivil reflexionó sobre el impacto que tiene el Modelo en la formación de los participantes y el interés genuino que despierta en ellos: "Los chicos eligen sentarse a leer qué es lo que está pasando en el mundo, y esas cosas nos ponen muy contentos, porque estamos apostando y formando a futuros líderes que pueden ser de La Plata o de cualquier parte. Y muchos de ellos, como también nos pasó a nosotros, terminamos definiendo nuestra carrera, qué era lo que queríamos hacer, y vemos esa ilusión en ellos, de seguir formándose académicamente…"
+
+No es una copia es el primer programa de streaming de una agencia de noticias de la Ciudad de La Plata. De lunes a viernes, entre las 10 y las 12 de la mañana, ofrece un formato moderno y dinámico que informa sobre los últimos acontecimientos de la ciudad. Mirá la nota completa por YouTube: https://youtu.be/erC5eFH9XnI
+    `,
+    date: "Jueves, 31 de julio de 2025",
+    img: noticias14,
+    additionalImages: [
+      {
+        url: noticias14_2,
+      },
+      {
+        url: noticias14_3,
+      }
+    ],
+    videoUrl: "https://youtu.be/erC5eFH9XnI",
+    youtubeId: "erC5eFH9XnI"
   }
   
   
