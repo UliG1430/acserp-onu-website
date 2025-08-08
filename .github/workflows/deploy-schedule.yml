@@ -1,0 +1,36 @@
+
+name: Scheduled Deploy
+
+on:
+  schedule:
+    - cron: '0 23 8 8 *'  # 8 de agosto a las 23:00 UTC (20:00 Argentina)
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          token: ${{ secrets.PAT_DEPLOY }}
+
+      - name: Config Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Set remote with PAT
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_DEPLOY }}@github.com/${{ github.repository }}.git
+
+      - name: Fetch backup-main
+        run: git fetch origin backup-main
+
+      - name: Merge backup-main into main
+        run: git merge origin/backup-main --no-edit
+
+      - name: Push to main
+        run: git push origin main
