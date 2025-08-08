@@ -50,7 +50,7 @@ const Model = () => {
                 <img
                   src={body.logo}
                   alt={body.nombre}
-                  className="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-md"
+                  className="object-contain drop-shadow-md w-80 h-40 md:w-[500px] md:h-[250px]"
                 />
               </div>
               <div className="md:w-1/2 text-center md:text-left">

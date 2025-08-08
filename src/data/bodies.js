@@ -13,6 +13,8 @@ import pnumaLogo from '../assets/logos/pnuma.png';
 import stiLogo from '../assets/logos/sti.png';
 import unescoLogo from '../assets/logos/unesco.png';
 import unicefLogo from '../assets/logos/unicef.png';
+import unodaLogo from '../assets/logos/unoda.png';
+import unodaLogoCompleto from '../assets/logos/unodaCompleto.png';
 
 export const bodies = [
   {
@@ -101,8 +103,8 @@ export const bodies = [
   },
   {
     id: 5,
-    nombre: "Comité Especial de Descolonización",
-    logo: cedLogo,
-    descripcion: "El Comité Especial de Descolonización (CED) es un organismo creado en 1961 para monitorear e impulsar el proceso de descolonización de los territorios no autónomos bajo administración de potencias coloniales."
+    nombre: "Oficina de las Naciones Unidas para el Desarme",
+    logo: unodaLogoCompleto,
+    descripcion: "La Oficina de Asuntos de Desarme de la ONU (UNODA) es un organismo creado para promover el desarme, prevenir la proliferación de armas de destrucción masiva y apoyar la aplicación de tratados internacionales en la materia."
   }
 ];
