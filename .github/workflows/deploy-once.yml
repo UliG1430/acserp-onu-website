@@ -1,0 +1,21 @@
+name: One-time Scheduled Deploy
+
+on:
+  schedule:
+    - cron: '0 23 8 8 5' # Min Hora Día Mes DíaSemana → 20hs ARG, viernes 8 ago 2025
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Trigger deploy with dummy change
+        run: |
+          echo "Deploy triggered: $(date -u)" > .deploy-once.txt
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .deploy-once.txt
+          git commit -m "One-time scheduled deploy"
+          git push origin main
