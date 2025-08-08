@@ -24,7 +24,7 @@ const NewsDetail = () => {
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
 
-  const paragraphs = news.content.trim().split("\n").filter((p) => p);
+  const content = news.content.trim();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -81,37 +81,35 @@ const NewsDetail = () => {
         />
       </motion.figure>
 
-      {/* Contenido y Galería */}
+      {/* Contenido */}
       <section className="space-y-12">
-        {paragraphs.map((paragraph, index) => (
-          <div key={index} className="space-y-6">
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="text-lg leading-relaxed text-gray-800"
-            >
-              {paragraph}
-            </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-lg leading-relaxed text-gray-800 prose prose-lg max-w-none"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
 
-            {/* Imagen secundaria debajo del párrafo */}
-            {news.additionalImages && index > 0 && news.additionalImages[index - 1] && (
-              <motion.figure
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-              >
-                <img
-                  src={news.additionalImages[index - 1].url}
-                  alt={`Imagen ${index}`}
-                  className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
-                />
-                <figcaption className="text-gray-600 text-sm mt-2 text-center">
-                  {news.additionalImages[index - 1].description}
-                </figcaption>
-              </motion.figure>
+        {/* Imágenes adicionales */}
+        {news.additionalImages && news.additionalImages.map((image, index) => (
+          <motion.figure
+            key={index}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
+          >
+            <img
+              src={image.url}
+              alt={`Imagen ${index + 1}`}
+              className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
+            />
+            {image.description && (
+              <figcaption className="text-gray-600 text-sm mt-2 text-center">
+                {image.description}
+              </figcaption>
             )}
-          </div>
+          </motion.figure>
         ))}
       </section>
 

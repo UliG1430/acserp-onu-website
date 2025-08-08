@@ -36,6 +36,7 @@ import noticias13_3 from "../images/noticia13_3.webp";
 import noticias14 from "../images/noticia14.webp";
 import noticias14_2 from "../images/noticia14_2.webp";
 import noticias14_3 from "../images/noticia14_3.webp";
+import noticias15 from "../images/noticia15.webp";
 
 const newsData = [
   {
@@ -384,6 +385,7 @@ El Modelo de Naciones Unidas es una actividad educativa que impulsa una forma di
       }
     ],
   },
+ 
   {
     id: 14,
     title: "¡La ACSERP presentó al Modelo ONU en el streaming de 0221!",
@@ -412,7 +414,105 @@ No es una copia es el primer programa de streaming de una agencia de noticias de
     ],
     videoUrl: "https://youtu.be/erC5eFH9XnI",
     youtubeId: "erC5eFH9XnI"
-  }
+  },
+  {
+    id: 15,
+    title: "¡Ya están disponibles los tópicos del VIII Modelo ONU LP!",
+    summary:
+      "Con la publicación de los tópicos oficiales de cada órgano, comienza una etapa decisiva de investigación y preparación rumbo a la octava edición del Modelo de Naciones Unidas de La Plata...",
+    content: `
+<p class="mb-6">Con la publicación de los tópicos oficiales de cada órgano, comienza una etapa decisiva de investigación y preparación rumbo a la octava edición del Modelo de Naciones Unidas de La Plata. Las delegaciones ya pueden comenzar a profundizar en la búsqueda sobre las posturas de sus países, analizando antecedentes históricos, políticas públicas y elaborando propuestas estratégicas alineadas a los objetivos de cada órgano.</p>
+
+<p class="mb-6">La diversidad de temas seleccionados para esta edición reflejan los principales desafíos de la agenda internacional. Los elegidos para cada órgano fueron:</p>
+
+<div class="bg-gray-50 p-6 rounded-lg mb-8">
+  <div class="space-y-4">
+    <div class="border-l-4 border-red-500 pl-4">
+      <h4 class="font-bold text-lg text-red-700">Asamblea General (AG)</h4>
+      <p class="text-gray-700">Inteligencia artificial en procesos electorales. Desafíos globales de regulación, privacidad y equidad en campañas políticas.</p>
+    </div>
+    
+    <div class="border-l-4 border-blue-500 pl-4">
+      <h4 class="font-bold text-lg text-blue-700">Sala de Tratados Internacionales (STI)</h4>
+      <p class="text-gray-700">EJE 1: Nuevas agendas de seguridad</p>
+      <p class="text-gray-700">EJE 2: Hegemonía económica mundial en disputa</p>
+    </div>
+    
+    <div class="border-l-4 border-green-500 pl-4">
+      <h4 class="font-bold text-lg text-green-700">Consejo Económico y Social (ECOSOC)</h4>
+      <p class="text-gray-700">Sostenibilidad de la deuda pública. Retos para el desarrollo, la autonomía fiscal y la estabilidad económica global.</p>
+    </div>
+    
+    <div class="border-l-4 border-orange-500 pl-4">
+      <h4 class="font-bold text-lg text-orange-700">Consejo de Derechos Humanos (CDH)</h4>
+      <p class="text-gray-700">Militarización de las fuerzas de seguridad. Del ejercicio legítimo de la violencia al abuso de poder.</p>
+    </div>
+    
+    <div class="border-l-4 border-pink-500 pl-4">
+      <h4 class="font-bold text-lg text-pink-700">ONU Mujeres (ONUM)</h4>
+      <p class="text-gray-700">Economía de la fertilidad y gestación subrogada. Dilemas éticos y jurídicos sobre la instrumentalización de la mujer.</p>
+    </div>
+    
+    <div class="border-l-4 border-teal-500 pl-4">
+      <h4 class="font-bold text-lg text-teal-700">Programa de las Naciones Unidas para el Medioambiente (PNUMA)</h4>
+      <p class="text-gray-700">Políticas verdes o desarrollo: ¿una falsa dicotomía? Tensión entre la responsabilidad histórica del norte y los desafíos del sur global.</p>
+    </div>
+    
+    <div class="border-l-4 border-indigo-500 pl-4">
+      <h4 class="font-bold text-lg text-indigo-700">Alto Comisionado de las Naciones Unidas para los Refugiados (ACNUR)</h4>
+      <p class="text-gray-700">Derecho al retorno. Obstáculos políticos, sociales y jurídicos para su implementación.</p>
+    </div>
+    
+    <div class="border-l-4 border-brown-500 pl-4">
+      <h4 class="font-bold text-lg text-brown-700">Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO)</h4>
+      <p class="text-gray-700">Lenguas silenciadas. La herencia de la colonización, la globalización y la exclusión lingüística.</p>
+    </div>
+    
+    <div class="border-l-4 border-red-400 pl-4">
+      <h4 class="font-bold text-lg text-red-600">Fondo de las Naciones Unidas para la Infancia (UNICEF)</h4>
+      <p class="text-gray-700">Trata con fines de explotación. La infancia en peligro: desafíos transnacionales para la protección de los derechos de niñas y niños.</p>
+    </div>
+    
+    <div class="border-l-4 border-yellow-500 pl-4">
+      <h4 class="font-bold text-lg text-yellow-700">Organización Mundial de la Salud (OMS)</h4>
+      <p class="text-gray-700">Regulación de la edición genética. Entre los fines terapéuticos y las ambiciones eugenésicas.</p>
+    </div>
+    
+    <div class="border-l-4 border-gray-500 pl-4">
+      <h4 class="font-bold text-lg text-gray-700">Comité de Asuntos Jurídicos (CAJ)</h4>
+      <p class="text-gray-700">Crímenes de lesa humanidad. Debate jurídico y avance del negacionismo internacional.</p>
+    </div>
+    
+    <div class="border-l-4 border-pink-600 pl-4">
+      <h4 class="font-bold text-lg text-pink-800">Organización Internacional del Trabajo (OIT)</h4>
+      <p class="text-gray-700">La reconfiguración del trabajo en la era de las plataformas. Tensiones entre flexibilidad, regulación y derechos laborales.</p>
+    </div>
+    
+    <div class="border-l-4 border-teal-600 pl-4">
+      <h4 class="font-bold text-lg text-teal-800">Oficina de las Naciones Unidas contra la Droga y el Delito (ONUDD)</h4>
+      <p class="text-gray-700">Corrupción estatal. Crimen transnacional, lavado de activos y vacíos legales en la regulación internacional.</p>
+    </div>
+    
+    <div class="border-l-4 border-black pl-4">
+      <h4 class="font-bold text-lg text-black">Oficina de las Naciones Unidas para Asuntos de Desarme (UNODA)</h4>
+      <p class="text-gray-700">Producción, trazabilidad y uso de las armas. El rol de los Estados en la plena vigencia de los acuerdos internacionales existentes.</p>
+    </div>
+    
+    <div class="border-l-4 border-purple-500 pl-4">
+      <h4 class="font-bold text-lg text-purple-700">Consejo de Seguridad (CS)</h4>
+      <p class="text-gray-700">Crisis en la región de Cachemira. Conflicto territorial y las consecuencias de su escalada.</p>
+    </div>
+  </div>
+</div>
+
+<p class="text-gray-700 mb-4">El trabajo previo es fundamental para llegar al debate con argumentos sólidos, propuestas innovadoras y una mirada estratégica. Esta instancia no solo busca formar delegados con conocimientos técnicos, sino también promover habilidades de oratoria, negociación y trabajo en equipo, esenciales para desenvolverse en cualquier ámbito. Porque cada investigación, cada discurso y cada propuesta, representan un paso más en la formación de jóvenes comprometidos con la realidad internacional.</p>
+
+<p class="text-gray-700">La cuenta regresiva ya está en marcha, y la preparación previa marcará la diferencia en el debate. Queda en sus manos transformar estas problemáticas en propuestas creativas y soluciones reales. Con compromiso e investigación, lograremos que esta octava edición sea un espacio de aprendizaje, cooperación, crecimiento colectivo y formación de futuros jóvenes líderes.</p>
+
+    `,
+    date: "Viernes, 8 de Agosto de 2025",
+    img: noticias15,
+  },
   
   
   
