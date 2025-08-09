@@ -30,7 +30,7 @@ const CountdownBanner = () => {
 
   return (
     <div className="bg-indigo-100 text-blue-950 text-sm md:text-base py-2 px-4 text-center shadow font-bold tracking-wide z-40">
-       ¡Faltan {timeLeft.días} días, {timeLeft.horas}h {timeLeft.minutos}m {timeLeft.segundos}s para VIII Modelo ONU La Plata!
+       ¡Faltan {timeLeft.días} días, {timeLeft.horas}h {timeLeft.minutos}m {timeLeft.segundos}s para el VIII Modelo ONU La Plata!
     </div>
   );
 };

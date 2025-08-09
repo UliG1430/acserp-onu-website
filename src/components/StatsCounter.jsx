@@ -3,8 +3,8 @@ import CountUp from "react-countup";
 
 const StatsCounter = () => {
   const stats = [
-    { id: 1, value: 13540, label: "TOTAL DE PARTICIPANTES" },
-    { id: 2, value: 109, label: "COLEGIOS QUE PARTICIPARON" },
+    { id: 1, value: 15584, label: "TOTAL DE PARTICIPANTES" },
+    { id: 2, value: 131, label: "COLEGIOS QUE PARTICIPARON" },
     { id: 3, value: 156, label: "VOLUNTARIOS ACTUALMENTE" },
     { id: 4, value: 36, label: "MODELOS REALIZADOS" },
   ];

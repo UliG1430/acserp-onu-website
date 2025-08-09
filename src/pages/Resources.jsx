@@ -16,7 +16,7 @@ const Resources = () => {
     threshold: 0.2,
   });
 
-  const reglamentoLink ='https://drive.google.com/uc?export=download&id=1_5wgjobLXBUaUiMGSwXtpaA177WERkmX'
+  const reglamentoLink ='https://drive.google.com/uc?export=download&id=1J4SGK_Hq3XaTIT6hRcjWUTRsRppTHYAi'
   const driveLink =
     "https://drive.google.com/drive/folders/1bDQ4vE3yD-5RqmBd1Tgqf-9WFKy4WEML";
 
@@ -97,6 +97,28 @@ const Resources = () => {
             </a>
           </div>
 
+          {/* Países por Órgano */}
+          <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105 flex flex-col items-start justify-between">
+            <FontAwesomeIcon
+              icon={faFolderOpen}
+              className="text-pink-500 text-4xl mb-4"
+            />
+            <h3 className="text-lg font-bold mb-2 text-blue-900">
+              Países por Órgano
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Consultá qué países representan cada delegación en cada órgano.
+            </p>
+            <a
+              href="https://drive.google.com/file/d/17CcIvdx5EwdCgbj71OpoEiCdSC9OXWcb/view?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-4 py-2 text-sm font-medium bg-[#787ac1] text-white rounded-md hover:bg-blue-950 transition"
+            >
+              Ver países por órgano
+            </a>
+          </div>
+
           {/* Tópicos Ampliados */}
           <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105 flex flex-col items-start justify-between">
             <FontAwesomeIcon
@@ -110,23 +132,6 @@ const Resources = () => {
               Explorá los temas desarrollados de cada comité y descargalos.
             </p>
             <SlideOverTriggerTopics />
-          </div>
-
-       
-
-          {/* Anteproyectos */}
-          <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105 flex flex-col items-start justify-between">
-            <FontAwesomeIcon
-              icon={faFolderOpen}
-              className="text-pink-500 text-4xl mb-4"
-            />
-            <h3 className="text-lg font-bold mb-2 text-blue-900">
-              Anteproyectos
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Explorá los anteproyectos de cada órgano y descargalos directamente.
-            </p>
-            <SlideOverTrigger />
           </div>
         </div>
 
