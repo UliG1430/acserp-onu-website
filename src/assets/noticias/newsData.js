@@ -400,7 +400,7 @@ Los jóvenes y los Coordinadores, invitaron al equipo de No es una copia, Matía
 
 Por su parte, Micaela Mendivil reflexionó sobre el impacto que tiene el Modelo en la formación de los participantes y el interés genuino que despierta en ellos: "Los chicos eligen sentarse a leer qué es lo que está pasando en el mundo, y esas cosas nos ponen muy contentos, porque estamos apostando y formando a futuros líderes que pueden ser de La Plata o de cualquier parte. Y muchos de ellos, como también nos pasó a nosotros, terminamos definiendo nuestra carrera, qué era lo que queríamos hacer, y vemos esa ilusión en ellos, de seguir formándose académicamente…"
 
-No es una copia es el primer programa de streaming de una agencia de noticias de la Ciudad de La Plata. De lunes a viernes, entre las 10 y las 12 de la mañana, ofrece un formato moderno y dinámico que informa sobre los últimos acontecimientos de la ciudad. Mirá la nota completa por YouTube: https://youtu.be/erC5eFH9XnI
+No es una copia es el primer programa de streaming de una agencia de noticias de la Ciudad de La Plata. De lunes a viernes, entre las 10 y las 12 de la mañana, ofrece un formato moderno y dinámico que informa sobre los últimos acontecimientos de la ciudad. Mirá la nota completa: 
     `,
     date: "Jueves, 31 de julio de 2025",
     img: noticias14,

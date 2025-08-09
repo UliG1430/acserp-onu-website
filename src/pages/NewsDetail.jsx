@@ -81,36 +81,85 @@ const NewsDetail = () => {
         />
       </motion.figure>
 
-      {/* Contenido */}
+      {/* Contenido y Galería */}
       <section className="space-y-12">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-lg leading-relaxed text-gray-800 prose prose-lg max-w-none"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        {(() => {
+          // Verificar si el contenido contiene HTML
+          const hasHTML = content.includes('<');
+          
+          if (hasHTML) {
+            // Renderizar todo el contenido HTML junto, luego agregar imágenes al final
+            return (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="prose prose-lg max-w-none [&_.space-y-4]:space-y-8 [&_.space-y-4>div]:mb-6"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+                
+                {/* Imágenes adicionales al final */}
+                {news.additionalImages && news.additionalImages.map((image, index) => (
+                  <motion.figure
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
+                    className="mt-8"
+                  >
+                    <img
+                      src={image.url}
+                      alt={`Imagen ${index + 1}`}
+                      className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
+                    />
+                    {image.description && (
+                      <figcaption className="text-gray-600 text-sm mt-2 text-center">
+                        {image.description}
+                      </figcaption>
+                    )}
+                  </motion.figure>
+                ))}
+              </>
+            );
+          } else {
+            // Para contenido de texto plano, dividir por saltos de línea
+            const paragraphs = content.trim().split("\n").filter((p) => p.trim());
+            
+            return paragraphs.map((paragraph, index) => (
+              <div key={index} className="space-y-6">
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-lg leading-relaxed text-gray-800"
+                >
+                  {paragraph}
+                </motion.p>
 
-        {/* Imágenes adicionales */}
-        {news.additionalImages && news.additionalImages.map((image, index) => (
-          <motion.figure
-            key={index}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
-          >
-            <img
-              src={image.url}
-              alt={`Imagen ${index + 1}`}
-              className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
-            />
-            {image.description && (
-              <figcaption className="text-gray-600 text-sm mt-2 text-center">
-                {image.description}
-              </figcaption>
-            )}
-          </motion.figure>
-        ))}
+                {/* Imagen secundaria debajo del párrafo */}
+                {news.additionalImages && index > 0 && news.additionalImages[index - 1] && (
+                  <motion.figure
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <img
+                      src={news.additionalImages[index - 1].url}
+                      alt={`Imagen ${index}`}
+                      className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
+                    />
+                    {news.additionalImages[index - 1].description && (
+                      <figcaption className="text-gray-600 text-sm mt-2 text-center">
+                        {news.additionalImages[index - 1].description}
+                      </figcaption>
+                    )}
+                  </motion.figure>
+                )}
+              </div>
+            ));
+          }
+        })()}
       </section>
 
       {/* Video de YouTube (si existe) */}
