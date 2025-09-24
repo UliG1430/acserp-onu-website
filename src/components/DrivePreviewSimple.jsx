@@ -31,70 +31,51 @@ const DrivePreviewSimple = () => {
         </div>
         <div className="max-w-7xl mx-auto">
           <div className="space-y-8">
-      {/* Grid de diarios con diseño moderno */}
-      <div className="grid xl:grid-cols-3 lg:grid-cols-2 gap-6">
+      {/* Grid de burbujas modernas */}
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 gap-8">
         {newspapers.map((newspaper, index) => (
           <motion.div
             key={newspaper.name}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2, duration: 0.6 }}
-            className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-gray-300"
+            initial={{ opacity: 0, scale: 0.8, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="group relative"
           >
-            {/* Gradiente de fondo */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500" style={{backgroundColor: newspaper.color}}></div>
-            
-            {/* Portada con logo */}
-            <div className="h-64 flex items-center justify-center relative overflow-hidden" style={{backgroundColor: newspaper.color}}>
-              <div className="absolute inset-0 bg-black opacity-5"></div>
-              <img 
-                src={logoMap[newspaper.name]} 
-                alt={`Logo de ${newspaper.name}`}
-                className={`object-contain relative z-10 filter drop-shadow-xl ${
-                  newspaper.name === 'Liberty Times' || newspaper.name === 'Vocero del Sur' 
-                    ? 'w-56 h-56' 
-                    : 'w-48 h-48'
-                }`}
-              />
-              {/* Efecto de brillo */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-10 transform -skew-x-12 translate-x-full group-hover:translate-x-[-100%] transition-transform duration-700"></div>
-            </div>
-
-            {/* Contenido */}
-            <div className="relative p-8 min-h-[300px] flex flex-col">
-              {/* Título */}
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors leading-tight mb-2">
-                  {newspaper.name}
-                </h3>
-                <p className="text-base text-gray-500 font-medium">
-                  {newspaper.name === 'ONU Today' ? 'Noticiero' : 'Publicación Digital'}
-                </p>
+            {/* Burbuja principal */}
+            <div 
+              className="relative w-80 h-80 mx-auto rounded-full shadow-2xl hover:shadow-3xl transition-all duration-700 ease-out transform hover:scale-105 cursor-pointer overflow-hidden"
+              style={{backgroundColor: newspaper.color}}
+            >
+              {/* Efecto de gradiente interno */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+              
+              {/* Logo centrado */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <img 
+                  src={logoMap[newspaper.name]} 
+                  alt={`Logo de ${newspaper.name}`}
+                  className={`object-contain filter drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-110 ${
+                    newspaper.name === 'Liberty Times' || newspaper.name === 'Vocero del Sur' 
+                      ? 'w-48 h-48' 
+                      : 'w-40 h-40'
+                  }`}
+                />
               </div>
 
-              {/* Descripción */}
-              <p className="text-gray-600 text-base mb-8 leading-relaxed flex-1">
-                {newspaper.description}
-              </p>
+              {/* Efecto de ondas */}
+              <div className="absolute inset-0 rounded-full overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transform -skew-x-12 translate-x-full group-hover:translate-x-[-100%] transition-all duration-[2000ms] ease-out"></div>
+              </div>
 
-              {/* Botón de acción */}
+              {/* Enlace invisible para acceder */}
               <a
                 href={newspaper.folderId}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-white font-semibold py-4 px-6 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                style={{backgroundColor: newspaper.color}}
-              >
-                <div className="flex items-center justify-center gap-3">
-                  <FontAwesomeIcon icon={faFolderOpen} className="text-lg" />
-                  <span>Acceder</span>
-                  <FontAwesomeIcon icon={faExternalLinkAlt} className="text-sm" />
-                </div>
-              </a>
+                className="absolute inset-0 z-10"
+                aria-label={`Acceder a ${newspaper.name}`}
+              ></a>
             </div>
-
-            {/* Efecto de brillo en hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-5 transform -skew-x-12 translate-x-full group-hover:translate-x-[-100%] transition-transform duration-700"></div>
           </motion.div>
         ))}
       </div>
