@@ -87,7 +87,7 @@ const DrivePreviewSimple = () => {
               >
                 <div className="flex items-center justify-center gap-3">
                   <FontAwesomeIcon icon={faFolderOpen} className="text-lg" />
-                  <span>Acceder a Archivos</span>
+                  <span>Acceder</span>
                   <FontAwesomeIcon icon={faExternalLinkAlt} className="text-sm" />
                 </div>
               </a>
