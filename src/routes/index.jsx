@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion"; // Importamos AnimatePresence
+import { AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
@@ -11,29 +12,33 @@ import SocialMediaPage from "../pages/SocialMediaPage";
 import DonationsPage from "../pages/DonationsPage";
 import NewsDetail from "../pages/NewsDetail";
 import Resources from "../pages/Resources";
-import ScrollToTop from "../components/ScrollToTop"; // Para cargar siempre desde arriba
+import ScrollToTop from "../components/ScrollToTop";
+import { shouldUseSafeMode } from "../utils/runtimeSafety";
 
 function AppRoutes() {
-  const location = useLocation(); // Obtén la ubicación actual para las transiciones
+  const location = useLocation();
+  const safeMode = useMemo(() => shouldUseSafeMode(), []);
+
+  const routes = (
+    <Routes location={location} key={location.pathname}>
+      <Route path="/" element={<Home />} />
+      <Route path="/acserp" element={<ACSERPPage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/fotos" element={<Photos />} />
+      <Route path="/organos" element={<Model />} />
+      <Route path="*" element={<NotFound />} />
+      <Route path="/redes" element={<SocialMediaPage />} />
+      <Route path="/donaciones" element={<DonationsPage />} />
+      <Route path="/recursos" element={<Resources />} />
+      <Route path="/noticias/:id" element={<NewsDetail />} />
+    </Routes>
+  );
 
   return (
     <>
-      <ScrollToTop /> {/* Resetea el scroll al inicio en cada cambio de ruta */}
-      <AnimatePresence mode="wait" initial={false}>
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/acserp" element={<ACSERPPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/fotos" element={<Photos />} />
-          <Route path="/organos" element={<Model />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/redes" element={<SocialMediaPage />} />
-          <Route path="/donaciones" element={<DonationsPage />} />
-          <Route path="/recursos" element={<Resources />} />
-          <Route path="/noticias/:id" element={<NewsDetail />} /> {/* Detalle de noticia */}
-        </Routes>
-      </AnimatePresence>
+      <ScrollToTop />
+      {safeMode ? routes : <AnimatePresence mode="wait" initial={false}>{routes}</AnimatePresence>}
     </>
   );
 }

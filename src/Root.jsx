@@ -27,11 +27,14 @@
 import React from "react";
 import App from "./App";
 import { HelmetProvider } from "react-helmet-async";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const Root = () => {
   return (
     <HelmetProvider>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </HelmetProvider>
   );
 };
