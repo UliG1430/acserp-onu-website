@@ -1,29 +1,33 @@
 import React, { useState } from "react";
 
 const LazyImage = ({ src, alt, className = "", ...props }) => {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
-
-  console.log("🖼 Intentando cargar imagen:", src);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   return (
-    <img
-      src={src}  // ✅ Ahora src es la URL de importación procesada por Vite
-      alt={alt}
-      loading="lazy"
-      onLoad={() => {
-        console.log(`✅ Imagen cargada con éxito: ${src}`);
-        setLoaded(true);
-      }}
-      onError={() => {
-        console.error(`❌ Error al cargar la imagen: ${src}`);
-        setError(true);
-      }}
-      className={`transition-opacity duration-700 ease-in-out
-        ${loaded ? "opacity-100 scale-100" : "opacity-0 scale-95"}
-        ${className}`}
-      {...props}
-    />
+    <div className="relative overflow-hidden">
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
+        className={`transition-all duration-700 ease-out ${isLoaded ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-105 blur-sm"} ${className}`}
+        {...props}
+      />
+
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-900/25 backdrop-blur-sm pointer-events-none">
+          <div className="w-9 h-9 rounded-full border-2 border-white/70 border-t-transparent animate-spin" />
+        </div>
+      )}
+
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-900/40 text-white text-xs md:text-sm pointer-events-none">
+          Error al cargar imagen
+        </div>
+      )}
+    </div>
   );
 };
 
