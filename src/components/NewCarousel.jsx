@@ -37,8 +37,8 @@ const NewsCarousel = () => {
     swipeToSlide: true,
     waitForAnimate: false,
     useTransform: !isMobile,
-    nextArrow: safeMode || isMobile ? null : <NextArrow />,
-    prevArrow: safeMode || isMobile ? null : <PrevArrow />,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     beforeChange: () => setIsSliding(true),
     afterChange: () => setIsSliding(false),
   };
