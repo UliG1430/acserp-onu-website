@@ -6,7 +6,6 @@ import SubscriptionCallToAction from '../components/SubscriptionCallToAction';
 import NewsSection from '../components/NewsSection';
 import SEOHelmet from '../components/SEOHelmet';
 import CountdownDisplay from '../components/CountDownDisplay'; // Asegúrate de que la ruta sea correcta
-import DiariosNotification from '../components/DiariosNotification';
 import DrivePreviewSimple from '../components/DrivePreviewSimple';
 function Home() {
   return (
@@ -14,7 +13,6 @@ function Home() {
       <SEOHelmet 
         title="Inicio - Modelo ONU La Plata"
       />
-      <DiariosNotification />
       <CountdownDisplay/>
       {/* Carrusel de imágenes */}
       <NewsCarousel />

@@ -21,7 +21,7 @@ const SubscriptionCallToAction = () => {
           rel="noopener noreferrer"
           className="bg-white text-blue-950 font-semibold text-lg px-8 py-3 rounded-full shadow-md hover:scale-105 hover:bg-blue-100 transition-transform duration-300"
         >
-          Quiero apoyar mensualmente
+          ¡Quiero donar!
         </a>
       </div>
     </section>
