@@ -29,7 +29,7 @@ function AppRoutes() {
       <Route path="/organos" element={<Model />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/redes" element={<SocialMediaPage />} />
-      <Route path="/donaciones" element={<DonationsPage />} />
+      <Route path="/donar" element={<DonationsPage />} />
       <Route path="/recursos" element={<Resources />} />
       <Route path="/noticias/:id" element={<NewsDetail />} />
     </Routes>

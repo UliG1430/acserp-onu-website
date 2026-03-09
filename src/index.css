@@ -229,6 +229,17 @@ body {
 .animate-fade-in-up {
   animation: fadeInUp 0.5s ease-out forwards;
 }
+@keyframes fadeOutOverlay {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.animate-fade-out-overlay {
+  animation: fadeOutOverlay 0.9s ease-out forwards;
+}
 body {
   font-family: 'Poppins', sans-serif;
 }
