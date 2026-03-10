@@ -5,6 +5,8 @@ import newsData from "../assets/noticias/newsData.js";
 import LazyImage from "../components/LazyImage";
 import parseDate from "../utils/parseDate";
 
+const NEWS_FADE_STEP_MS = 220;
+
 const sortedNewsData = [...newsData].sort((a, b) => {
   return parseDate(b.date) - parseDate(a.date);
 });
@@ -14,7 +16,7 @@ const NewsSection = () => {
   const hasTriggeredRef = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [animationKey, setAnimationKey] = useState(0);
+  const [visibleItems, setVisibleItems] = useState(0);
 
   const getItemsPerPage = () => (window.innerWidth < 768 ? 2 : 6);
   const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage());
@@ -41,6 +43,27 @@ const NewsSection = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!isVisible) {
+      setVisibleItems(0);
+      return;
+    }
+
+    setVisibleItems(0);
+    const timers = [];
+
+    for (let index = 0; index < itemsPerPage; index += 1) {
+      const timer = window.setTimeout(() => {
+        setVisibleItems(index + 1);
+      }, index * NEWS_FADE_STEP_MS);
+      timers.push(timer);
+    }
+
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+    };
+  }, [isVisible, currentPage, itemsPerPage]);
+
   const totalPages = Math.ceil(sortedNewsData.length / itemsPerPage);
 
   const paginatedNews = sortedNewsData.slice(
@@ -50,8 +73,8 @@ const NewsSection = () => {
 
   const handlePageChange = (newPage) => {
     if (newPage < 0 || newPage >= totalPages) return;
+    setVisibleItems(0);
     setCurrentPage(newPage);
-    if (isVisible) setAnimationKey((prev) => prev + 1);
   };
 
   return (
@@ -77,38 +100,18 @@ const NewsSection = () => {
         </button>
 
         <div className="overflow-visible">
-          <motion.div
-            key={`${currentPage}-${animationKey}`}
-            initial="hidden"
-            animate={isVisible ? "visible" : "hidden"}
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.12,
-                  delayChildren: 0.18,
-                },
-              },
-            }}
+          <div
+            key={currentPage}
             className={`grid grid-cols-1 ${
               itemsPerPage <= 2 ? "sm:grid-cols-2" : "md:grid-cols-3 lg:grid-cols-3"
             } gap-8 px-2`}
           >
-            {paginatedNews.map((news) => (
+            {paginatedNews.map((news, index) => (
               <motion.div
                 key={news.id}
-                variants={{
-                  hidden: { opacity: 0, y: 18, scale: 0.99 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    transition: {
-                      duration: 0.5,
-                      ease: [0.22, 1, 0.36, 1],
-                    },
-                  },
-                }}
+                initial={{ opacity: 0 }}
+                animate={isVisible && index < visibleItems ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
               >
                 <Link to={`/noticias/${news.id}`} className="block h-full">
                   <motion.article
@@ -133,7 +136,7 @@ const NewsSection = () => {
                 </Link>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
         <button
