@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import newsData from "../assets/noticias/newsData.js";
 import LazyImage from "../components/LazyImage";
 import parseDate from "../utils/parseDate";
@@ -11,11 +11,11 @@ const sortedNewsData = [...newsData].sort((a, b) => {
 
 const NewsSection = () => {
   const sectionRef = useRef(null);
+  const hasTriggeredRef = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const [animationKey, setAnimationKey] = useState(0);
 
-  // 👇 Responsivo: 2 noticias por página en mobile, 6 en desktop
   const getItemsPerPage = () => (window.innerWidth < 768 ? 2 : 6);
   const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage());
 
@@ -25,6 +25,22 @@ const NewsSection = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || hasTriggeredRef.current) return;
+        hasTriggeredRef.current = true;
+        setIsVisible(true);
+        observer.disconnect();
+      },
+      { threshold: 0.22 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   const totalPages = Math.ceil(sortedNewsData.length / itemsPerPage);
 
   const paginatedNews = sortedNewsData.slice(
@@ -32,83 +48,74 @@ const NewsSection = () => {
     (currentPage + 1) * itemsPerPage
   );
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
-    };
-  }, []);
-
-  const handlePageChange = (newPage, dir) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setDirection(dir);
-      setCurrentPage(newPage);
-    }
+  const handlePageChange = (newPage) => {
+    if (newPage < 0 || newPage >= totalPages) return;
+    setCurrentPage(newPage);
+    if (isVisible) setAnimationKey((prev) => prev + 1);
   };
 
   return (
-    <div ref={sectionRef} className="px-4 py-12 bg-blue-950 relative">
-      <h2
-        className={`text-4xl font-bold text-center text-white mb-8 transition-opacity duration-[2000ms] ease-out ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
+    <section ref={sectionRef} className="px-4 py-12 bg-blue-950 relative">
+      <motion.h2
+        initial={{ opacity: 0, y: 8 }}
+        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="text-4xl font-bold text-center text-white mb-8"
       >
-        Últimas Noticias
-      </h2>
+        {"\u00daltimas Noticias"}
+      </motion.h2>
 
       <div className="relative max-w-7xl mx-auto">
-        {/* Flecha Izquierda */}
         <button
-          onClick={() => handlePageChange(currentPage - 1, -1)}
+          onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 0}
           style={{ backgroundColor: "#787ac1" }}
           className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 text-white text-5xl w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition duration-300 disabled:opacity-30 hover:scale-110"
+          aria-label="Noticias anteriores"
         >
-          ‹
+          {"<"}
         </button>
 
-        {/* Carrusel */}
         <div className="overflow-visible">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentPage}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: 0.05 } },
-                exit: {
-                  transition: { staggerChildren: 0.03, staggerDirection: -1 },
+          <motion.div
+            key={`${currentPage}-${animationKey}`}
+            initial="hidden"
+            animate={isVisible ? "visible" : "hidden"}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.12,
+                  delayChildren: 0.18,
                 },
-              }}
-              className={`grid grid-cols-1 ${
-                itemsPerPage <= 2 ? "sm:grid-cols-2" : "md:grid-cols-3 lg:grid-cols-3"
-              } gap-8 px-2`}
-            >
-              {paginatedNews.map((news) => (
-                <Link key={news.id} to={`/noticias/${news.id}`} className="block">
-                  <motion.div
-                    variants={{
-                      hidden: { opacity: 0, y: 30 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-                      exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
-                    }}
+              },
+            }}
+            className={`grid grid-cols-1 ${
+              itemsPerPage <= 2 ? "sm:grid-cols-2" : "md:grid-cols-3 lg:grid-cols-3"
+            } gap-8 px-2`}
+          >
+            {paginatedNews.map((news) => (
+              <motion.div
+                key={news.id}
+                variants={{
+                  hidden: { opacity: 0, y: 18, scale: 0.99 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    transition: {
+                      duration: 0.5,
+                      ease: [0.22, 1, 0.36, 1],
+                    },
+                  },
+                }}
+              >
+                <Link to={`/noticias/${news.id}`} className="block h-full">
+                  <motion.article
                     whileHover={{
-                      scale: 1.05,
+                      scale: 1.03,
                       boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
                     }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
                     className="bg-white rounded-lg transition duration-300 cursor-pointer h-full flex flex-col"
                   >
                     <LazyImage
@@ -120,40 +127,39 @@ const NewsSection = () => {
                       <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
                       <p className="text-gray-500 text-sm mb-2">{news.date}</p>
                       <p className="text-gray-700 mb-4 line-clamp-4">{news.summary}</p>
-                      <span className="text-blue-600 font-semibold mt-auto">Leer más</span>
+                      <span className="text-blue-600 font-semibold mt-auto">{"Leer m\u00e1s"}</span>
                     </div>
-                  </motion.div>
+                  </motion.article>
                 </Link>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Flecha Derecha */}
         <button
-          onClick={() => handlePageChange(currentPage + 1, 1)}
+          onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage >= totalPages - 1}
           style={{ backgroundColor: "#787ac1" }}
           className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 text-white text-5xl w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition duration-300 disabled:opacity-30 hover:scale-110"
+          aria-label="Noticias siguientes"
         >
-          ›
+          {">"}
         </button>
       </div>
 
-
-      {/* Paginación */}
       <div className="flex justify-center mt-6 space-x-2">
         {Array.from({ length: totalPages }).map((_, i) => (
           <button
             key={i}
-            onClick={() => handlePageChange(i, i > currentPage ? 1 : -1)}
+            onClick={() => handlePageChange(i)}
             className={`w-3 h-3 rounded-full transition ${
               i === currentPage ? "bg-white scale-125" : "bg-gray-400"
             }`}
+            aria-label={`Ir a la p\u00e1gina ${i + 1} de noticias`}
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

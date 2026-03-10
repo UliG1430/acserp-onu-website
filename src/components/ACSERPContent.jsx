@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import img1 from "../assets/images/acserp1.webp";
 import img2 from "../assets/images/acserp2.webp";
 import img3 from "../assets/images/acserp3.webp";
@@ -50,30 +51,46 @@ const ACSERPContent = () => {
 
       {/* Secciones de historia */}
       {secciones.map((sec, i) => (
-        <div
+        <motion.div
           key={i}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
           className={`py-20 px-6 md:px-16 ${
             i % 2 === 0 ? "bg-white" : "bg-blue-50"
           }`}
         >
           <div className={`max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 ${i % 2 !== 0 ? "md:flex-row-reverse" : ""}`}>
-            <div className="md:w-1/2 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+              className="md:w-1/2 space-y-6"
+            >
               <h2 className="text-3xl font-bold text-blue-900">{sec.titulo}</h2>
               {sec.texto.map((p, idx) => (
                 <p key={idx} className="text-gray-700 text-lg leading-relaxed">
                   {p}
                 </p>
               ))}
-            </div>
-            <div className="md:w-1/2">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: i % 2 === 0 ? 40 : -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+              className="md:w-1/2"
+            >
               <img
                 src={sec.imagen}
                 alt={sec.titulo}
                 className="rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
               />
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       ))}
 
       {/* Separador final */}

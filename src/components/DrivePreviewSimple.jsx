@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExternalLinkAlt, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import { useInView } from "react-intersection-observer";
 import { driveConfig } from '../config/driveConfig';
 
 // Importar logos
@@ -10,8 +9,12 @@ import onuTodayLogo from '../assets/logos/onu_today.png';
 import voceroDelSurLogo from '../assets/logos/vocero_del_sur_png.png';
 
 const DrivePreviewSimple = () => {
-  const driveUrl = `https://drive.google.com/drive/folders/${driveConfig.mainFolderId}`;
   const newspapers = driveConfig.newspapers;
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.25,
+    rootMargin: "0px 0px -10% 0px",
+  });
 
   // Mapeo de logos
   const logoMap = {
@@ -22,7 +25,12 @@ const DrivePreviewSimple = () => {
 
   return (
     <section data-section="diarios" className="py-16 bg-gradient-to-br from-indigo-800 to-blue-900">
-      <div className="max-w-7xl mx-auto px-6">
+      <div
+        ref={ref}
+        className={`max-w-7xl mx-auto px-6 transition-all duration-[1400ms] ease-out ${
+          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+        }`}
+      >
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">Diarios del Modelo ONU</h2>
           <p className="text-lg text-blue-100 max-w-2xl mx-auto">
@@ -37,7 +45,7 @@ const DrivePreviewSimple = () => {
           <motion.div
             key={newspaper.name}
             initial={{ opacity: 0, scale: 0.8, y: 40 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            animate={inView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 40 }}
             transition={{ delay: index * 0.1, duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="group relative"
           >
