@@ -11,7 +11,11 @@ import DrivePreviewSimple from '../components/DrivePreviewSimple';
 function Home() {
   return (
     <div>
-      <SEOHelmet title="Inicio - Modelo ONU La Plata" />
+      <SEOHelmet
+        title="Modelo ONU La Plata - ACSERP"
+        description="Modelo ONU La Plata es un simulacro educativo de Naciones Unidas organizado por ACSERP, con participacion estudiantil y educacion publica y gratuita."
+        url="https://acserp.org.ar/"
+      />
       <CountdownDisplay />
       {/* Carrusel de imagenes */}
       <NewsCarousel />
