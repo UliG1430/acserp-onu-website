@@ -5,26 +5,24 @@ import SocialMediaSection from '../components/SocialMediaSection';
 import SubscriptionCallToAction from '../components/SubscriptionCallToAction';
 import NewsSection from '../components/NewsSection';
 import SEOHelmet from '../components/SEOHelmet';
-import CountdownDisplay from '../components/CountDownDisplay'; // Asegúrate de que la ruta sea correcta
+import CountdownDisplay from '../components/CountDownDisplay';
 import DrivePreviewSimple from '../components/DrivePreviewSimple';
+
 function Home() {
   return (
     <div>
-      <SEOHelmet 
-        title="Inicio - Modelo ONU La Plata"
-      />
-      <CountdownDisplay/>
-      {/* Carrusel de imágenes */}
+      <SEOHelmet title="Inicio - Modelo ONU La Plata" />
+      <CountdownDisplay />
+      {/* Carrusel de imagenes */}
       <NewsCarousel />
-      
 
-      {/* Contador de estadísticas */}
+      {/* Contador de estadisticas */}
       <StatsCounter />
 
-      {/* Nueva sección de apoyo mensual */}
+      {/* Nueva seccion de apoyo */}
       <SubscriptionCallToAction />
 
-      {/* Sección de Diarios de la ONU */}
+      {/* Seccion de Diarios de la ONU */}
       <DrivePreviewSimple />
 
       {/* <SocialMediaSection/> */}

@@ -1,7 +1,14 @@
 import React from "react";
 import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
 
 const StatsCounter = () => {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.35,
+    rootMargin: "0px 0px -10% 0px",
+  });
+
   const stats = [
     { id: 1, value: 15584, label: "TOTAL DE PARTICIPANTES" },
     { id: 2, value: 131, label: "COLEGIOS QUE PARTICIPARON" },
@@ -11,7 +18,12 @@ const StatsCounter = () => {
 
   return (
     <div className="py-10 bg-gray-50">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+      <div
+        ref={ref}
+        className={`max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center transition-all duration-[1400ms] ease-out ${
+          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+        }`}
+      >
         {stats.map((stat) => (
           <div
             key={stat.id}
