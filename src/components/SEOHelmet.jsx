@@ -2,13 +2,13 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 
 const SEOHelmet = ({
-  title = "Modelo ONU La Plata - VI Edición",
-  description = "Somos la Asociación Civil Simulacros Educativos Río de La Plata - ¡Educación pública y gratuita!",
+  title = "Modelo ONU La Plata - VI Edicion",
+  description = "Somos la Asociacion Civil Simulacros Educativos Rio de la Plata. Educacion publica y gratuita.",
   url = "https://acserp.org.ar/",
   image = "https://acserp.org.ar/og-image.png",
 }) => {
   const keywords =
-    "modelo ONU, La Plata, simulacro educativo, Naciones Unidas, estudiantes, diplomacia, debate, VI Edición, acserp, ACSERP, ONU, onu";
+    "modelo ONU, La Plata, simulacro educativo, Naciones Unidas, estudiantes, diplomacia, debate, VI Edicion, acserp, ACSERP, ONU, onu";
 
   return (
     <Helmet>
@@ -31,20 +31,20 @@ const SEOHelmet = ({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
 
-      {/* Datos estructurados de la organización */}
+      {/* Datos estructurados de la organizacion */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "Asociación Civil Simulacros Educativos Río de La Plata",
+          name: "Asociacion Civil Simulacros Educativos Rio de la Plata",
           alternateName: "ACSERP",
           url: "https://acserp.org.ar",
           logo: "https://acserp.org.ar/og-image.png",
           sameAs: [
             "https://www.instagram.com/modeloonulp/",
             "https://www.linkedin.com/in/simulacros-educativos-r%C3%ADo-de-la-plata-b45698230/",
-            "https://www.youtube.com/@modeloonulaplata"
-          ]
+            "https://www.youtube.com/@modeloonulaplata",
+          ],
         })}
       </script>
     </Helmet>
