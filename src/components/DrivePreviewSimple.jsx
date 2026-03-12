@@ -1,96 +1,115 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from "react-intersection-observer";
+import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import { driveConfig } from '../config/driveConfig';
+import { stagger, cardItem, headingVariants, viewport } from '../utils/motion';
 
-// Importar logos
 import libertyTimesLogo from '../assets/logos/liberty_times.png';
-import onuTodayLogo from '../assets/logos/onu_today.png';
+import onuTodayLogo     from '../assets/logos/onu_today.png';
 import voceroDelSurLogo from '../assets/logos/vocero_del_sur_png.png';
+
+const logoMap = {
+  'Liberty Times':  libertyTimesLogo,
+  'ONU Today':      onuTodayLogo,
+  'Vocero del Sur': voceroDelSurLogo,
+};
 
 const DrivePreviewSimple = () => {
   const newspapers = driveConfig.newspapers;
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.25,
-    rootMargin: "0px 0px -10% 0px",
-  });
-
-  // Mapeo de logos
-  const logoMap = {
-    'Liberty Times': libertyTimesLogo,
-    'ONU Today': onuTodayLogo,
-    'Vocero del Sur': voceroDelSurLogo
-  };
 
   return (
-    <section data-section="diarios" className="py-16 bg-gradient-to-br from-indigo-800 to-blue-900">
-      <div
-        ref={ref}
-        className={`max-w-7xl mx-auto px-6 transition-all duration-[1400ms] ease-out ${
-          inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-        }`}
-      >
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white mb-4">Diarios del Modelo ONU</h2>
-          <p className="text-lg text-blue-100 max-w-2xl mx-auto">
-            Accedé a las publicaciones más importantes del período de sesiones
+    /* Deep navy background — white logos become fully visible */
+    <section
+      data-section="diarios"
+      className="relative py-24 overflow-hidden"
+      style={{ background: 'linear-gradient(160deg, #070d20 0%, #0c1535 60%, #111a45 100%)' }}
+    >
+      {/* Subtle background glow */}
+      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-20"
+        style={{ background: 'radial-gradient(ellipse, #3b5bdb 0%, transparent 70%)' }} />
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Heading */}
+        <motion.div
+          variants={headingVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="text-center mb-16"
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-4">
+            Publicaciones oficiales
           </p>
-        </div>
-        <div className="max-w-7xl mx-auto">
-          <div className="space-y-8">
-      {/* Grid de burbujas modernas */}
-      <div className="grid xl:grid-cols-3 lg:grid-cols-2 gap-8">
-        {newspapers.map((newspaper, index) => (
-          <motion.div
-            key={newspaper.name}
-            initial={{ opacity: 0, scale: 0.8, y: 40 }}
-            animate={inView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.8, y: 40 }}
-            transition={{ delay: index * 0.1, duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="group relative"
-          >
-            {/* Burbuja principal */}
-            <div 
-              className="relative w-80 h-80 mx-auto rounded-full shadow-2xl hover:shadow-3xl transition-all duration-700 ease-out transform hover:scale-105 cursor-pointer overflow-hidden"
-              style={{backgroundColor: newspaper.color}}
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            Diarios del Modelo ONU
+          </h2>
+          <p className="text-base text-white/50 max-w-xl mx-auto leading-relaxed">
+            Accedé a las ediciones publicadas durante cada período de sesiones
+          </p>
+        </motion.div>
+
+        {/* Cards */}
+        <motion.div
+          variants={stagger(0.12)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {newspapers.map((newspaper) => (
+            <motion.a
+              key={newspaper.name}
+              href={newspaper.folderId}
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={cardItem}
+              whileHover={{ y: -6, transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] } }}
+              className="group relative flex flex-col rounded-2xl overflow-hidden cursor-pointer"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.09)',
+              }}
+              aria-label={`Acceder a ${newspaper.name}`}
             >
-              {/* Efecto de gradiente interno */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-              
-              {/* Logo centrado */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <img 
-                  src={logoMap[newspaper.name]} 
-                  alt={`Logo de ${newspaper.name}`}
-                  className={`object-contain filter drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-110 ${
-                    newspaper.name === 'Liberty Times' || newspaper.name === 'Vocero del Sur' 
-                      ? 'w-48 h-48' 
-                      : 'w-40 h-40'
-                  }`}
+              {/* Glass shine on hover */}
+              <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100
+                transition-opacity duration-500"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 60%)',
+                }} />
+
+              {/* Logo area */}
+              <div className="flex items-center justify-center h-48 px-10 py-8">
+                <img
+                  src={logoMap[newspaper.name]}
+                  alt={`Logo ${newspaper.name}`}
+                  className="max-h-full max-w-[200px] w-full object-contain
+                    group-hover:scale-105 transition-transform duration-400"
+                  style={{ filter: 'drop-shadow(0 2px 12px rgba(255,255,255,0.08))' }}
                 />
               </div>
 
-              {/* Efecto de ondas */}
-              <div className="absolute inset-0 rounded-full overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transform -skew-x-12 translate-x-full group-hover:translate-x-[-100%] transition-all duration-[2000ms] ease-out"></div>
+              {/* Divider */}
+              <div className="mx-6 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
+
+              {/* Footer */}
+              <div className="flex items-center justify-between px-6 py-4">
+                <div>
+                  <p className="text-sm font-semibold text-white/90">{newspaper.name}</p>
+                  {newspaper.description && (
+                    <p className="text-xs text-white/40 mt-0.5 line-clamp-1">{newspaper.description}</p>
+                  )}
+                </div>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full
+                  bg-white/8 border border-white/12 text-white/50 group-hover:text-white
+                  group-hover:bg-white/15 transition-all duration-200 shrink-0 ml-3">
+                  <ArrowUpRightIcon className="w-4 h-4" />
+                </span>
               </div>
-
-              {/* Enlace invisible para acceder */}
-              <a
-                href={newspaper.folderId}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0 z-10"
-                aria-label={`Acceder a ${newspaper.name}`}
-              ></a>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-    
-          </div>
-        </div>
+            </motion.a>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

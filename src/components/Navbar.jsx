@@ -1,88 +1,164 @@
-import React, { useState } from 'react';
-import NavLink from './NavLink'; // Importamos nuestro NavLink personalizado
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../assets/images/Azul Viejo - Logo ACSERP + Texto.png';
+
+const navLinks = [
+  { name: 'Inicio',    path: '/' },
+  { name: 'ACSERP',   path: '/acserp' },
+  { name: 'Órganos',  path: '/organos' },
+  { name: 'Recursos', path: '/recursos', target: '_blank' },
+  { name: 'Fotos',    path: '/fotos' },
+  { name: 'Redes',    path: '/redes' },
+  { name: 'Donar',    path: '/donar' },
+  {
+    name: 'Sumate',
+    path: 'https://docs.google.com/forms/d/e/1FAIpQLSdSs6OBExmEBdEZiWE9vbNZXVkc92WqEZcmVkZpclx1AucDFw/viewform',
+    target: '_blank',
+    cta: true,
+  },
+];
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen]     = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-  const navLinks = [
-    { name: "Inicio", path: "/" },
-    { name: "ACSERP", path: "/acserp" },
-    { name: "Órganos", path: "/organos" },
-    { name: "Recursos", path: "/recursos", target: "_blank" },
-    { name: "Fotos", path: "/fotos" },
-    { name: "Redes", path: "/redes" },
-    { name: "Donar", path: "/donar" },
-    {
-      name: "Sumate",
-      path: "https://docs.google.com/forms/d/e/1FAIpQLSdSs6OBExmEBdEZiWE9vbNZXVkc92WqEZcmVkZpclx1AucDFw/viewform",
-      target: "_blank",
-    },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  useEffect(() => { setIsOpen(false); }, [location]);
+
+  const isActive = (path) =>
+    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
 
   return (
-    <nav className="bg-[#121445] shadow-lg sticky top-0 z-10">
+    <header
+      className={`sticky top-0 z-50 bg-white transition-shadow duration-300
+        ${scrolled ? 'shadow-[0_1px_24px_rgba(18,20,69,0.10)]' : 'border-b border-gray-100'}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Botón hamburguesa para móvil */}
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              type="button"
-              className="bg-blue-950 inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-blue-950 focus:outline-none transition duration-300 ease-in-out"
-              aria-label="Abrir menú de navegación"
-            >
-              <div className="relative w-6 h-6 flex items-center justify-center">
-                <span className={`block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out ${isOpen ? "rotate-45 translate-y-2" : "-translate-y-2"}`} />
-                <span className={`block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out ${isOpen ? "opacity-0" : ""}`} />
-                <span className={`block absolute h-0.5 w-5 bg-current transform transition duration-500 ease-in-out ${isOpen ? "-rotate-45 -translate-y-2" : "translate-y-2"}`} />
-              </div>
-            </button>
-          </div>
+        <div className="flex items-center justify-between h-20">
 
-          {/* Links para pantallas grandes */}
-          <div className="hidden md:flex space-x-8 justify-center w-full ml-10 navbar-links">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.name}
-                to={link.path}
-                label={link.name}
-                target={link.target}
-                className={`flex items-center ${
-                  link.name === "Sumate"
-                    ? "px-3 py-1 border-2 border-white text-white rounded-md hover:bg-white hover:text-blue-950 transition duration-300"
-                    : "text-white hover:text-gray-300 transition duration-300"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Menú desplegable para móvil con animación */}
-      <div className={`${isOpen ? "max-h-screen scale-100" : "max-h-0 scale-95"} transition-all duration-500 ease-in-out overflow-hidden md:hidden bg-blue-950 bg-opacity-95`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              label={link.name}
-              target={link.target}
-              mobile
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center ${
-                link.name === "Sumate"
-                  ? "block px-4 py-2 border-2 border-white text-white rounded-md hover:bg-white hover:text-blue-950 transition duration-300"
-                  : "block text-white hover:text-gray-300 transition duration-300"
-              }`}
+          {/* ── Logo ── */}
+          <Link
+            to="/"
+            aria-label="Inicio — ACSERP ONU"
+            className="shrink-0 flex items-center"
+          >
+            <img
+              src={logo}
+              alt="Simulacros Educativos Río de la Plata"
+              className="h-14 w-auto"
             />
-          ))}
+          </Link>
+
+          {/* ── Desktop nav ── */}
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Navegación principal">
+            {navLinks.map((link) => {
+              const isExternal = link.path.startsWith('http');
+              const active     = !isExternal && isActive(link.path);
+
+              if (link.cta) {
+                return (
+                  <a
+                    key={link.name}
+                    href={link.path}
+                    target={link.target}
+                    rel="noopener noreferrer"
+                    className="ml-4 px-5 py-2.5 bg-brand-900 text-white text-sm font-semibold
+                      rounded-full hover:bg-brand-800 transition-colors duration-200 whitespace-nowrap"
+                  >
+                    {link.name}
+                  </a>
+                );
+              }
+
+              const cls = `relative px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150
+                after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:rounded-full
+                after:transition-opacity after:duration-200
+                ${active
+                  ? 'text-brand-900 after:bg-brand-900 after:opacity-100'
+                  : 'text-gray-600 hover:text-brand-900 hover:bg-gray-50 after:bg-brand-900 after:opacity-0 hover:after:opacity-40'
+                }`;
+
+              return isExternal ? (
+                <a
+                  key={link.name}
+                  href={link.path}
+                  target={link.target}
+                  rel="noopener noreferrer"
+                  className={cls}
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link key={link.name} to={link.path} className={cls}>
+                  {link.name}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* ── Mobile hamburger ── */}
+          <button
+            onClick={() => setIsOpen((o) => !o)}
+            type="button"
+            aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={isOpen}
+            className="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg
+              text-gray-700 hover:bg-gray-100 transition-colors duration-150
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 gap-[5px]"
+          >
+            <span className={`block w-5 h-0.5 bg-current rounded-full transition-all duration-300
+              ${isOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
+            <span className={`block w-5 h-0.5 bg-current rounded-full transition-all duration-300
+              ${isOpen ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`block w-5 h-0.5 bg-current rounded-full transition-all duration-300
+              ${isOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
+          </button>
         </div>
       </div>
-    </nav>
+
+      {/* ── Mobile dropdown ── */}
+      <div
+        className={`lg:hidden border-t border-gray-100 overflow-hidden transition-all duration-300 ease-in-out
+          ${isOpen ? 'max-h-[32rem] opacity-100' : 'max-h-0 opacity-0'}`}
+      >
+        <nav className="px-4 py-3 space-y-0.5 bg-white" aria-label="Menú móvil">
+          {navLinks.map((link) => {
+            const isExternal = link.path.startsWith('http');
+            const active     = !isExternal && isActive(link.path);
+
+            const cls = `block px-4 py-3 text-base font-medium rounded-xl transition-colors duration-150
+              ${link.cta
+                ? 'mt-2 text-center bg-brand-900 text-white hover:bg-brand-800'
+                : active
+                  ? 'bg-brand-50 text-brand-900'
+                  : 'text-gray-700 hover:bg-gray-50 hover:text-brand-900'
+              }`;
+
+            return isExternal ? (
+              <a
+                key={link.name}
+                href={link.path}
+                target={link.target}
+                rel="noopener noreferrer"
+                className={cls}
+              >
+                {link.name}
+              </a>
+            ) : (
+              <Link key={link.name} to={link.path} className={cls}>
+                {link.name}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+    </header>
   );
 };
 

@@ -1,29 +1,33 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';  // Importar componente React de FontAwesome
-import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';  // Importar los íconos que necesitas
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
-export const NextArrow = ({ onClick }) => {
-  return (
-    <div
-      className="absolute right-3 md:right-4 top-1/2 transform -translate-y-1/2 bg-black/55 p-4 md:p-3 rounded-full cursor-pointer z-10 touch-manipulation"
-      onClick={onClick}
-      aria-label="Siguiente noticia"
-      role="button"
-    >
-      <FontAwesomeIcon icon={faChevronRight} className="text-white text-2xl" />
-    </div>
-  );
-};
+const ArrowBase = ({ onClick, label, Icon, side }) => (
+  <button
+    onClick={onClick}
+    aria-label={label}
+    className={`
+      absolute ${side === 'right' ? 'right-4 sm:right-6' : 'left-4 sm:left-6'}
+      top-1/2 -translate-y-1/2 z-10
+      flex items-center justify-center
+      w-11 h-11 sm:w-13 sm:h-13
+      rounded-full bg-white/90 hover:bg-white
+      shadow-lg hover:shadow-xl
+      text-gray-900
+      transition-all duration-200
+      hover:scale-110
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60
+      backdrop-blur-sm
+    `}
+    style={{ width: '48px', height: '48px' }}
+  >
+    <Icon className="w-5 h-5" />
+  </button>
+);
 
-export const PrevArrow = ({ onClick }) => {
-  return (
-    <div
-      className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 bg-black/55 p-4 md:p-3 rounded-full cursor-pointer z-10 touch-manipulation"
-      onClick={onClick}
-      aria-label="Noticia anterior"
-      role="button"
-    >
-      <FontAwesomeIcon icon={faChevronLeft} className="text-white text-2xl" />
-    </div>
-  );
-};
+export const NextArrow = ({ onClick }) => (
+  <ArrowBase onClick={onClick} label="Siguiente" Icon={ChevronRightIcon} side="right" />
+);
+
+export const PrevArrow = ({ onClick }) => (
+  <ArrowBase onClick={onClick} label="Anterior" Icon={ChevronLeftIcon} side="left" />
+);
