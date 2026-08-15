@@ -13,6 +13,10 @@ const OrganCard = ({ organ, index, topicEdition }) => {
   const [fallbackTopicTitle = "", ...fallbackTopicSubtitleLines] = String(organ.topicText || "").split(/\r?\n/);
   const topicTitle = organ.topicTitle ?? fallbackTopicTitle.trim();
   const topicSubtitle = organ.topicSubtitle ?? fallbackTopicSubtitleLines.join("\n").trim();
+  const hasTopicLink = organ.topicLink && organ.topicLink !== "#";
+  const openTopicLink = () => {
+    if (hasTopicLink) window.open(organ.topicLink, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div
@@ -75,12 +79,21 @@ const OrganCard = ({ organ, index, topicEdition }) => {
                 {organ.description}
               </p>
 
-              <div
-                className="p-4 rounded-r-lg mb-6 border-l-4 transition-all duration-500 ease-out group-hover:scale-105 group-hover:shadow-lg group-hover:border-l-8"
+              <button
+                type="button"
+                onClick={openTopicLink}
+                disabled={!hasTopicLink}
+                className={`w-full p-4 rounded-r-lg mb-6 border-l-4 text-left transition-all duration-500 ease-out group-hover:scale-105 group-hover:shadow-lg group-hover:border-l-8 ${
+                  hasTopicLink
+                    ? "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    : "cursor-default"
+                }`}
                 style={{
                   backgroundColor: organColor === "#000000" ? "rgba(0, 0, 0, 0.1)" : `${organColor}15`,
                   borderLeftColor: organColor,
+                  outlineColor: organColor,
                 }}
+                aria-label={hasTopicLink ? `Abrir tópico ampliado de ${organ.name}` : undefined}
               >
                 <h3 className="text-lg font-semibold mb-2" style={{ color: organColor }}>
                   Tópico - {topicEdition}
@@ -98,7 +111,7 @@ const OrganCard = ({ organ, index, topicEdition }) => {
                     {topicSubtitle}
                   </p>
                 )}
-              </div>
+              </button>
             </div>
           </div>
         </div>
