@@ -159,6 +159,7 @@ export const defaultSiteContent = {
   },
   modelPage: {
     subtitle: "IX Modelo Intercolegial de Naciones Unidas La Plata",
+    topicEdition: "VIII Edición",
     intro:
       "Conocé todos los órganos que forman parte de los Modelos de Naciones Unidas en La Plata. A lo largo de los años, nuestra Asociación ha desarrollado una amplia variedad de órganos y comités, permitiendo a los y las participantes abordar las principales temáticas de la agenda internacional desde distintas perspectivas. Explorá cada uno y descubrí su impacto.",
   },

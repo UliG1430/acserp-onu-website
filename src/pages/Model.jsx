@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import SEOHelmet from '../components/SEOHelmet';
 import { useSiteContent } from '../context/SiteContentContext';
 
-const OrganCard = ({ organ, index }) => {
+const OrganCard = ({ organ, index, topicEdition }) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -80,9 +80,9 @@ const OrganCard = ({ organ, index }) => {
                 }}
               >
                 <h3 className="text-lg font-semibold mb-2" style={{ color: organColor }}>
-                  Tópico - VIII Edición
+                  Tópico - {topicEdition}
                 </h3>
-                <p className="text-gray-700">{organ.topicText}</p>
+                <p className="whitespace-pre-line text-gray-700">{organ.topicText}</p>
               </div>
             </div>
           </div>
@@ -135,7 +135,12 @@ const Model = () => {
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           {visibleOrgans.map((organ, index) => (
-            <OrganCard key={organ.id} organ={organ} index={index} />
+            <OrganCard
+              key={organ.id}
+              organ={organ}
+              index={index}
+              topicEdition={content.modelPage.topicEdition || "VIII Edición"}
+            />
           ))}
         </div>
       </section>

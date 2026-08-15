@@ -1315,7 +1315,7 @@ const Admin = () => {
                   </button>
                 </div>
                 {!isModelHeaderCollapsed && (
-                  <div className="mt-4 grid gap-4">
+                  <div className="mt-4 grid gap-4 md:grid-cols-2">
                     <label className="block">
                       <span className="text-sm font-semibold text-gray-700">Subtítulo de actividad</span>
                       <input
@@ -1328,6 +1328,18 @@ const Admin = () => {
                       />
                     </label>
                     <label className="block">
+                      <span className="text-sm font-semibold text-gray-700">Edición</span>
+                      <input
+                        value={draft.modelPage.topicEdition || ""}
+                        onChange={(event) => updateDraft((current) => ({
+                          ...current,
+                          modelPage: { ...current.modelPage, topicEdition: event.target.value },
+                        }))}
+                        placeholder="VIII Edición"
+                        className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                      />
+                    </label>
+                    <label className="block md:col-span-2">
                       <span className="text-sm font-semibold text-gray-700">Texto introductorio</span>
                       <textarea
                         value={draft.modelPage.intro}
