@@ -569,7 +569,9 @@ const Admin = () => {
           blankLogoUrl: "",
           color: "#3B82F6",
           suggestedColors: ["#3B82F6", "#2563EB", "#1D4ED8", "#60A5FA"],
-          topicText: "Texto del tópico.",
+          topicTitle: "Título del tópico.",
+          topicSubtitle: "Subtítulo del tópico.",
+          topicText: "Título del tópico.\nSubtítulo del tópico.",
           topicLink: "#",
           hidden: false,
         },
@@ -1563,8 +1565,22 @@ const Admin = () => {
                       {uploadingAsset === `blankLogoUrl-${index}` && <span className="text-xs text-blue-700">Subiendo...</span>}
                     </label>
                     <label className="block md:col-span-2">
-                      <span className="text-sm font-semibold text-gray-700">Texto de tópico</span>
-                      <textarea value={organ.topicText || ""} onChange={(event) => updateOrgan(index, "topicText", event.target.value)} rows={2} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                      <span className="text-sm font-semibold text-gray-700">Título de tópico</span>
+                      <textarea
+                        value={organ.topicTitle || ""}
+                        onChange={(event) => updateOrgan(index, "topicTitle", event.target.value)}
+                        rows={2}
+                        className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                      />
+                    </label>
+                    <label className="block md:col-span-2">
+                      <span className="text-sm font-semibold text-gray-700">Subtítulo de tópico</span>
+                      <textarea
+                        value={organ.topicSubtitle || ""}
+                        onChange={(event) => updateOrgan(index, "topicSubtitle", event.target.value)}
+                        rows={3}
+                        className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                      />
                     </label>
                     <label className="block md:col-span-2">
                       <span className="text-sm font-semibold text-gray-700">Link al tópico ampliado</span>

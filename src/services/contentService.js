@@ -4,6 +4,24 @@ import { isSupabaseConfigured, supabase } from "../lib/supabaseClient";
 const LOCAL_STORAGE_KEY = "acserp_admin_content";
 const STORAGE_BUCKET = "site-assets";
 
+const splitTopicText = (topicText = "") => {
+  const [title = "", ...subtitleLines] = String(topicText).split(/\r?\n/);
+  return {
+    topicTitle: title.trim(),
+    topicSubtitle: subtitleLines.join("\n").trim(),
+  };
+};
+
+const normalizeOrgan = (organ) => {
+  const splitTopic = splitTopicText(organ.topicText || "");
+
+  return {
+    ...organ,
+    topicTitle: organ.topicTitle ?? splitTopic.topicTitle,
+    topicSubtitle: organ.topicSubtitle ?? splitTopic.topicSubtitle,
+  };
+};
+
 const mergeContent = (base, overrides = {}) => {
   const photos = overrides.photos || {};
 
@@ -33,7 +51,7 @@ const mergeContent = (base, overrides = {}) => {
         : base.donations.allocationItems,
       faqs: Array.isArray(overrides.donations?.faqs) ? overrides.donations.faqs : base.donations.faqs,
     },
-    organs: Array.isArray(overrides.organs) ? overrides.organs : base.organs,
+    organs: (Array.isArray(overrides.organs) ? overrides.organs : base.organs).map(normalizeOrgan),
     socialPosts: { ...base.socialPosts, ...overrides.socialPosts },
     adminNews: overrides.adminNews || base.adminNews,
   };

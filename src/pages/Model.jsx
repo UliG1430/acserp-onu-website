@@ -10,6 +10,9 @@ const OrganCard = ({ organ, index, topicEdition }) => {
   });
   const isEven = index % 2 === 0;
   const organColor = organ.color || "#3B82F6";
+  const [fallbackTopicTitle = "", ...fallbackTopicSubtitleLines] = String(organ.topicText || "").split(/\r?\n/);
+  const topicTitle = organ.topicTitle ?? fallbackTopicTitle.trim();
+  const topicSubtitle = organ.topicSubtitle ?? fallbackTopicSubtitleLines.join("\n").trim();
 
   return (
     <div
@@ -82,7 +85,19 @@ const OrganCard = ({ organ, index, topicEdition }) => {
                 <h3 className="text-lg font-semibold mb-2" style={{ color: organColor }}>
                   Tópico - {topicEdition}
                 </h3>
-                <p className="whitespace-pre-line text-gray-700">{organ.topicText}</p>
+                {topicTitle && (
+                  <p className="whitespace-pre-line text-xl font-semibold leading-snug text-gray-800">
+                    {topicTitle}
+                  </p>
+                )}
+                {topicSubtitle && (
+                  <p
+                    className="mt-3 whitespace-pre-line border-t pt-3 text-base leading-relaxed text-gray-700"
+                    style={{ borderTopColor: `${organColor}40` }}
+                  >
+                    {topicSubtitle}
+                  </p>
+                )}
               </div>
             </div>
           </div>

@@ -28,6 +28,14 @@ const mimeByExt = {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const splitTopicText = (topicText = "") => {
+  const [title = "", ...subtitleLines] = String(topicText).split(/\r?\n/);
+  return {
+    topicTitle: title.trim(),
+    topicSubtitle: subtitleLines.join("\n").trim(),
+  };
+};
+
 const { error: loginError } = await supabase.auth.signInWithPassword({
   email: adminEmail,
   password: adminPassword,
@@ -71,9 +79,12 @@ try {
     const basePath = `organs/${organ.id.toLowerCase()}`;
     const logoExt = path.extname(organ.logoUrl || ".png") || ".png";
     const blankExt = path.extname(organ.blankLogoUrl || ".png") || ".png";
+    const splitTopic = splitTopicText(organ.topicText || "");
 
     return {
       ...organ,
+      topicTitle: organ.topicTitle ?? splitTopic.topicTitle,
+      topicSubtitle: organ.topicSubtitle ?? splitTopic.topicSubtitle,
       logoUrl: await uploadAssetPath(organ.logoUrl, `${basePath}/logo${logoExt}`),
       blankLogoUrl: await uploadAssetPath(organ.blankLogoUrl, `${basePath}/blank-logo${blankExt}`),
     };
