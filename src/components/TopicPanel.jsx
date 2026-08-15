@@ -8,7 +8,9 @@ const TopicPanel = ({ onClose }) => {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-blue-950 mb-8 text-center">Tópicos Ampliados Internos 2025</h2>
+      <h2 className="text-3xl font-bold text-blue-950 mb-8 text-center">
+        Tópicos Ampliados {content.modelPage.subtitle}
+      </h2>
       
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         {filteredOrgans.map((organ) => (

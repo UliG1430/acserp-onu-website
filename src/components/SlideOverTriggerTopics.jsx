@@ -51,7 +51,9 @@ const SlideOverTriggerTopics = () => {
               <Dialog.Panel className="pointer-events-auto w-full max-w-6xl bg-white shadow-xl flex flex-col h-full">
                 {/* Header con botón de cierre */}
                 <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                  <h2 className="text-3xl font-bold text-blue-950">Tópicos Ampliados Internos 2025</h2>
+                  <h2 className="text-3xl font-bold text-blue-950">
+                    Tópicos Ampliados {content.modelPage.subtitle}
+                  </h2>
                   <button
                     onClick={() => setOpen(false)}
                     className="text-gray-600 hover:text-red-500 transition-colors"
