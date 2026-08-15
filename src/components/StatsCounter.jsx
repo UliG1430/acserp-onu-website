@@ -1,20 +1,17 @@
 import React from "react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const StatsCounter = () => {
+  const { content } = useSiteContent();
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.35,
     rootMargin: "0px 0px -10% 0px",
   });
 
-  const stats = [
-    { id: 1, value: 15584, label: "TOTAL DE PARTICIPANTES" },
-    { id: 2, value: 131, label: "COLEGIOS QUE PARTICIPARON" },
-    { id: 3, value: 156, label: "VOLUNTARIOS ACTUALMENTE" },
-    { id: 4, value: 36, label: "MODELOS REALIZADOS" },
-  ];
+  const stats = content.stats;
 
   return (
     <div className="py-10 bg-gray-50">

@@ -4,13 +4,14 @@ import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import organsMetadata from "../data/organsMetadata";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const SlideOverTriggerTopics = () => {
+  const { content } = useSiteContent();
   const [open, setOpen] = useState(false);
 
   // Filtrar órganos que tienen topicLink
-  const availableTopics = organsMetadata.filter(organ => organ.topicLink && organ.topicLink !== "#");
+  const availableTopics = content.organs.filter(organ => !organ.hidden && organ.topicLink && organ.topicLink !== "#");
 
   return (
     <>
@@ -73,12 +74,12 @@ const SlideOverTriggerTopics = () => {
                             style={{ backgroundColor: organ.color }}
                           >
                             <img
-                              src={organ.icon}
-                              alt={organ.nombre}
+                              src={organ.blankLogoUrl || organ.logoUrl}
+                              alt={organ.shortName || organ.name}
                               className="w-16 h-16 mb-4 object-contain"
                             />
                             <span className="text-white text-center font-semibold text-sm leading-tight">
-                              {organ.nombre}
+                              {organ.shortName || organ.name}
                             </span>
                           </button>
                         ))}

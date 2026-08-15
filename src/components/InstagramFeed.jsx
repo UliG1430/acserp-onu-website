@@ -1,13 +1,11 @@
 import React from "react";
 import { InstagramEmbed } from "react-social-media-embed";
 import { motion } from "framer-motion";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const InstagramFeed = () => {
-  const posts = [
-    "https://www.instagram.com/p/DLlTQFePdfw/",
-    "https://www.instagram.com/p/DAjykIcsv-O/",
-    "https://www.instagram.com/p/DLit0e8unXV/"
-  ];
+  const { content } = useSiteContent();
+  const posts = content.socialPosts.instagram;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

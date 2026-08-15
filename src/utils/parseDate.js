@@ -15,11 +15,14 @@ const parseDate = (dateStr) => {
     };
   
     const match = dateStr.match(/(\d{1,2}) de (\w+) de (\d{4})/i);
-    if (!match) return new Date(0);
+    const monthFirstMatch = dateStr.match(/(\w+)\s+(\d{1,2})\s+de\s+(\d{4})/i);
+    if (!match && !monthFirstMatch) return new Date(0);
   
-    const day = match[1].padStart(2, "0");
-    const month = meses[match[2].toLowerCase()];
-    const year = match[3];
+    const day = (match ? match[1] : monthFirstMatch[2]).padStart(2, "0");
+    const monthName = match ? match[2] : monthFirstMatch[1];
+    const month = meses[monthName.toLowerCase()];
+    const year = match ? match[3] : monthFirstMatch[3];
+    if (!month) return new Date(0);
   
     return new Date(`${year}-${month}-${day}`);
   };

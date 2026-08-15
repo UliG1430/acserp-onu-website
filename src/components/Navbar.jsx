@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import NavLink from './NavLink'; // Importamos nuestro NavLink personalizado
+import { useSiteContent } from '../context/SiteContentContext';
 
 const Navbar = () => {
+  const { content } = useSiteContent();
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
@@ -11,10 +13,10 @@ const Navbar = () => {
     { name: "Recursos", path: "/recursos", target: "_blank" },
     { name: "Fotos", path: "/fotos" },
     { name: "Redes", path: "/redes" },
-    { name: "Donar", path: "/donar" },
+    { name: content.donations?.navTitle || "Donar", path: "/donar" },
     {
       name: "Sumate",
-      path: "https://docs.google.com/forms/d/e/1FAIpQLSdSs6OBExmEBdEZiWE9vbNZXVkc92WqEZcmVkZpclx1AucDFw/viewform",
+      path: content.links.joinForm,
       target: "_blank",
     },
   ];

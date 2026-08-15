@@ -12,6 +12,7 @@ import SocialMediaPage from "../pages/SocialMediaPage";
 import DonationsPage from "../pages/DonationsPage";
 import NewsDetail from "../pages/NewsDetail";
 import Resources from "../pages/Resources";
+import Admin from "../pages/Admin";
 import ScrollToTop from "../components/ScrollToTop";
 import { shouldUseSafeMode } from "../utils/runtimeSafety";
 
@@ -32,6 +33,7 @@ function AppRoutes() {
       <Route path="/donar" element={<DonationsPage />} />
       <Route path="/recursos" element={<Resources />} />
       <Route path="/noticias/:id" element={<NewsDetail />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
   );
 

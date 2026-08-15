@@ -2,8 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { useInView } from "react-intersection-observer";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const SubscriptionCallToAction = () => {
+  const { content } = useSiteContent();
+  const donations = content.donations;
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.35,
@@ -22,18 +25,18 @@ const SubscriptionCallToAction = () => {
           <FontAwesomeIcon icon={faHeart} className="text-red-400 text-5xl animate-bounce-slow" />
         </div>
         <h2 className="text-3xl md:text-4xl font-bold">
-        ¡LA ACTIVIDAD EDUCATIVA PÚBLICA Y GRATUITA MÁS GRANDE DE ARGENTINA TE NECESITA!
+          {donations.homeCtaTitle}
         </h2>
         <p className="text-lg md:text-xl max-w-3xl text-blue-100 leading-relaxed">
-          Con tu aporte mensual, acompañás al Modelo ONU público más grande del país en su misión de llevar educación transformadora a miles de estudiantes cada año.
+          {donations.homeCtaText}
         </p>
         <a
-          href="https://donaronline.org/simulacros-educativos-rio-de-la-plata/la-actividad-educativa-publica-y-gratuita-mas-grande-de-argentina-te-necesita"
+          href={donations.homeCtaButtonUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white text-blue-950 font-semibold text-lg px-8 py-3 rounded-full shadow-md hover:scale-105 hover:bg-blue-100 transition-transform duration-300"
         >
-          ¡Quiero donar!
+          {donations.homeCtaButtonText}
         </a>
       </div>
     </section>

@@ -3,34 +3,13 @@ import React, { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import SEOHelmet from "../components/SEOHelmet";
 import heroDonaciones from "../assets/images/image3.webp";
-
-const DONATION_URL =
-  "https://donaronline.org/simulacros-educativos-rio-de-la-plata/la-actividad-educativa-publica-y-gratuita-mas-grande-de-argentina-te-necesita";
-
-const faqItems = [
-  {
-    question: "¿La donación es segura?",
-    answer:
-      "Sí. El pago se realiza a través de DonarOnline en una plataforma segura con procesamiento cifrado.",
-  },
-  {
-    question: "¿Puedo donar una sola vez?",
-    answer:
-      "Sí. Podés realizar un aporte puntual sin compromiso de continuidad.",
-  },
-  {
-    question: "¿Puedo modificar o detener mis aportes?",
-    answer:
-      "Sí. Podes modificar o cancelar tus aportes en cualquier momento mandando un correo a modeloonulp@gmail.com",
-  },
-  {
-    question: "¿A qué se destina mi aporte?",
-    answer:
-      "Se destina a sostener nuestras actividades durante todo el año: logística, materiales pedagógicos, recursos para delegaciones y funcionamiento general del programa.",
-  },
-];
+import { useSiteContent } from "../context/SiteContentContext";
 
 const DonationsPage = () => {
+  const { content } = useSiteContent();
+  const donations = content.donations;
+  const allocationItems = (donations.allocationItems || []).filter((item) => !item.hidden);
+  const faqItems = (donations.faqs || []).filter((item) => !item.hidden);
   const [openFaqIndexes, setOpenFaqIndexes] = useState([]);
 
   const { ref: whyDonateRef, inView: whyDonateInView } = useInView({
@@ -82,28 +61,28 @@ const DonationsPage = () => {
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/55 to-black/65 flex flex-col items-center justify-center text-center px-4">
           <h1 className="text-white text-4xl md:text-6xl font-bold mb-4 animate-fade-in-slow">
-            ¡Hacé tu aporte al Modelo ONU más grande del país!
+            {donations.heroTitle}
           </h1>
           <p
             className="text-blue-200 text-xs md:text-sm uppercase tracking-[0.14em] mb-3 opacity-0 animate-fade-in"
             style={{ animationDelay: "120ms", animationFillMode: "forwards" }}
           >
-            Donaciones • ACSERP
+            {donations.heroKicker}
           </p>
           <a
-            href={DONATION_URL}
+            href={donations.heroButtonUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center bg-white text-blue-950 font-extrabold text-xl md:text-2xl px-12 md:px-16 py-4 md:py-5 rounded-full shadow-2xl ring-1 ring-blue-200/70 hover:shadow-[0_20px_45px_rgba(12,24,72,0.45)] hover:-translate-y-0.5 hover:bg-slate-50 transition-all duration-300 whitespace-nowrap tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white opacity-0 animate-fade-in"
             style={{ animationDelay: "260ms", animationFillMode: "forwards" }}
           >
-Quiero aportar
+            {donations.heroButtonText}
           </a>
           <p
             className="text-blue-200/85 text-xs mt-2 opacity-0 animate-fade-in"
             style={{ animationDelay: "420ms", animationFillMode: "forwards" }}
           >
-            Pago seguro • DonarOnline
+            {donations.securePaymentText}
           </p>
         </div>
       </div>
@@ -115,11 +94,9 @@ Quiero aportar
           whyDonateInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">¿Por qué donar?</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">{donations.whyTitle}</h2>
         <p className="text-lg md:text-xl text-blue-200/85 leading-relaxed max-w-4xl mx-auto">
-          Tu colaboración hace posible que miles de estudiantes de escuelas públicas y privadas de toda la región vivan
-          una experiencia educativa transformadora. Cada donación sostiene un proyecto colectivo basado en compromiso
-          voluntario, participación juvenil y cooperación internacional.
+          {donations.whyText}
         </p>
       </div>
 
@@ -133,29 +110,16 @@ Quiero aportar
         <div className="rounded-2xl bg-gradient-to-br from-blue-900/80 to-blue-800/60 border border-blue-700/70 p-6 md:p-10">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-5">¿A dónde va tu aporte?</h3>
+              <h3 className="text-2xl md:text-3xl font-bold mb-5">{donations.allocationTitle}</h3>
               <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <span className="mt-2 h-2.5 w-2.5 rounded-full bg-cyan-300" />
-                  <p className="text-blue-200/85">
-                    <span className="text-white font-semibold">Logística educativa:</span> organización de actividades,
-                    espacios y recursos operativos.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="mt-2 h-2.5 w-2.5 rounded-full bg-cyan-300" />
-                  <p className="text-blue-200/85">
-                    <span className="text-white font-semibold">Materiales:</span> documentación pedagógica y herramientas
-                    para delegaciones.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="mt-2 h-2.5 w-2.5 rounded-full bg-cyan-300" />
-                  <p className="text-blue-200/85">
-                    <span className="text-white font-semibold">Sostenimiento anual:</span> continuidad del proyecto
-                    público y gratuito más grande de Argentina.
-                  </p>
-                </div>
+                {allocationItems.map((item) => (
+                  <div key={item.id || item.title} className="flex items-start gap-3">
+                    <span className="mt-2 h-2.5 w-2.5 rounded-full bg-cyan-300" />
+                    <p className="text-blue-200/85">
+                      <span className="text-white font-semibold">{item.title}:</span> {item.text}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -166,16 +130,16 @@ Quiero aportar
               }`}
             >
               <div className="bg-white/10 rounded-2xl border border-blue-500/40 p-6">
-                <p className="text-blue-200 text-xs uppercase tracking-[0.16em] mb-3">Impacto del proyecto</p>
+                <p className="text-blue-200 text-xs uppercase tracking-[0.16em] mb-3">{donations.impactKicker}</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-4xl font-extrabold text-white">+4000</p>
-                    <p className="text-blue-200/85">jóvenes participantes por ciclo</p>
+                    <p className="text-4xl font-extrabold text-white">{donations.impactNumber}</p>
+                    <p className="text-blue-200/85">{donations.impactNumberText}</p>
                   </div>
                   <div className="h-px bg-blue-300/30" />
                   <div>
-                    <p className="text-2xl font-bold text-white">Educación pública con impacto real</p>
-                    <p className="text-blue-200/85">tu aporte fortalece una experiencia transformadora para miles de jóvenes</p>
+                    <p className="text-2xl font-bold text-white">{donations.impactTitle}</p>
+                    <p className="text-blue-200/85">{donations.impactText}</p>
                   </div>
                 </div>
               </div>
@@ -184,10 +148,9 @@ Quiero aportar
 
           <div className="mt-8 pt-6 border-t border-blue-500/30 text-center">
             <p className="text-blue-200/85 italic max-w-3xl mx-auto">
-              "Donar es apostar a una experiencia que cambia trayectorias educativas y abre oportunidades reales para
-              miles de jóvenes."
+              "{donations.quote}"
             </p>
-            <p className="text-white font-semibold mt-3">Equipo ACSERP</p>
+            <p className="text-white font-semibold mt-3">{donations.quoteAuthor}</p>
           </div>
         </div>
       </div>
@@ -199,7 +162,7 @@ Quiero aportar
           faqInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
-        <h3 className="text-2xl md:text-3xl font-bold text-center mb-6">Preguntas frecuentes</h3>
+        <h3 className="text-2xl md:text-3xl font-bold text-center mb-6">{donations.faqTitle}</h3>
         <div className="space-y-3">
           {faqItems.map((item, index) => {
             const isOpen = openFaqIndexes.includes(index);

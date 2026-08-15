@@ -5,10 +5,14 @@ import newsData from "../assets/noticias/newsData";
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import SEOHelmet from "../components/SEOHelmet";
 import YouTubeEmbed from "../components/YouTubeEmbed";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const NewsDetail = () => {
+  const { content: siteContent } = useSiteContent();
   const { id } = useParams();
-  const news = newsData.find((item) => item.id === parseInt(id));
+  const allNews = (siteContent.adminNews.length > 0 ? siteContent.adminNews : newsData)
+    .filter((item) => !item.hidden);
+  const news = allNews.find((item) => String(item.id) === String(id));
 
   if (!news) {
     return (
@@ -19,12 +23,12 @@ const NewsDetail = () => {
     );
   }
 
-  const recommendedNews = newsData
+  const recommendedNews = allNews
     .filter((item) => item.id !== news.id)
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
 
-  const content = news.content.trim();
+  const articleContent = news.content.trim();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -85,7 +89,7 @@ const NewsDetail = () => {
       <section className="space-y-12">
         {(() => {
           // Verificar si el contenido contiene HTML
-          const hasHTML = content.includes('<');
+          const hasHTML = articleContent.includes('<');
           
           if (hasHTML) {
             // Renderizar todo el contenido HTML junto, luego agregar imágenes al final
@@ -96,7 +100,7 @@ const NewsDetail = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                   className="prose prose-lg max-w-none [&_.space-y-4]:space-y-8 [&_.space-y-4>div]:mb-6"
-                  dangerouslySetInnerHTML={{ __html: content }}
+                  dangerouslySetInnerHTML={{ __html: articleContent }}
                 />
                 
                 {/* Imágenes adicionales al final */}
@@ -124,7 +128,7 @@ const NewsDetail = () => {
             );
           } else {
             // Para contenido de texto plano, dividir por saltos de línea
-            const paragraphs = content.trim().split("\n").filter((p) => p.trim());
+            const paragraphs = articleContent.trim().split("\n").filter((p) => p.trim());
             
             return paragraphs.map((paragraph, index) => (
               <div key={index} className="space-y-6">

@@ -1,6 +1,7 @@
 import React from "react";
 import { LinkedInEmbed } from "react-social-media-embed";
 import { motion } from "framer-motion";
+import { useSiteContent } from "../context/SiteContentContext";
 
 // Variantes de animación
 const fadeInVariant = {
@@ -8,14 +9,10 @@ const fadeInVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
 };
 
-const linkedInPosts = [
-  {
-    embedUrl: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7232821551501324290",
-    postUrl: "https://www.linkedin.com/posts/simulacros-educativos-r%C3%ADo-de-la-plata-b45698230_durante-el-mes-de-agosto-continuamos-realizamos-activity-7232821562280665088-WQTt?utm_source=share&utm_medium=member_desktop"
-  }
-];
-
 const LinkedInFeed = () => {
+  const { content } = useSiteContent();
+  const linkedInPosts = content.socialPosts.linkedin;
+
   return (
     <motion.div
       initial="hidden"

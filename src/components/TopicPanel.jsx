@@ -1,9 +1,10 @@
 import React from "react";
-import organsMetadata from "../data/organsMetadata";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const TopicPanel = ({ onClose }) => {
+  const { content } = useSiteContent();
   // Filtra solo órganos con topicLink válido
-  const filteredOrgans = organsMetadata.filter(org => org.topicLink && org.topicLink !== "#");
+  const filteredOrgans = content.organs.filter(org => !org.hidden && org.topicLink && org.topicLink !== "#");
 
   return (
     <div className="p-6">
@@ -18,12 +19,12 @@ const TopicPanel = ({ onClose }) => {
             style={{ backgroundColor: organ.color }}
           >
             <img
-              src={organ.icon}
-              alt={organ.nombre}
+              src={organ.blankLogoUrl || organ.logoUrl}
+              alt={organ.shortName || organ.name}
               className="w-14 h-14 mb-3 object-contain"
             />
             <span className="text-white text-center font-semibold text-sm leading-tight">
-              {organ.nombre}
+              {organ.shortName || organ.name}
             </span>
           </button>
         ))}

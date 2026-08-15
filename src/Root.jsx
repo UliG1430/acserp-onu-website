@@ -28,12 +28,15 @@ import React from "react";
 import App from "./App";
 import { HelmetProvider } from "react-helmet-async";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { SiteContentProvider } from "./context/SiteContentContext";
 
 const Root = () => {
   return (
     <HelmetProvider>
       <ErrorBoundary>
-        <App />
+        <SiteContentProvider>
+          <App />
+        </SiteContentProvider>
       </ErrorBoundary>
     </HelmetProvider>
   );

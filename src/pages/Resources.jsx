@@ -9,16 +9,17 @@ import recursoBanner from "../assets/images/image1.webp";
 import SlideOverTrigger from "../components/SlideOverTrigger";
 import SlideOverTriggerTopics from "../components/SlideOverTriggerTopics";
 import { motion } from "framer-motion";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const Resources = () => {
+  const { content } = useSiteContent();
   const { ref: driveRef, inView: driveInView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
   });
 
-  const reglamentoLink ='https://drive.google.com/uc?export=download&id=1J4SGK_Hq3XaTIT6hRcjWUTRsRppTHYAi'
-  const driveLink =
-    "https://drive.google.com/drive/folders/1bDQ4vE3yD-5RqmBd1Tgqf-9WFKy4WEML";
+  const reglamentoLink = content.links.rules;
+  const driveLink = content.links.resourcesDrive;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100">
@@ -110,7 +111,7 @@ const Resources = () => {
               Consultá qué países representan cada delegación en cada órgano.
             </p>
             <a
-              href="https://drive.google.com/file/d/17CcIvdx5EwdCgbj71OpoEiCdSC9OXWcb/view?usp=drive_link"
+              href={content.links.countriesByOrgan}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-4 py-2 text-sm font-medium bg-[#787ac1] text-white rounded-md hover:bg-blue-950 transition"

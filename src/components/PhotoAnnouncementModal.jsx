@@ -3,9 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
 
-const PhotoAnnouncementModal = ({ isOpen, onClose }) => {
-  const driveLink = "https://drive.google.com/drive/folders/1-1_qQ-c_0ZBps9Sf1Fw-R_W7aDHM0hfr";
-
+const PhotoAnnouncementModal = ({ isOpen, onClose, title, subtitle, buttonUrl }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -23,33 +21,30 @@ const PhotoAnnouncementModal = ({ isOpen, onClose }) => {
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            {/* Ícono */}
             <FontAwesomeIcon
               icon={faCameraRetro}
               className="text-5xl mb-6 text-[#a0c4ff]"
             />
 
-            {/* Título */}
             <h2 className="text-2xl md:text-3xl font-extrabold mb-4 leading-snug">
-              ¡Ya están disponibles las fotos de los modelos preparatorios!
+              {title}
             </h2>
 
-            {/* Descripción */}
             <p className="text-blue-200 mb-6 text-base leading-relaxed">
-              Ingresá a la galería exclusiva y reviví los mejores momentos de los modelos preparatorios 2025.
+              {subtitle}
             </p>
 
-            {/* Botón de acceso */}
-            <a
-              href={driveLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-[#a0c4ff] text-blue-950 font-semibold px-6 py-2.5 rounded-full shadow-md hover:bg-white transition-all duration-300"
-            >
-              Ir a las fotos
-            </a>
+            {buttonUrl && (
+              <a
+                href={buttonUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-[#a0c4ff] text-blue-950 font-semibold px-6 py-2.5 rounded-full shadow-md hover:bg-white transition-all duration-300"
+              >
+                Ir a las fotos
+              </a>
+            )}
 
-            {/* Botón de cierre */}
             <button
               onClick={onClose}
               className="absolute top-4 right-5 text-white hover:text-blue-300 text-xl"

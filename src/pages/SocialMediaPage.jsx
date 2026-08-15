@@ -6,6 +6,7 @@ import LinkedInFeed from "../components/LinkedInFeed";
 import { FaInstagram, FaYoutube, FaArrowUp, FaLinkedin } from "react-icons/fa";
 import TikTokLogo from "../assets/logos/tiktok_icon.svg"; 
 import SEOHelmet from "../components/SEOHelmet"; // Importamos el componente SEOHelmet
+import { useSiteContent } from "../context/SiteContentContext";
 
 // Variantes de animación
 const fadeInVariant = {
@@ -14,6 +15,7 @@ const fadeInVariant = {
 };
 
 const SocialMediaPage = () => {
+  const { content } = useSiteContent();
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   useEffect(() => {
@@ -107,11 +109,7 @@ const SocialMediaPage = () => {
             <FaYoutube className="text-red-600 mr-3 text-4xl" /> YouTube
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[ 
-              { id: "tF21F8CxBMk", title: "Consejo de Seguridad - Modelo ONU LP" },
-              { id: "jYaxIVlTqck", title: "Procedimientos Generales - Modelo ONU LP" },
-              { id: "jhtznz0ktmo", title: "Capacitación STI - Modelo ONU LP" },
-            ].map((video, index) => (
+            {content.socialPosts.youtube.map((video, index) => (
               <motion.div 
                 key={index} 
                 whileHover={{ scale: 1.05, rotate: 1 }} 

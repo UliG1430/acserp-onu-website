@@ -3,12 +3,15 @@ import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useSiteContent } from "../context/SiteContentContext";
 
 const HIDE_UNTIL_KEY = "donationPopupHideUntil";
 const HIDE_HOURS = 24;
 const SHOW_DELAY_MS = 4000;
 
 const DonationHomePopup = () => {
+  const { content } = useSiteContent();
+  const popup = content.donations?.popup;
   const [isVisible, setIsVisible] = useState(false);
   const location = useLocation();
   const isDonationPage = location.pathname.startsWith("/donar");
@@ -23,7 +26,7 @@ const DonationHomePopup = () => {
     // On every route change, reset visibility so it does not stay open across pages.
     setIsVisible(false);
 
-    if (isDonationPage) {
+    if (isDonationPage || !popup?.enabled) {
       return undefined;
     }
 
@@ -45,7 +48,7 @@ const DonationHomePopup = () => {
     }, SHOW_DELAY_MS);
 
     return () => clearTimeout(timer);
-  }, [location.pathname, location.search, isDonationPage]);
+  }, [location.pathname, location.search, isDonationPage, popup?.enabled]);
 
   const closePopup = () => setIsVisible(false);
 
@@ -55,7 +58,10 @@ const DonationHomePopup = () => {
     closePopup();
   };
 
-  if (isDonationPage) return null;
+  if (isDonationPage || !popup?.enabled) return null;
+
+  const isInternalPopupLink = (popup.buttonUrl || "").startsWith("/");
+  const popupButtonClass = "inline-flex w-full items-center justify-center rounded-full bg-blue-950 text-white font-semibold text-base py-3 px-5 hover:bg-blue-900 transition-colors duration-200";
 
   return (
     <AnimatePresence>
@@ -83,28 +89,30 @@ const DonationHomePopup = () => {
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-800 mb-3">
               <FontAwesomeIcon icon={faHeart} />
             </div>
-            <h3 className="text-xl font-bold leading-tight">Ayudanos a sostener el proyecto</h3>
+            <h3 className="text-xl font-bold leading-tight">{popup.title}</h3>
             <p className="text-base text-slate-600 mt-2 leading-relaxed">
-              Con tu aporte apoyas una experiencia educativa publica y gratuita para miles de jovenes.
+              {popup.text}
             </p>
           </div>
 
           <div className="mt-5 flex flex-col gap-2">
             <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.985 }}>
-              <Link
-                to="/donar"
-                onClick={closePopup}
-                className="inline-flex w-full items-center justify-center rounded-full bg-blue-950 text-white font-semibold text-base py-3 px-5 hover:bg-blue-900 transition-colors duration-200"
-              >
-                Quiero aportar
-              </Link>
+              {isInternalPopupLink ? (
+                <Link to={popup.buttonUrl} onClick={closePopup} className={popupButtonClass}>
+                  {popup.buttonText}
+                </Link>
+              ) : (
+                <a href={popup.buttonUrl} target="_blank" rel="noopener noreferrer" onClick={closePopup} className={popupButtonClass}>
+                  {popup.buttonText}
+                </a>
+              )}
             </motion.div>
             <button
               type="button"
               onClick={hidePopupFor24Hours}
               className="text-sm text-slate-500 hover:text-slate-700 transition-colors duration-200"
             >
-              No volver a mostrar
+              {popup.dismissText}
             </button>
           </div>
         </motion.aside>

@@ -1,6 +1,7 @@
 import React from "react";
 import { TikTokEmbed } from "react-social-media-embed";
 import { motion } from "framer-motion";
+import { useSiteContent } from "../context/SiteContentContext";
 
 // Variantes de animación
 const fadeInVariant = {
@@ -9,11 +10,8 @@ const fadeInVariant = {
 };
 
 const TikTokFeed = () => {
-  const tikTokLinks = [
-    "https://www.tiktok.com/@modeloonulp/video/7515939053162859781",
-    "https://www.tiktok.com/@modeloonulp/video/7216504495075757318",
-    "https://www.tiktok.com/@modeloonulp/video/7420543059194105094",
-  ];
+  const { content } = useSiteContent();
+  const tikTokLinks = content.socialPosts.tiktok;
 
   return (
     <motion.div
