@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons';
@@ -19,6 +19,7 @@ const Photos = () => {
 
   const [showModal, setShowModal] = useState(true);
   const [isFolderMenuOpen, setIsFolderMenuOpen] = useState(false);
+  const folderMenuRef = useRef(null);
   const visibleDriveFolders = useMemo(
     () => (content.photos.driveFolders || []).filter((folder) => !folder.hidden),
     [content.photos.driveFolders]
@@ -38,6 +39,24 @@ const Photos = () => {
       setSelectedFolderId(visibleDriveFolders[0].id);
     }
   }, [selectedFolderId, visibleDriveFolders]);
+
+  useEffect(() => {
+    if (!isFolderMenuOpen) return undefined;
+
+    const closeOnOutsideClick = (event) => {
+      if (!folderMenuRef.current?.contains(event.target)) {
+        setIsFolderMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("touchstart", closeOnOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", closeOnOutsideClick);
+      document.removeEventListener("touchstart", closeOnOutsideClick);
+    };
+  }, [isFolderMenuOpen]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -74,7 +93,7 @@ const Photos = () => {
           </h2>
 
           {visibleDriveFolders.length > 0 && (
-            <div className="relative w-full max-w-xl">
+            <div ref={folderMenuRef} className="relative w-full max-w-xl">
               <button
                 type="button"
                 onClick={() => setIsFolderMenuOpen((current) => !current)}
