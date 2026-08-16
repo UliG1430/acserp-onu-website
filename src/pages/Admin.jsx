@@ -454,6 +454,7 @@ const Admin = () => {
           {
             id,
             title: "Nueva carpeta",
+            previewUrl: "",
             folderUrl: "",
             hidden: false,
           },
@@ -1253,13 +1254,22 @@ const Admin = () => {
 
                           {!collapsedDriveFolders[folder.id] && (
                             <div className="grid gap-4 md:grid-cols-2">
-                              <label className="block">
-                                <span className="text-sm font-semibold text-gray-700">Título</span>
-                                <input value={folder.title || ""} onChange={(event) => updateDriveFolder(index, "title", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
-                              </label>
-                              <label className="block md:col-span-2">
-                                <span className="text-sm font-semibold text-gray-700">Link de la carpeta de Drive</span>
-                                <input
+                            <label className="block">
+                              <span className="text-sm font-semibold text-gray-700">Título</span>
+                              <input value={folder.title || ""} onChange={(event) => updateDriveFolder(index, "title", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                            </label>
+                            <label className="block md:col-span-2">
+                              <span className="text-sm font-semibold text-gray-700">Preview</span>
+                              <input
+                                value={folder.previewUrl || ""}
+                                onChange={(event) => updateDriveFolder(index, "previewUrl", event.target.value)}
+                                placeholder="https://drive.google.com/drive/folders/..."
+                                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                              />
+                            </label>
+                            <label className="block md:col-span-2">
+                              <span className="text-sm font-semibold text-gray-700">Link de la carpeta de Drive</span>
+                              <input
                                   value={folder.folderUrl || ""}
                                   onChange={(event) => updateDriveFolder(index, "folderUrl", event.target.value)}
                                   placeholder="https://drive.google.com/drive/folders/..."

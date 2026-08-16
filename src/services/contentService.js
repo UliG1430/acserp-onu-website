@@ -51,6 +51,11 @@ const normalizeLinks = (baseLinks, overrideLinks = {}) => {
   };
 };
 
+const normalizeDriveFolder = (folder) => ({
+  ...folder,
+  previewUrl: folder.previewUrl || folder.folderUrl || "",
+});
+
 const mergeContent = (base, overrides = {}) => {
   const photos = overrides.photos || {};
 
@@ -66,9 +71,9 @@ const mergeContent = (base, overrides = {}) => {
       carouselSections: Array.isArray(photos.carouselSections)
         ? photos.carouselSections
         : base.photos.carouselSections,
-      driveFolders: Array.isArray(photos.driveFolders)
+      driveFolders: (Array.isArray(photos.driveFolders)
         ? photos.driveFolders
-        : base.photos.driveFolders,
+        : base.photos.driveFolders).map(normalizeDriveFolder),
     },
     modelPage: { ...base.modelPage, ...overrides.modelPage },
     donations: {

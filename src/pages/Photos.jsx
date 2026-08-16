@@ -11,7 +11,7 @@ import { useSiteContent } from '../context/SiteContentContext';
 import { buildGoogleDriveEmbedUrl, buildGoogleDriveFolderUrl } from '../utils/googleDrive';
 
 const Photos = () => {
-  const { content } = useSiteContent();
+  const { content, loading } = useSiteContent();
   const { ref: googleDriveRef, inView: googleDriveInView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -25,7 +25,7 @@ const Photos = () => {
   );
   const [selectedFolderId, setSelectedFolderId] = useState("");
   const selectedFolder = visibleDriveFolders.find((folder) => folder.id === selectedFolderId) || visibleDriveFolders[0];
-  const googleDriveLink = buildGoogleDriveEmbedUrl(selectedFolder?.folderUrl || content.photos.embedUrl);
+  const googleDriveLink = buildGoogleDriveEmbedUrl(selectedFolder?.previewUrl || selectedFolder?.folderUrl || content.photos.embedUrl);
   const googleDriveGeneralLink = buildGoogleDriveFolderUrl(selectedFolder?.folderUrl || content.photos.galleryUrl);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const Photos = () => {
       />
 
       <PhotoAnnouncementModal
-        isOpen={showModal && content.photos.popup?.enabled}
+        isOpen={!loading && showModal && content.photos.popup?.enabled}
         onClose={() => setShowModal(false)}
         title={content.photos.popup?.title}
         subtitle={content.photos.popup?.subtitle}

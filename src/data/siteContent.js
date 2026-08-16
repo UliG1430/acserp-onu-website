@@ -158,18 +158,21 @@ export const defaultSiteContent = {
       {
         id: "main-gallery",
         title: "Fotos VII Edición del Modelo Público Más Grande del País",
+        previewUrl: "https://drive.google.com/drive/folders/1MBZn4nV7mB8i9KxA_Tiypgrsy9qXrkpk",
         folderUrl: "https://drive.google.com/drive/folders/1MBZn4nV7mB8i9KxA_Tiypgrsy9qXrkpk",
         hidden: false,
       },
       {
         id: "full-gallery",
         title: "Galería completa",
+        previewUrl: "https://drive.google.com/drive/folders/1lUwofFDsJk68XDpKdA-3HrZAPSjKmOa6",
         folderUrl: "https://drive.google.com/drive/folders/1lUwofFDsJk68XDpKdA-3HrZAPSjKmOa6",
         hidden: false,
       },
       {
         id: "preparatorios-2025",
         title: "Galería preparatorios 2025",
+        previewUrl: "https://drive.google.com/drive/folders/1-1_qQ-c_0ZBps9Sf1Fw-R_W7aDHM0hfr",
         folderUrl: "https://drive.google.com/drive/folders/1-1_qQ-c_0ZBps9Sf1Fw-R_W7aDHM0hfr",
         hidden: false,
       },
