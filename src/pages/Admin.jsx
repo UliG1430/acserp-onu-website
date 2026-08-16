@@ -981,23 +981,29 @@ const Admin = () => {
                         onDrop={(event) => handleResourceDrop(event, resourceDropIndex ?? index)}
                         className={`rounded-md border p-4 transition ${draggedResourceIndex === index ? "scale-[0.99] border-blue-300 bg-blue-50 opacity-70" : resource.hidden ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}
                       >
-                        <div className="mb-3 flex flex-wrap justify-between gap-2">
-                          <div
-                            draggable
-                            onDragStart={(event) => {
-                              setDraggedResourceIndex(index);
-                              event.dataTransfer.effectAllowed = "move";
-                              event.dataTransfer.setData("text/plain", String(index));
-                            }}
-                            onDragEnd={() => setDraggedResourceIndex(null)}
-                            onDragEndCapture={() => setResourceDropIndex(null)}
-                            className="flex h-10 w-10 cursor-grab items-center justify-center rounded-md border border-gray-300 bg-white text-lg font-bold text-gray-500 active:cursor-grabbing"
-                            title="Arrastrar para ordenar"
-                            aria-label="Arrastrar para ordenar"
-                          >
-                            ≡
+                        <div className="mb-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                          <div className="flex min-w-0 flex-1 items-center gap-3">
+                            <div
+                              draggable
+                              onDragStart={(event) => {
+                                setDraggedResourceIndex(index);
+                                event.dataTransfer.effectAllowed = "move";
+                                event.dataTransfer.setData("text/plain", String(index));
+                              }}
+                              onDragEnd={() => setDraggedResourceIndex(null)}
+                              onDragEndCapture={() => setResourceDropIndex(null)}
+                              className="flex h-10 w-10 cursor-grab items-center justify-center rounded-md border border-gray-300 bg-white text-lg font-bold text-gray-500 active:cursor-grabbing"
+                              title="Arrastrar para ordenar"
+                              aria-label="Arrastrar para ordenar"
+                            >
+                              ≡
+                            </div>
+                            <div className="min-w-0">
+                              <h3 className="break-words text-sm font-bold text-blue-950">{resource.title || "Sin título"}</h3>
+                              {resource.hidden && <span className="mt-1 inline-block rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculto</span>}
+                            </div>
                           </div>
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-shrink-0 flex-wrap gap-2 md:max-w-[430px] md:justify-end">
                             <button type="button" onClick={() => moveResource(index, index - 1)} disabled={index === 0} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 disabled:opacity-40">Subir</button>
                             <button type="button" onClick={() => moveResource(index, index + 2)} disabled={index === draft.links.additionalResources.length - 1} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 disabled:opacity-40">Bajar</button>
                             <button type="button" onClick={() => setCollapsedResources((current) => ({ ...current, [resource.id]: !current[resource.id] }))} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700">
@@ -1366,7 +1372,8 @@ const Admin = () => {
                                 ≡
                               </div>
                               <div className="min-w-0">
-                                {folder.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculta</span>}
+                                <h3 className="break-words text-sm font-bold text-blue-950">{folder.title || "Sin título"}</h3>
+                                {folder.hidden && <span className="mt-1 inline-block rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculta</span>}
                               </div>
                             </div>
                             <div className="flex flex-shrink-0 flex-wrap gap-2 md:max-w-[430px] md:justify-end">
@@ -1823,7 +1830,9 @@ const Admin = () => {
                       </div>
                       {organ.logoUrl && <img src={organ.logoUrl} alt="" className="h-12 w-20 flex-shrink-0 object-contain" />}
                       <div className="min-w-0 flex-1">
-                        {organ.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculto</span>}
+                        <h3 className="break-words text-sm font-bold text-blue-950">{organ.shortName || organ.name || "Sin nombre"}</h3>
+                        <p className="text-xs text-gray-500">{organ.id || "Sin abreviación"}</p>
+                        {organ.hidden && <span className="mt-1 inline-block rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculto</span>}
                       </div>
                     </div>
                     <div className="flex flex-shrink-0 flex-wrap justify-start gap-2 md:max-w-[430px] md:justify-end">
