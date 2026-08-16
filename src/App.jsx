@@ -8,9 +8,11 @@ import DonationHomePopup from './components/DonationHomePopup';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ScrollToTop from './components/ScrollToTop';
+import { useSiteContent } from './context/SiteContentContext';
 
 function AppShell() {
   const location = useLocation();
+  const { loading } = useSiteContent();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
@@ -21,7 +23,11 @@ function AppShell() {
           <Header />
           <Navbar />
           <main className="flex-grow">
-            <AppRoutes />
+            {loading ? (
+              <div className="min-h-[60vh] bg-white" aria-label="Cargando contenido" />
+            ) : (
+              <AppRoutes />
+            )}
           </main>
           <Footer />
         </div>
