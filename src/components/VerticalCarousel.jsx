@@ -16,22 +16,19 @@ const settings = {
 
 const sectionStyles = [
   {
-    container: "bg-[#f0f0f5] flex-col md:flex-row",
+    background: "bg-[#f0f0f5]",
     title: "text-indigo-950",
     text: "text-gray-700",
-    animation: "animate-fade-in-left",
   },
   {
-    container: "bg-blue-950 flex-col md:flex-row-reverse",
+    background: "bg-blue-950",
     title: "text-white",
     text: "text-gray-300",
-    animation: "animate-fade-in-right",
   },
   {
-    container: "bg-indigo-300 flex-col md:flex-row",
+    background: "bg-indigo-300",
     title: "text-indigo-950",
     text: "text-gray-700",
-    animation: "animate-fade-in-left",
   },
 ];
 
@@ -74,13 +71,16 @@ const CarouselMedia = ({ section }) => {
 const CarouselSection = ({ section, index }) => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
   const style = sectionStyles[index % sectionStyles.length];
+  const isReversed = index % 2 === 1;
+  const layout = isReversed ? "flex-col md:flex-row-reverse" : "flex-col md:flex-row";
+  const animation = isReversed ? "animate-fade-in-right" : "animate-fade-in-left";
 
   return (
-    <section ref={ref} className={`flex w-full items-center py-16 md:py-24 ${style.container}`}>
-      <div className={`w-full md:w-1/2 p-8 ${inView ? style.animation : "opacity-0"}`}>
+    <section ref={ref} className={`flex w-full items-center py-16 md:py-24 ${layout} ${style.background}`}>
+      <div className={`w-full md:w-1/2 p-8 ${inView ? animation : "opacity-0"}`}>
         <CarouselMedia section={section} />
       </div>
-      <div className={`w-full md:w-1/2 p-8 text-center md:text-left ${inView ? style.animation : "opacity-0"}`}>
+      <div className={`w-full md:w-1/2 p-8 text-center md:text-left ${inView ? animation : "opacity-0"}`}>
         <h2 className={`mb-4 text-4xl font-bold ${style.title}`}>{section.title}</h2>
         <p className={`text-lg ${style.text}`}>{section.subtitle}</p>
       </div>

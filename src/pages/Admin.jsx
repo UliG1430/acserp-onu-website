@@ -112,6 +112,8 @@ const Admin = () => {
   const [dropIndicatorIndex, setDropIndicatorIndex] = useState(null);
   const [collapsedPhotoGroups, setCollapsedPhotoGroups] = useState({});
   const [collapsedCarouselSections, setCollapsedCarouselSections] = useState({});
+  const [draggedCarouselSectionIndex, setDraggedCarouselSectionIndex] = useState(null);
+  const [carouselSectionDropIndex, setCarouselSectionDropIndex] = useState(null);
   const [collapsedDriveFolders, setCollapsedDriveFolders] = useState({});
   const [draggedPhotoFolderIndex, setDraggedPhotoFolderIndex] = useState(null);
   const [photoFolderDropIndex, setPhotoFolderDropIndex] = useState(null);
@@ -376,6 +378,38 @@ const Admin = () => {
         carouselSections: current.photos.carouselSections.filter((_, sectionIndex) => sectionIndex !== index),
       },
     }));
+  };
+
+  const moveCarouselSection = (fromIndex, toIndex) => {
+    if (fromIndex === null || fromIndex === toIndex || toIndex < 0 || toIndex > draft.photos.carouselSections.length) return;
+
+    updateDraft((current) => {
+      const carouselSections = [...current.photos.carouselSections];
+      const [movedSection] = carouselSections.splice(fromIndex, 1);
+      const adjustedToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
+      carouselSections.splice(adjustedToIndex, 0, movedSection);
+      return { ...current, photos: { ...current.photos, carouselSections } };
+    });
+    setDraggedCarouselSectionIndex(null);
+    setCarouselSectionDropIndex(null);
+  };
+
+  const getDraggedCarouselSectionIndex = (event) => {
+    const fromIndex = Number(event.dataTransfer.getData("text/plain"));
+    return Number.isNaN(fromIndex) ? draggedCarouselSectionIndex : fromIndex;
+  };
+
+  const handleCarouselSectionDrop = (event, toIndex) => {
+    event.preventDefault();
+    event.stopPropagation();
+    moveCarouselSection(getDraggedCarouselSectionIndex(event), toIndex);
+  };
+
+  const updateCarouselSectionDropIndicator = (event, index) => {
+    if (draggedCarouselSectionIndex === null) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const isAfter = event.clientY > rect.top + rect.height / 2;
+    setCarouselSectionDropIndex(index + (isAfter ? 1 : 0));
   };
 
   const updateDriveFolder = (index, field, value) => {
@@ -817,70 +851,131 @@ const Admin = () => {
                 {!collapsedPhotoGroups.carousel && (
                   <div className="mt-4 grid gap-3">
                     {draft.photos.carouselSections.map((section, index) => (
-                      <article key={section.id || index} className={`rounded-md border p-4 ${section.hidden ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}>
-                        <div className="mb-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                          <div className="min-w-0">
-                            <h3 className="break-words font-semibold text-blue-950">
-                              Sección {index + 1}
-                              {section.hidden && <span className="ml-2 rounded bg-amber-200 px-2 py-0.5 text-xs text-amber-900">Oculta</span>}
-                            </h3>
-                          </div>
-                          <div className="flex flex-shrink-0 flex-wrap gap-2">
-                            <button
-                              type="button"
-                              onClick={() => setCollapsedCarouselSections((current) => ({ ...current, [section.id]: !current[section.id] }))}
-                              className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700"
-                            >
-                              {collapsedCarouselSections[section.id] ? "Expandir" : "Colapsar"}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => updateCarouselSection(index, "hidden", !section.hidden)}
-                              className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700"
-                            >
-                              {section.hidden ? "Mostrar" : "Ocultar"}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => deleteCarouselSection(index)}
-                              className="rounded-md border border-red-200 px-3 py-1 text-sm text-red-700"
-                            >
-                              Eliminar
-                            </button>
-                          </div>
-                        </div>
-
-                        {!collapsedCarouselSections[section.id] && (
-                          <div className="grid gap-4 md:grid-cols-2">
-                            <label className="block">
-                              <span className="text-sm font-semibold text-gray-700">Título</span>
-                              <input
-                                value={section.title || ""}
-                                onChange={(event) => updateCarouselSection(index, "title", event.target.value)}
-                                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
-                              />
-                            </label>
-                            <label className="block md:col-span-2">
-                              <span className="text-sm font-semibold text-gray-700">Subtítulo</span>
-                              <textarea
-                                value={section.subtitle || ""}
-                                onChange={(event) => updateCarouselSection(index, "subtitle", event.target.value)}
-                                rows={3}
-                                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
-                              />
-                            </label>
-                            <label className="block md:col-span-2">
-                              <span className="text-sm font-semibold text-gray-700">Link de carpeta de fotos</span>
-                              <input
-                                value={section.folderUrl || ""}
-                                onChange={(event) => updateCarouselSection(index, "folderUrl", event.target.value)}
-                                placeholder="https://drive.google.com/drive/folders/..."
-                                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
-                              />
-                            </label>
+                      <React.Fragment key={section.id || index}>
+                        {carouselSectionDropIndex === index && draggedCarouselSectionIndex !== null && draggedCarouselSectionIndex !== index && (
+                          <div
+                            className="relative -my-3 h-6"
+                            onDragOver={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              setCarouselSectionDropIndex(index);
+                            }}
+                            onDrop={(event) => handleCarouselSectionDrop(event, index)}
+                          >
+                            <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-blue-500 shadow-[0_0_0_4px_rgba(59,130,246,0.16)] transition-all" />
                           </div>
                         )}
-                      </article>
+                        <article
+                          onDragOver={(event) => {
+                            event.preventDefault();
+                            event.dataTransfer.dropEffect = "move";
+                            updateCarouselSectionDropIndicator(event, index);
+                          }}
+                          onDrop={(event) => handleCarouselSectionDrop(event, carouselSectionDropIndex ?? index)}
+                          className={`rounded-md border p-4 transition ${
+                            draggedCarouselSectionIndex === index ? "scale-[0.99] border-blue-300 bg-blue-50 opacity-70" : section.hidden ? "border-amber-200 bg-amber-50" : "border-gray-200"
+                          }`}
+                        >
+                          <div className="mb-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                            <div className="flex min-w-0 flex-1 items-center gap-3">
+                              <div
+                                draggable
+                                onDragStart={(event) => {
+                                  setDraggedCarouselSectionIndex(index);
+                                  event.dataTransfer.effectAllowed = "move";
+                                  event.dataTransfer.setData("text/plain", String(index));
+                                }}
+                                onDragEnd={() => setDraggedCarouselSectionIndex(null)}
+                                onDragEndCapture={() => setCarouselSectionDropIndex(null)}
+                                className="flex h-10 w-10 cursor-grab items-center justify-center rounded-md border border-gray-300 bg-white text-lg font-bold text-gray-500 active:cursor-grabbing"
+                                title="Arrastrar para ordenar"
+                                aria-label="Arrastrar para ordenar"
+                              >
+                                ≡
+                              </div>
+                              <div className="min-w-0">
+                                <h3 className="break-words font-semibold text-blue-950">
+                                  Sección {index + 1}
+                                  {section.hidden && <span className="ml-2 rounded bg-amber-200 px-2 py-0.5 text-xs text-amber-900">Oculta</span>}
+                                </h3>
+                              </div>
+                            </div>
+                            <div className="flex flex-shrink-0 flex-wrap gap-2 md:max-w-[430px] md:justify-end">
+                              <button type="button" onClick={() => moveCarouselSection(index, index - 1)} disabled={index === 0} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 disabled:opacity-40">
+                                Subir
+                              </button>
+                              <button type="button" onClick={() => moveCarouselSection(index, index + 2)} disabled={index === draft.photos.carouselSections.length - 1} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 disabled:opacity-40">
+                                Bajar
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setCollapsedCarouselSections((current) => ({ ...current, [section.id]: !current[section.id] }))}
+                                className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700"
+                              >
+                                {collapsedCarouselSections[section.id] ? "Expandir" : "Colapsar"}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => updateCarouselSection(index, "hidden", !section.hidden)}
+                                className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700"
+                              >
+                                {section.hidden ? "Mostrar" : "Ocultar"}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => deleteCarouselSection(index)}
+                                className="rounded-md border border-red-200 px-3 py-1 text-sm text-red-700"
+                              >
+                                Eliminar
+                              </button>
+                            </div>
+                          </div>
+
+                          {!collapsedCarouselSections[section.id] && (
+                            <div className="grid gap-4 md:grid-cols-2">
+                              <label className="block">
+                                <span className="text-sm font-semibold text-gray-700">Título</span>
+                                <input
+                                  value={section.title || ""}
+                                  onChange={(event) => updateCarouselSection(index, "title", event.target.value)}
+                                  className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                                />
+                              </label>
+                              <label className="block md:col-span-2">
+                                <span className="text-sm font-semibold text-gray-700">Subtítulo</span>
+                                <textarea
+                                  value={section.subtitle || ""}
+                                  onChange={(event) => updateCarouselSection(index, "subtitle", event.target.value)}
+                                  rows={3}
+                                  className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                                />
+                              </label>
+                              <label className="block md:col-span-2">
+                                <span className="text-sm font-semibold text-gray-700">Link de carpeta de fotos</span>
+                                <input
+                                  value={section.folderUrl || ""}
+                                  onChange={(event) => updateCarouselSection(index, "folderUrl", event.target.value)}
+                                  placeholder="https://drive.google.com/drive/folders/..."
+                                  className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                                />
+                              </label>
+                            </div>
+                          )}
+                        </article>
+                        {index === draft.photos.carouselSections.length - 1 && carouselSectionDropIndex === draft.photos.carouselSections.length && draggedCarouselSectionIndex !== null && draggedCarouselSectionIndex !== index && (
+                          <div
+                            className="relative -my-3 h-6"
+                            onDragOver={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              setCarouselSectionDropIndex(draft.photos.carouselSections.length);
+                            }}
+                            onDrop={(event) => handleCarouselSectionDrop(event, draft.photos.carouselSections.length)}
+                          >
+                            <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-blue-500 shadow-[0_0_0_4px_rgba(59,130,246,0.16)] transition-all" />
+                          </div>
+                        )}
+                      </React.Fragment>
                     ))}
                   </div>
                 )}
