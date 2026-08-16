@@ -106,6 +106,18 @@ const extractYouTubeId = (value = "") => {
   return trimmed;
 };
 
+const formatAssetName = (value = "") => {
+  if (!value) return "";
+  if (value.startsWith("data:")) return "Archivo local cargado";
+
+  try {
+    const pathname = new URL(value, "https://acserp.local").pathname;
+    return decodeURIComponent(pathname.split("/").filter(Boolean).pop() || value);
+  } catch {
+    return value.split("/").filter(Boolean).pop() || value;
+  }
+};
+
 const Admin = () => {
   const { content, saveContent, refreshContent } = useSiteContent();
   const [activeTab, setActiveTab] = useState("news");
@@ -265,6 +277,68 @@ const Admin = () => {
       setUploadingAsset("");
       event.target.value = "";
     }
+  };
+
+  const handleCarouselImageFiles = async (event, sectionIndex) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    setUploadingAsset(`carousel-images-${sectionIndex}`);
+    setStatus("Subiendo fotos del carousel...");
+    try {
+      const section = draft.photos.carouselSections[sectionIndex];
+      const uploadedImages = await Promise.all(files.map(async (file) => {
+        const publicUrl = await contentService.uploadAsset(file, `photos/carousel/${section?.id || "section"}`);
+        return {
+          src: publicUrl,
+          alt: file.name.replace(/\.[^/.]+$/, ""),
+          fileName: file.name,
+        };
+      }));
+
+      updateDraft((current) => ({
+        ...current,
+        photos: {
+          ...current.photos,
+          carouselSections: current.photos.carouselSections.map((currentSection, currentIndex) =>
+            currentIndex === sectionIndex
+              ? {
+                  ...currentSection,
+                  images: [...(currentSection.images || []), ...uploadedImages],
+                }
+              : currentSection
+          ),
+        },
+      }));
+      setStatus("Fotos subidas. Guardá los cambios para publicarlas.");
+    } catch (error) {
+      setStatus(error.message || "No se pudieron subir las fotos.");
+    } finally {
+      setUploadingAsset("");
+      event.target.value = "";
+    }
+  };
+
+  const deleteCarouselImage = (sectionIndex, imageIndex) => {
+    const image = draft.photos.carouselSections[sectionIndex]?.images?.[imageIndex];
+    const imageName = image?.fileName || image?.alt || formatAssetName(image?.src);
+    const confirmed = window.confirm(`¿Eliminar la foto "${imageName || "seleccionada"}"? Esta acción se aplicará cuando guardes los cambios.`);
+    if (!confirmed) return;
+
+    updateDraft((current) => ({
+      ...current,
+      photos: {
+        ...current.photos,
+        carouselSections: current.photos.carouselSections.map((section, currentIndex) =>
+          currentIndex === sectionIndex
+            ? {
+                ...section,
+                images: (section.images || []).filter((_, currentImageIndex) => currentImageIndex !== imageIndex),
+              }
+            : section
+        ),
+      },
+    }));
   };
 
   const updateOrgan = (index, field, value) => {
@@ -1134,6 +1208,45 @@ const Admin = () => {
                                   className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
                                 />
                               </label>
+                              <label className="block md:col-span-2">
+                                <span className="text-sm font-semibold text-gray-700">Fotos del carousel</span>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  multiple
+                                  onChange={(event) => handleCarouselImageFiles(event, index)}
+                                  className="mt-1 w-full"
+                                />
+                                <span className="mt-1 block text-xs text-gray-500">
+                                  Subí una selección de fotos. La página las mostrará de a una, alternando automáticamente.
+                                </span>
+                                {uploadingAsset === `carousel-images-${index}` && <span className="text-xs text-blue-700">Subiendo fotos...</span>}
+                              </label>
+                              {(section.images || []).length > 0 && (
+                                <div className="md:col-span-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                  {(section.images || []).map((image, imageIndex) => (
+                                    <div key={`${image.src}-${imageIndex}`} className="rounded-md border border-gray-200 bg-white p-3">
+                                      <img
+                                        src={image.src}
+                                        alt={image.alt || section.title}
+                                        className="h-28 w-full rounded-md object-cover"
+                                      />
+                                      <div className="mt-2 flex items-start justify-between gap-2">
+                                        <p className="min-w-0 break-words text-xs text-gray-600">
+                                          {image.fileName || image.alt || formatAssetName(image.src)}
+                                        </p>
+                                        <button
+                                          type="button"
+                                          onClick={() => deleteCarouselImage(index, imageIndex)}
+                                          className="flex-shrink-0 rounded-md border border-red-200 px-2 py-1 text-xs text-red-700"
+                                        >
+                                          Eliminar foto
+                                        </button>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           )}
                         </article>
@@ -1828,11 +1941,13 @@ const Admin = () => {
                     <label className="block">
                       <span className="text-sm font-semibold text-gray-700">Logo principal</span>
                       <input type="file" accept="image/*" onChange={(event) => handleLogoFile(event, index, "logoUrl")} className="mt-1 w-full" />
+                      {organ.logoUrl && <span className="mt-1 block break-words text-xs text-gray-500">Archivo actual: {formatAssetName(organ.logoUrl)}</span>}
                       {uploadingAsset === `logoUrl-${index}` && <span className="text-xs text-blue-700">Subiendo...</span>}
                     </label>
                     <label className="block">
                       <span className="text-sm font-semibold text-gray-700">Logo para tópicos ampliados</span>
                       <input type="file" accept="image/*" onChange={(event) => handleLogoFile(event, index, "blankLogoUrl")} className="mt-1 w-full" />
+                      {organ.blankLogoUrl && <span className="mt-1 block break-words text-xs text-gray-500">Archivo actual: {formatAssetName(organ.blankLogoUrl)}</span>}
                       {uploadingAsset === `blankLogoUrl-${index}` && <span className="text-xs text-blue-700">Subiendo...</span>}
                     </label>
                     <label className="block md:col-span-2">

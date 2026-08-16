@@ -33,6 +33,24 @@ const sectionStyles = [
 ];
 
 const CarouselMedia = ({ section }) => {
+  const images = Array.isArray(section.images) ? section.images.filter((image) => image.src) : [];
+
+  if (images.length > 0) {
+    return (
+      <Slider {...settings}>
+        {images.map((image, index) => (
+          <div key={`${section.id || section.title}-${index}`}>
+            <LazyImage
+              src={image.src}
+              alt={image.alt || section.title}
+              className="h-[450px] w-full rounded-lg object-cover shadow-lg"
+            />
+          </div>
+        ))}
+      </Slider>
+    );
+  }
+
   const embedUrl = buildGoogleDriveEmbedUrl(section.folderUrl || "");
 
   if (embedUrl) {
@@ -48,24 +66,7 @@ const CarouselMedia = ({ section }) => {
     );
   }
 
-  const images = Array.isArray(section.images) ? section.images.filter((image) => image.src) : [];
-  if (images.length === 0) {
-    return <div className="flex h-[450px] items-center justify-center rounded-lg bg-white text-sm text-gray-500 shadow-lg">Sin fotos cargadas</div>;
-  }
-
-  return (
-    <Slider {...settings}>
-      {images.map((image, index) => (
-        <div key={`${section.id || section.title}-${index}`}>
-          <LazyImage
-            src={image.src}
-            alt={image.alt || section.title}
-            className="h-[450px] w-full rounded-lg object-cover shadow-lg"
-          />
-        </div>
-      ))}
-    </Slider>
-  );
+  return <div className="flex h-[450px] items-center justify-center rounded-lg bg-white text-sm text-gray-500 shadow-lg">Sin fotos cargadas</div>;
 };
 
 const CarouselSection = ({ section, index }) => {
