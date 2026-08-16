@@ -90,6 +90,22 @@ const extractImagePalette = (file) => new Promise((resolve) => {
 
 const sortNewsByDateDesc = (items) => [...items].sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
+const extractYouTubeId = (value = "") => {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  const patterns = [
+    /youtu\.be\/([^?&/]+)/,
+    /youtube\.com\/watch\?v=([^?&/]+)/,
+    /youtube\.com\/embed\/([^?&/]+)/,
+    /youtube\.com\/shorts\/([^?&/]+)/,
+  ];
+  for (const pattern of patterns) {
+    const match = trimmed.match(pattern);
+    if (match) return match[1];
+  }
+  return trimmed;
+};
+
 const Admin = () => {
   const { content, saveContent, refreshContent } = useSiteContent();
   const [activeTab, setActiveTab] = useState("news");
@@ -117,6 +133,9 @@ const Admin = () => {
   const [collapsedDriveFolders, setCollapsedDriveFolders] = useState({});
   const [draggedPhotoFolderIndex, setDraggedPhotoFolderIndex] = useState(null);
   const [photoFolderDropIndex, setPhotoFolderDropIndex] = useState(null);
+  const [draggedResourceIndex, setDraggedResourceIndex] = useState(null);
+  const [resourceDropIndex, setResourceDropIndex] = useState(null);
+  const [collapsedResources, setCollapsedResources] = useState({});
   const [collapsedDonationGroups, setCollapsedDonationGroups] = useState({});
   const [collapsedDonationFaqs, setCollapsedDonationFaqs] = useState({});
   const [collapsedDonationItems, setCollapsedDonationItems] = useState({});
@@ -152,8 +171,8 @@ const Admin = () => {
   const socialText = useMemo(() => ({
     instagram: draft.socialPosts.instagram.join("\n"),
     tiktok: draft.socialPosts.tiktok.join("\n"),
-    youtube: draft.socialPosts.youtube.map((video) => `${video.id}|${video.title}`).join("\n"),
-    linkedin: draft.socialPosts.linkedin.map((post) => `${post.embedUrl}|${post.postUrl}`).join("\n"),
+    youtube: draft.socialPosts.youtube.map((video) => video.url || `https://www.youtube.com/watch?v=${video.id}`).join("\n"),
+    linkedin: draft.socialPosts.linkedin.map((post) => post.postUrl || post.embedUrl).join("\n"),
   }), [draft.socialPosts]);
 
   const updateDraft = (updater) => {
@@ -490,6 +509,78 @@ const Admin = () => {
     setPhotoFolderDropIndex(index + (isAfter ? 1 : 0));
   };
 
+  const updateResource = (index, field, value) => {
+    updateDraft((current) => ({
+      ...current,
+      links: {
+        ...current.links,
+        additionalResources: current.links.additionalResources.map((resource, resourceIndex) =>
+          resourceIndex === index ? { ...resource, [field]: value } : resource
+        ),
+      },
+    }));
+  };
+
+  const addResource = () => {
+    const id = `resource-${Date.now()}`;
+    updateDraft((current) => ({
+      ...current,
+      links: {
+        ...current.links,
+        additionalResources: [
+          ...current.links.additionalResources,
+          { id, title: "", description: "", buttonText: "Abrir recurso", url: "", hidden: false },
+        ],
+      },
+    }));
+  };
+
+  const deleteResource = (index) => {
+    const resource = draft.links.additionalResources[index];
+    const confirmed = window.confirm(`¿Eliminar el recurso "${resource.title || "sin título"}"? Esta acción se aplicará cuando guardes los cambios.`);
+    if (!confirmed) return;
+
+    updateDraft((current) => ({
+      ...current,
+      links: {
+        ...current.links,
+        additionalResources: current.links.additionalResources.filter((_, resourceIndex) => resourceIndex !== index),
+      },
+    }));
+  };
+
+  const moveResource = (fromIndex, toIndex) => {
+    if (fromIndex === null || fromIndex === toIndex || toIndex < 0 || toIndex > draft.links.additionalResources.length) return;
+
+    updateDraft((current) => {
+      const additionalResources = [...current.links.additionalResources];
+      const [movedResource] = additionalResources.splice(fromIndex, 1);
+      const adjustedToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
+      additionalResources.splice(adjustedToIndex, 0, movedResource);
+      return { ...current, links: { ...current.links, additionalResources } };
+    });
+    setDraggedResourceIndex(null);
+    setResourceDropIndex(null);
+  };
+
+  const getDraggedResourceIndex = (event) => {
+    const fromIndex = Number(event.dataTransfer.getData("text/plain"));
+    return Number.isNaN(fromIndex) ? draggedResourceIndex : fromIndex;
+  };
+
+  const handleResourceDrop = (event, toIndex) => {
+    event.preventDefault();
+    event.stopPropagation();
+    moveResource(getDraggedResourceIndex(event), toIndex);
+  };
+
+  const updateResourceDropIndicator = (event, index) => {
+    if (draggedResourceIndex === null) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const isAfter = event.clientY > rect.top + rect.height / 2;
+    setResourceDropIndex(index + (isAfter ? 1 : 0));
+  };
+
   const updateDonation = (field, value) => {
     updateDraft((current) => ({
       ...current,
@@ -743,25 +834,111 @@ const Admin = () => {
           )}
 
           {activeTab === "resources" && (
-            <div className="grid gap-4">
-              {[
-                ["joinForm", "Formulario Sumate"],
-                ["rules", "Reglamento"],
-                ["countriesByOrgan", "Países por órgano"],
-                ["resourcesDrive", "Drive general de recursos"],
-              ].map(([key, label]) => (
-                <label key={key} className="block">
-                  <span className="text-sm font-semibold text-gray-700">{label}</span>
-                  <input
-                    value={draft.links[key]}
-                    onChange={(event) => updateDraft((current) => ({
-                      ...current,
-                      links: { ...current.links, [key]: event.target.value },
-                    }))}
-                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
-                  />
-                </label>
-              ))}
+            <div className="grid gap-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                {[
+                  ["joinForm", "Formulario Sumate"],
+                  ["resourcesDrive", "Drive general de recursos"],
+                ].map(([key, label]) => (
+                  <label key={key} className="block">
+                    <span className="text-sm font-semibold text-gray-700">{label}</span>
+                    <input
+                      value={draft.links[key]}
+                      onChange={(event) => updateDraft((current) => ({
+                        ...current,
+                        links: { ...current.links, [key]: event.target.value },
+                      }))}
+                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                    />
+                  </label>
+                ))}
+              </div>
+
+              <article className="rounded-lg border border-gray-200 p-4">
+                <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <h2 className="text-lg font-bold text-blue-950">Recursos adicionales</h2>
+                    <p className="text-sm text-gray-600">Cards adicionales de la página Recursos.</p>
+                  </div>
+                  <button type="button" onClick={addResource} className="w-fit rounded-md bg-blue-950 px-3 py-1 text-sm font-semibold text-white">
+                    Agregar recurso
+                  </button>
+                </div>
+                <div className="grid gap-3">
+                  {draft.links.additionalResources.map((resource, index) => (
+                    <React.Fragment key={resource.id || index}>
+                      {resourceDropIndex === index && draggedResourceIndex !== null && draggedResourceIndex !== index && (
+                        <div className="relative -my-3 h-6" onDragOver={(event) => { event.preventDefault(); event.stopPropagation(); setResourceDropIndex(index); }} onDrop={(event) => handleResourceDrop(event, index)}>
+                          <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-blue-500 shadow-[0_0_0_4px_rgba(59,130,246,0.16)] transition-all" />
+                        </div>
+                      )}
+                      <article
+                        onDragOver={(event) => {
+                          event.preventDefault();
+                          event.dataTransfer.dropEffect = "move";
+                          updateResourceDropIndicator(event, index);
+                        }}
+                        onDrop={(event) => handleResourceDrop(event, resourceDropIndex ?? index)}
+                        className={`rounded-md border p-4 transition ${draggedResourceIndex === index ? "scale-[0.99] border-blue-300 bg-blue-50 opacity-70" : resource.hidden ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}
+                      >
+                        <div className="mb-3 flex flex-wrap justify-between gap-2">
+                          <div
+                            draggable
+                            onDragStart={(event) => {
+                              setDraggedResourceIndex(index);
+                              event.dataTransfer.effectAllowed = "move";
+                              event.dataTransfer.setData("text/plain", String(index));
+                            }}
+                            onDragEnd={() => setDraggedResourceIndex(null)}
+                            onDragEndCapture={() => setResourceDropIndex(null)}
+                            className="flex h-10 w-10 cursor-grab items-center justify-center rounded-md border border-gray-300 bg-white text-lg font-bold text-gray-500 active:cursor-grabbing"
+                            title="Arrastrar para ordenar"
+                            aria-label="Arrastrar para ordenar"
+                          >
+                            ≡
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <button type="button" onClick={() => moveResource(index, index - 1)} disabled={index === 0} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 disabled:opacity-40">Subir</button>
+                            <button type="button" onClick={() => moveResource(index, index + 2)} disabled={index === draft.links.additionalResources.length - 1} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 disabled:opacity-40">Bajar</button>
+                            <button type="button" onClick={() => setCollapsedResources((current) => ({ ...current, [resource.id]: !current[resource.id] }))} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700">
+                              {collapsedResources[resource.id] ? "Expandir" : "Colapsar"}
+                            </button>
+                            <button type="button" onClick={() => updateResource(index, "hidden", !resource.hidden)} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700">
+                              {resource.hidden ? "Mostrar" : "Ocultar"}
+                            </button>
+                            <button type="button" onClick={() => deleteResource(index)} className="rounded-md border border-red-200 px-3 py-1 text-sm text-red-700">Eliminar</button>
+                          </div>
+                        </div>
+                        {!collapsedResources[resource.id] && (
+                          <div className="grid gap-4 md:grid-cols-2">
+                            <label className="block">
+                              <span className="text-sm font-semibold text-gray-700">Título</span>
+                              <input value={resource.title || ""} onChange={(event) => updateResource(index, "title", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                            </label>
+                            <label className="block">
+                              <span className="text-sm font-semibold text-gray-700">Texto botón</span>
+                              <input value={resource.buttonText || ""} onChange={(event) => updateResource(index, "buttonText", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                            </label>
+                            <label className="block md:col-span-2">
+                              <span className="text-sm font-semibold text-gray-700">Descripción</span>
+                              <textarea value={resource.description || ""} onChange={(event) => updateResource(index, "description", event.target.value)} rows={2} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                            </label>
+                            <label className="block md:col-span-2">
+                              <span className="text-sm font-semibold text-gray-700">Enlace</span>
+                              <input value={resource.url || ""} onChange={(event) => updateResource(index, "url", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                            </label>
+                          </div>
+                        )}
+                      </article>
+                      {index === draft.links.additionalResources.length - 1 && resourceDropIndex === draft.links.additionalResources.length && draggedResourceIndex !== null && draggedResourceIndex !== index && (
+                        <div className="relative -my-3 h-6" onDragOver={(event) => { event.preventDefault(); event.stopPropagation(); setResourceDropIndex(draft.links.additionalResources.length); }} onDrop={(event) => handleResourceDrop(event, draft.links.additionalResources.length)}>
+                          <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-blue-500 shadow-[0_0_0_4px_rgba(59,130,246,0.16)] transition-all" />
+                        </div>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </article>
             </div>
           )}
 
@@ -894,10 +1071,7 @@ const Admin = () => {
                                 ≡
                               </div>
                               <div className="min-w-0">
-                                <h3 className="break-words font-semibold text-blue-950">
-                                  Sección {index + 1}
-                                  {section.hidden && <span className="ml-2 rounded bg-amber-200 px-2 py-0.5 text-xs text-amber-900">Oculta</span>}
-                                </h3>
+                                {section.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculta</span>}
                               </div>
                             </div>
                             <div className="flex flex-shrink-0 flex-wrap gap-2 md:max-w-[430px] md:justify-end">
@@ -1051,11 +1225,7 @@ const Admin = () => {
                                 ≡
                               </div>
                               <div className="min-w-0">
-                                <h3 className="break-words font-semibold text-blue-950">
-                                  {folder.title}
-                                  {folder.hidden && <span className="ml-2 rounded bg-amber-200 px-2 py-0.5 text-xs text-amber-900">Oculta</span>}
-                                </h3>
-                                <p className="truncate text-xs text-gray-500">{folder.folderUrl}</p>
+                                {folder.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculta</span>}
                               </div>
                             </div>
                             <div className="flex flex-shrink-0 flex-wrap gap-2 md:max-w-[430px] md:justify-end">
@@ -1226,10 +1396,7 @@ const Admin = () => {
                         {draft.donations.allocationItems.map((item, index) => (
                           <article key={item.id || index} className={`rounded-md border p-4 ${item.hidden ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}>
                             <div className="mb-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                              <h4 className="font-semibold text-blue-950">
-                                Destino {index + 1}
-                                {item.hidden && <span className="ml-2 rounded bg-amber-200 px-2 py-0.5 text-xs text-amber-900">Oculto</span>}
-                              </h4>
+                              {item.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculto</span>}
                               <div className="flex flex-wrap gap-2">
                                 <button type="button" onClick={() => setCollapsedDonationItems((current) => ({ ...current, [item.id]: !current[item.id] }))} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700">
                                   {collapsedDonationItems[item.id] ? "Expandir" : "Colapsar"}
@@ -1358,10 +1525,7 @@ const Admin = () => {
                     {draft.donations.faqs.map((faq, index) => (
                       <article key={faq.id || index} className={`rounded-md border p-4 ${faq.hidden ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}>
                         <div className="mb-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                          <h3 className="font-semibold text-blue-950">
-                            Pregunta frecuente {index + 1}
-                            {faq.hidden && <span className="ml-2 rounded bg-amber-200 px-2 py-0.5 text-xs text-amber-900">Oculta</span>}
-                          </h3>
+                          {faq.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculta</span>}
                           <div className="flex flex-wrap gap-2">
                             <button type="button" onClick={() => setCollapsedDonationFaqs((current) => ({ ...current, [faq.id]: !current[faq.id] }))} className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700">
                               {collapsedDonationFaqs[faq.id] ? "Expandir" : "Colapsar"}
@@ -1509,11 +1673,7 @@ const Admin = () => {
                       </div>
                       {organ.logoUrl && <img src={organ.logoUrl} alt="" className="h-12 w-20 flex-shrink-0 object-contain" />}
                       <div className="min-w-0 flex-1">
-                        <h3 className="break-words font-semibold leading-snug text-blue-950">
-                          {organ.name}
-                          {organ.hidden && <span className="ml-2 rounded bg-amber-200 px-2 py-0.5 text-xs text-amber-900">Oculto</span>}
-                        </h3>
-                        <p className="text-xs text-gray-500">{organ.id}</p>
+                        {organ.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculto</span>}
                       </div>
                     </div>
                     <div className="flex flex-shrink-0 flex-wrap justify-start gap-2 md:max-w-[430px] md:justify-end">
@@ -1558,7 +1718,22 @@ const Admin = () => {
                   {!collapsedOrgans[organ.id] && (
                   <div className="grid gap-4 md:grid-cols-2">
                     <label className="block">
-                      <span className="text-sm font-semibold text-gray-700">ID interno</span>
+                      <span className="text-sm font-semibold text-gray-700">Nombre Completo</span>
+                      <input
+                        value={organ.shortName || organ.name || ""}
+                        onChange={(event) => updateDraft((current) => ({
+                          ...current,
+                          organs: current.organs.map((currentOrgan, organIndex) =>
+                            organIndex === index
+                              ? { ...currentOrgan, shortName: event.target.value, name: event.target.value }
+                              : currentOrgan
+                          ),
+                        }))}
+                        className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="text-sm font-semibold text-gray-700">Abreviación</span>
                       <input value={organ.id} onChange={(event) => updateOrgan(index, "id", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
                     </label>
                     <div className="block">
@@ -1636,14 +1811,6 @@ const Admin = () => {
                         )}
                       </div>
                     </div>
-                    <label className="block">
-                      <span className="text-sm font-semibold text-gray-700">Nombre en pestaña Órganos</span>
-                      <input value={organ.name} onChange={(event) => updateOrgan(index, "name", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
-                    </label>
-                    <label className="block">
-                      <span className="text-sm font-semibold text-gray-700">Nombre corto para tópicos</span>
-                      <input value={organ.shortName || ""} onChange={(event) => updateOrgan(index, "shortName", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
-                    </label>
                     <label className="block md:col-span-2">
                       <span className="text-sm font-semibold text-gray-700">Descripción</span>
                       <textarea value={organ.description} onChange={(event) => updateOrgan(index, "description", event.target.value)} rows={3} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
@@ -1780,17 +1947,18 @@ const Admin = () => {
                 />
               </label>
               <label className="block">
-                <span className="text-sm font-semibold text-gray-700">YouTube, formato videoId|título</span>
+                <span className="text-sm font-semibold text-gray-700">YouTube, una URL por línea</span>
                 <textarea
                   value={socialText.youtube}
                   onChange={(event) => updateDraft((current) => ({
                     ...current,
                     socialPosts: {
                       ...current.socialPosts,
-                      youtube: splitLines(event.target.value).map((line) => {
-                        const [id, title] = line.split("|");
-                        return { id, title: title || id };
-                      }),
+                      youtube: splitLines(event.target.value).map((line) => ({
+                        id: extractYouTubeId(line),
+                        title: extractYouTubeId(line),
+                        url: line,
+                      })),
                     },
                   }))}
                   rows={4}
@@ -1798,17 +1966,14 @@ const Admin = () => {
                 />
               </label>
               <label className="block">
-                <span className="text-sm font-semibold text-gray-700">LinkedIn, formato embedUrl|postUrl</span>
+                <span className="text-sm font-semibold text-gray-700">LinkedIn, una URL por línea</span>
                 <textarea
                   value={socialText.linkedin}
                   onChange={(event) => updateDraft((current) => ({
                     ...current,
                     socialPosts: {
                       ...current.socialPosts,
-                      linkedin: splitLines(event.target.value).map((line) => {
-                        const [embedUrl, postUrl] = line.split("|");
-                        return { embedUrl, postUrl: postUrl || embedUrl };
-                      }),
+                      linkedin: splitLines(event.target.value).map((line) => ({ embedUrl: line, postUrl: line })),
                     },
                   }))}
                   rows={4}

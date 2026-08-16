@@ -72,7 +72,7 @@ const OrganCard = ({ organ, index, topicEdition }) => {
           <div className="lg:w-1/2 lg:px-8">
             <div className="text-center lg:text-left">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight transition-all duration-500 ease-out group-hover:scale-105 group-hover:translate-x-2">
-                {organ.name}
+                {organ.shortName || organ.name}
               </h2>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-6">

@@ -22,6 +22,35 @@ const normalizeOrgan = (organ) => {
   };
 };
 
+const normalizeLinks = (baseLinks, overrideLinks = {}) => {
+  const legacyResources = [
+    {
+      id: "rules",
+      title: "Reglamento Modelo ONU",
+      description: "Descargá el reglamento oficial con toda la normativa y protocolos.",
+      buttonText: "Descargar reglamento",
+      url: overrideLinks.rules || baseLinks.rules,
+      hidden: false,
+    },
+    {
+      id: "countries-by-organ",
+      title: "Países por Órgano",
+      description: "Consultá qué países representan cada delegación en cada órgano.",
+      buttonText: "Ver países por órgano",
+      url: overrideLinks.countriesByOrgan || baseLinks.countriesByOrgan,
+      hidden: false,
+    },
+  ];
+
+  return {
+    ...baseLinks,
+    ...overrideLinks,
+    additionalResources: Array.isArray(overrideLinks.additionalResources)
+      ? overrideLinks.additionalResources
+      : legacyResources,
+  };
+};
+
 const mergeContent = (base, overrides = {}) => {
   const photos = overrides.photos || {};
 
@@ -29,7 +58,7 @@ const mergeContent = (base, overrides = {}) => {
     ...base,
     ...overrides,
     stats: overrides.stats || base.stats,
-    links: { ...base.links, ...overrides.links },
+    links: normalizeLinks(base.links, overrides.links),
     photos: {
       ...base.photos,
       ...photos,

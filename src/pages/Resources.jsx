@@ -3,7 +3,6 @@ import { useInView } from "react-intersection-observer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
-import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 import SEOHelmet from "../components/SEOHelmet";
 import recursoBanner from "../assets/images/image1.webp";
 import SlideOverTrigger from "../components/SlideOverTrigger";
@@ -18,8 +17,8 @@ const Resources = () => {
     threshold: 0.2,
   });
 
-  const reglamentoLink = content.links.rules;
   const driveLink = content.links.resourcesDrive;
+  const additionalResources = (content.links.additionalResources || []).filter((resource) => !resource.hidden);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100">
@@ -76,49 +75,21 @@ const Resources = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto grid sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10">
-          {/* Reglamento */}
-          <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105">
-            <FontAwesomeIcon
-              icon={faFileAlt}
-              className="text-yellow-500 text-4xl mb-4"
-            />
-            <h3 className="text-lg font-bold mb-2 text-blue-900">
-              Reglamento Modelo ONU
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Descargá el reglamento oficial con toda la normativa y protocolos.
-            </p>
-            <a
-              href={reglamentoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-4 py-2 text-sm font-medium bg-[#787ac1] text-white rounded-md hover:bg-blue-950 transition"
-            >
-              Descargar reglamento
-            </a>
-          </div>
-
-          {/* Países por Órgano */}
-          <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105 flex flex-col items-start justify-between">
-            <FontAwesomeIcon
-              icon={faFolderOpen}
-              className="text-pink-500 text-4xl mb-4"
-            />
-            <h3 className="text-lg font-bold mb-2 text-blue-900">
-              Países por Órgano
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Consultá qué países representan cada delegación en cada órgano.
-            </p>
-            <a
-              href={content.links.countriesByOrgan}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-4 py-2 text-sm font-medium bg-[#787ac1] text-white rounded-md hover:bg-blue-950 transition"
-            >
-              Ver países por órgano
-            </a>
-          </div>
+          {additionalResources.map((resource) => (
+            <div key={resource.id || resource.title} className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105 flex flex-col items-start justify-between">
+              <FontAwesomeIcon icon={faFolderOpen} className="text-pink-500 text-4xl mb-4" />
+              <h3 className="text-lg font-bold mb-2 text-blue-900">{resource.title}</h3>
+              {resource.description && <p className="text-sm text-gray-600 mb-4">{resource.description}</p>}
+              <a
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-4 py-2 text-sm font-medium bg-[#787ac1] text-white rounded-md hover:bg-blue-950 transition"
+              >
+                {resource.buttonText || "Abrir recurso"}
+              </a>
+            </div>
+          ))}
 
           {/* Tópicos Ampliados */}
           <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105 flex flex-col items-start justify-between">

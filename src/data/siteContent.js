@@ -86,6 +86,24 @@ export const defaultSiteContent = {
     resourcesDrive: "https://drive.google.com/drive/folders/1bDQ4vE3yD-5RqmBd1Tgqf-9WFKy4WEML",
     rules: "https://drive.google.com/uc?export=download&id=1J4SGK_Hq3XaTIT6hRcjWUTRsRppTHYAi",
     countriesByOrgan: "https://drive.google.com/file/d/17CcIvdx5EwdCgbj71OpoEiCdSC9OXWcb/view?usp=drive_link",
+    additionalResources: [
+      {
+        id: "rules",
+        title: "Reglamento Modelo ONU",
+        description: "Descargá el reglamento oficial con toda la normativa y protocolos.",
+        buttonText: "Descargar reglamento",
+        url: "https://drive.google.com/uc?export=download&id=1J4SGK_Hq3XaTIT6hRcjWUTRsRppTHYAi",
+        hidden: false,
+      },
+      {
+        id: "countries-by-organ",
+        title: "Países por Órgano",
+        description: "Consultá qué países representan cada delegación en cada órgano.",
+        buttonText: "Ver países por órgano",
+        url: "https://drive.google.com/file/d/17CcIvdx5EwdCgbj71OpoEiCdSC9OXWcb/view?usp=drive_link",
+        hidden: false,
+      },
+    ],
   },
   photos: {
     title: "Fotos VII Edición del Modelo Público Más Grande del País",
