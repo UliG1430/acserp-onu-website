@@ -118,6 +118,20 @@ const formatAssetName = (value = "") => {
   }
 };
 
+const FileUploadControl = ({ id, accept = "image/*", multiple = false, onChange, buttonText = "Cambiar archivo", currentText, helpText, isUploading }) => (
+  <div className="mt-1">
+    <input id={id} type="file" accept={accept} multiple={multiple} onChange={onChange} className="sr-only" />
+    <div className="flex flex-wrap items-center gap-2">
+      <label htmlFor={id} className="cursor-pointer rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
+        {buttonText}
+      </label>
+      {currentText && <span className="min-w-0 break-words text-sm text-gray-600">{currentText}</span>}
+    </div>
+    {helpText && <span className="mt-1 block text-xs text-gray-500">{helpText}</span>}
+    {isUploading && <span className="mt-1 block text-xs text-blue-700">Subiendo...</span>}
+  </div>
+);
+
 const Admin = () => {
   const { content, saveContent, refreshContent } = useSiteContent();
   const [activeTab, setActiveTab] = useState("news");
@@ -1210,17 +1224,15 @@ const Admin = () => {
                               </label>
                               <label className="block md:col-span-2">
                                 <span className="text-sm font-semibold text-gray-700">Fotos del carousel</span>
-                                <input
-                                  type="file"
-                                  accept="image/*"
+                                <FileUploadControl
+                                  id={`carousel-images-${section.id || index}`}
                                   multiple
                                   onChange={(event) => handleCarouselImageFiles(event, index)}
-                                  className="mt-1 w-full"
+                                  buttonText="Agregar fotos"
+                                  currentText={`${(section.images || []).length} foto${(section.images || []).length === 1 ? "" : "s"} cargada${(section.images || []).length === 1 ? "" : "s"}`}
+                                  helpText="Subí una selección de fotos. La página las mostrará de a una, alternando automáticamente."
+                                  isUploading={uploadingAsset === `carousel-images-${index}`}
                                 />
-                                <span className="mt-1 block text-xs text-gray-500">
-                                  Subí una selección de fotos. La página las mostrará de a una, alternando automáticamente.
-                                </span>
-                                {uploadingAsset === `carousel-images-${index}` && <span className="text-xs text-blue-700">Subiendo fotos...</span>}
                               </label>
                               {(section.images || []).length > 0 && (
                                 <div className="md:col-span-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1940,15 +1952,23 @@ const Admin = () => {
                     </label>
                     <label className="block">
                       <span className="text-sm font-semibold text-gray-700">Logo principal</span>
-                      <input type="file" accept="image/*" onChange={(event) => handleLogoFile(event, index, "logoUrl")} className="mt-1 w-full" />
-                      {organ.logoUrl && <span className="mt-1 block break-words text-xs text-gray-500">Archivo actual: {formatAssetName(organ.logoUrl)}</span>}
-                      {uploadingAsset === `logoUrl-${index}` && <span className="text-xs text-blue-700">Subiendo...</span>}
+                      <FileUploadControl
+                        id={`organ-logo-${organ.id || index}`}
+                        onChange={(event) => handleLogoFile(event, index, "logoUrl")}
+                        buttonText={organ.logoUrl ? "Cambiar logo" : "Subir logo"}
+                        currentText={organ.logoUrl ? `Archivo actual: ${formatAssetName(organ.logoUrl)}` : "Sin archivo cargado"}
+                        isUploading={uploadingAsset === `logoUrl-${index}`}
+                      />
                     </label>
                     <label className="block">
                       <span className="text-sm font-semibold text-gray-700">Logo para tópicos ampliados</span>
-                      <input type="file" accept="image/*" onChange={(event) => handleLogoFile(event, index, "blankLogoUrl")} className="mt-1 w-full" />
-                      {organ.blankLogoUrl && <span className="mt-1 block break-words text-xs text-gray-500">Archivo actual: {formatAssetName(organ.blankLogoUrl)}</span>}
-                      {uploadingAsset === `blankLogoUrl-${index}` && <span className="text-xs text-blue-700">Subiendo...</span>}
+                      <FileUploadControl
+                        id={`organ-blank-logo-${organ.id || index}`}
+                        onChange={(event) => handleLogoFile(event, index, "blankLogoUrl")}
+                        buttonText={organ.blankLogoUrl ? "Cambiar logo" : "Subir logo"}
+                        currentText={organ.blankLogoUrl ? `Archivo actual: ${formatAssetName(organ.blankLogoUrl)}` : "Sin archivo cargado"}
+                        isUploading={uploadingAsset === `blankLogoUrl-${index}`}
+                      />
                     </label>
                     <label className="block md:col-span-2">
                       <span className="text-sm font-semibold text-gray-700">Título de tópico</span>
