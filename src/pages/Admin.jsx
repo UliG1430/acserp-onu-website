@@ -14,6 +14,10 @@ const tabs = [
   { id: "social", label: "Redes" },
 ];
 
+const MAX_ASSET_UPLOAD_SIZE = 15 * 1024 * 1024;
+
+const formatFileSize = (bytes) => `${Math.round((bytes / 1024 / 1024) * 10) / 10} MB`;
+
 const formatAdminDate = (value) => {
   if (!value) return "";
   const date = new Date(`${value}T12:00:00`);
@@ -296,6 +300,13 @@ const Admin = () => {
   const handleCarouselImageFiles = async (event, sectionIndex) => {
     const files = Array.from(event.target.files || []);
     if (files.length === 0) return;
+    const oversizedFiles = files.filter((file) => file.size > MAX_ASSET_UPLOAD_SIZE);
+
+    if (oversizedFiles.length > 0) {
+      setStatus(`No se subieron fotos. El máximo por archivo es ${formatFileSize(MAX_ASSET_UPLOAD_SIZE)}: ${oversizedFiles.map((file) => file.name).join(", ")}`);
+      event.target.value = "";
+      return;
+    }
 
     setUploadingAsset(`carousel-images-${sectionIndex}`);
     setStatus("Subiendo fotos del carousel...");
@@ -1160,6 +1171,10 @@ const Admin = () => {
                                 ≡
                               </div>
                               <div className="min-w-0">
+                                <h3 className="break-words text-sm font-bold text-blue-950">{section.title || "Sin título"}</h3>
+                                <p className="text-xs text-gray-500">
+                                  {(section.images || []).length} foto{(section.images || []).length === 1 ? "" : "s"} cargada{(section.images || []).length === 1 ? "" : "s"}
+                                </p>
                                 {section.hidden && <span className="rounded bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-900">Oculta</span>}
                               </div>
                             </div>
@@ -1230,7 +1245,7 @@ const Admin = () => {
                                   onChange={(event) => handleCarouselImageFiles(event, index)}
                                   buttonText="Agregar fotos"
                                   currentText={`${(section.images || []).length} foto${(section.images || []).length === 1 ? "" : "s"} cargada${(section.images || []).length === 1 ? "" : "s"}`}
-                                  helpText="Subí una selección de fotos. La página las mostrará de a una, alternando automáticamente."
+                                  helpText={`Subí una selección de fotos. La página las mostrará de a una, alternando automáticamente. Máximo ${formatFileSize(MAX_ASSET_UPLOAD_SIZE)} por foto.`}
                                   isUploading={uploadingAsset === `carousel-images-${index}`}
                                 />
                               </label>
