@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -7,8 +7,13 @@ import DonationHomePopup from './components/DonationHomePopup';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ScrollToTop from './components/ScrollToTop';
+import { initPixel } from './utils/pixel';
 
 function App() {
+  useEffect(() => {
+    initPixel();
+  }, []);
+
   return (
     <Router>
       <ScrollToTop />

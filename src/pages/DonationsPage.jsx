@@ -1,8 +1,11 @@
 ﻿// src/pages/DonationsPage.jsx
 import React, { useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { motion } from "framer-motion";
 import SEOHelmet from "../components/SEOHelmet";
-import heroDonaciones from "../assets/images/image3.webp";
+import { stagger, cardItem } from "../utils/motion";
+import heroImg from "../assets/images/acserp4.webp";
+import { trackEvent } from "../utils/pixel";
 
 const DONATION_URL =
   "https://donaronline.org/simulacros-educativos-rio-de-la-plata/la-actividad-educativa-publica-y-gratuita-mas-grande-de-argentina-te-necesita";
@@ -67,46 +70,54 @@ const DonationsPage = () => {
       />
 
       {/* Hero */}
-      <div className="relative w-full h-[50vh] overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={heroDonaciones}
-            alt="Donaciones ONU Modelo"
-            loading="lazy"
-            className="w-full h-full object-cover object-[center_45%] md:object-[center_58%] opacity-0"
-            style={{ animation: "zoomEffect 10s ease-in-out infinite alternate, fadeIn 1s ease-out forwards" }}
-          />
-          <div
-            className="absolute inset-0 pointer-events-none bg-white animate-fade-out-overlay"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/55 to-black/65 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-white text-4xl md:text-6xl font-bold mb-4 animate-fade-in-slow">
-            ¡Hacé tu aporte al Modelo ONU más grande del país!
-          </h1>
-          <p
-            className="text-blue-200 text-xs md:text-sm uppercase tracking-[0.14em] mb-3 opacity-0 animate-fade-in"
-            style={{ animationDelay: "120ms", animationFillMode: "forwards" }}
+      <section className="relative overflow-hidden py-24 text-white">
+        <img
+          src={heroImg}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(155deg, rgba(11,21,53,0.82) 0%, rgba(23,37,84,0.78) 55%, rgba(26,32,112,0.75) 100%)' }}
+        />
+        <div
+          className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-20"
+          style={{ background: 'radial-gradient(ellipse, #3b5bdb 0%, transparent 70%)' }}
+        />
+        <motion.div
+          variants={stagger(0.12)}
+          initial="hidden"
+          animate="visible"
+          className="relative max-w-3xl mx-auto px-6 text-center"
+        >
+          <motion.p
+            variants={cardItem}
+            className="text-xs font-semibold uppercase tracking-widest text-blue-300 mb-4"
           >
             Donaciones • ACSERP
-          </p>
-          <a
-            href={DONATION_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center bg-white text-blue-950 font-extrabold text-xl md:text-2xl px-12 md:px-16 py-4 md:py-5 rounded-full shadow-2xl ring-1 ring-blue-200/70 hover:shadow-[0_20px_45px_rgba(12,24,72,0.45)] hover:-translate-y-0.5 hover:bg-slate-50 transition-all duration-300 whitespace-nowrap tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white opacity-0 animate-fade-in"
-            style={{ animationDelay: "260ms", animationFillMode: "forwards" }}
+          </motion.p>
+          <motion.h1
+            variants={cardItem}
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-8"
           >
-Quiero aportar
-          </a>
-          <p
-            className="text-blue-200/85 text-xs mt-2 opacity-0 animate-fade-in"
-            style={{ animationDelay: "420ms", animationFillMode: "forwards" }}
-          >
-            Pago seguro • DonarOnline
-          </p>
-        </div>
-      </div>
+            ¡Hacé tu aporte al Modelo ONU más grande del país!
+          </motion.h1>
+          <motion.div variants={cardItem} className="flex flex-col items-center gap-3">
+            <a
+              href={DONATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("InitiateCheckout", { content_name: "Donación ACSERP" })}
+              className="inline-flex items-center justify-center bg-white text-blue-950 font-extrabold text-xl px-12 py-4 rounded-full shadow-2xl ring-1 ring-blue-200/70 hover:shadow-[0_20px_45px_rgba(12,24,72,0.45)] hover:-translate-y-0.5 hover:bg-slate-50 transition-all duration-300 whitespace-nowrap tracking-tight"
+            >
+              Quiero aportar
+            </a>
+            <p className="text-blue-300/80 text-xs">Pago seguro • DonarOnline</p>
+          </motion.div>
+          <motion.div variants={cardItem} className="mt-8 mx-auto w-10 h-0.5 rounded-full bg-white/20" />
+        </motion.div>
+      </section>
 
       {/* Por qué donar */}
       <div

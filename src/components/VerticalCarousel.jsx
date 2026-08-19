@@ -8,7 +8,6 @@ import imageAgasajo1  from '../assets/images/agasajo1.webp';
 import imageAgasajo2  from '../assets/images/agasajo2.webp';
 import imageAgasajo3  from '../assets/images/agasajo3.webp';
 import imageApertura1 from '../assets/images/apertura1.webp';
-import imageApertura2 from '../assets/images/apertura2.webp';
 import imageApertura3 from '../assets/images/apertura3.webp';
 import imageSesiones1 from '../assets/images/sesiones1.webp';
 import imageSesiones2 from '../assets/images/sesiones2.webp';
@@ -83,7 +82,6 @@ const sections = [
     desc: 'El inicio del evento, con discursos que inspiran a los delegados a dar lo mejor de sí mismos en el escenario del Estadio Único Diego Armando Maradona.',
     images: [
       { src: imageApertura1, alt: 'Acto de Apertura 1' },
-      { src: imageApertura2, alt: 'Acto de Apertura 2' },
       { src: imageApertura3, alt: 'Acto de Apertura 3' },
     ],
     bg: 'bg-white',

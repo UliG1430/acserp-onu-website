@@ -5,10 +5,11 @@ import { faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 import SEOHelmet from "../components/SEOHelmet";
-import recursoBanner from "../assets/images/image1.webp";
 import SlideOverTrigger from "../components/SlideOverTrigger";
 import SlideOverTriggerTopics from "../components/SlideOverTriggerTopics";
 import { motion } from "framer-motion";
+import { stagger, cardItem } from "../utils/motion";
+import heroImg from "../assets/images/firma1.webp";
 
 const Resources = () => {
   const { ref: driveRef, inView: driveInView } = useInView({
@@ -30,33 +31,42 @@ const Resources = () => {
       />
 
       {/* Hero */}
-      <div className="relative w-full h-[400px] shadow-md overflow-hidden">
+      <section className="relative overflow-hidden py-24 text-white">
         <img
-          src={recursoBanner}
-          alt="Recursos Modelo ONU"
-          className="w-full h-full object-cover"
+          src={heroImg}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/30 flex items-center justify-center">
-          <div className="text-center px-6">
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight drop-shadow-md"
-            >
-              Recursos Académicos
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.5, delay: 0.3 }}
-              className="text-lg md:text-xl font-semibold text-[#a0c4ff] drop-shadow-md tracking-wide max-w-2xl mx-auto mt-4"
-            >
-              Guías, documentos, reglamentos y materiales clave para vivir la experiencia Modelo ONU.
-            </motion.p>
-          </div>
-        </div>
-      </div>
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(155deg, rgba(11,21,53,0.82) 0%, rgba(23,37,84,0.78) 55%, rgba(26,32,112,0.75) 100%)' }}
+        />
+        <div
+          className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-20"
+          style={{ background: 'radial-gradient(ellipse, #3b5bdb 0%, transparent 70%)' }}
+        />
+        <motion.div
+          variants={stagger(0.1)}
+          initial="hidden"
+          animate="visible"
+          className="relative max-w-3xl mx-auto px-6 text-center"
+        >
+          <motion.h1
+            variants={cardItem}
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-5"
+          >
+            Recursos Académicos
+          </motion.h1>
+          <motion.p
+            variants={cardItem}
+            className="text-lg text-white/55 leading-relaxed max-w-xl mx-auto"
+          >
+            Guías, documentos, reglamentos y materiales clave para vivir la experiencia Modelo ONU.
+          </motion.p>
+          <motion.div variants={cardItem} className="mt-7 mx-auto w-10 h-0.5 rounded-full bg-white/20" />
+        </motion.div>
+      </section>
 
       {/* Intro - con fondo más claro */}
       <section className="bg-gray-100 py-16 w-full">

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRightIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import VerticalCarousel from '../components/VerticalCarousel';
 import SEOHelmet from '../components/SEOHelmet';
-import PhotoAnnouncementModal from '../components/PhotoAnnouncementModal';
 import { stagger, cardItem, headingVariants, viewport } from '../utils/motion';
+import heroImg from '../assets/images/apertura1.webp';
 
 const driveLinks = [
   {
@@ -22,8 +22,6 @@ const driveLinks = [
 ];
 
 const Photos = () => {
-  const [showModal, setShowModal] = useState(true);
-
   return (
     <div className="min-h-screen bg-white">
       <SEOHelmet
@@ -33,13 +31,18 @@ const Photos = () => {
         image="https://acserp.org.ar/og-image.png"
       />
 
-      <PhotoAnnouncementModal isOpen={showModal} onClose={() => setShowModal(false)} />
-
       {/* ── Hero ── */}
-      <section
-        className="relative overflow-hidden py-24 text-white"
-        style={{ background: 'linear-gradient(155deg, #0b1535 0%, #172554 55%, #1a2070 100%)' }}
-      >
+      <section className="relative overflow-hidden py-24 text-white">
+        <img
+          src={heroImg}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(155deg, rgba(11,21,53,0.82) 0%, rgba(23,37,84,0.78) 55%, rgba(26,32,112,0.75) 100%)' }}
+        />
         <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-20"
           style={{ background: 'radial-gradient(ellipse, #3b5bdb 0%, transparent 70%)' }} />
 

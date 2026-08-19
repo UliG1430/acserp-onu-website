@@ -1,13 +1,15 @@
 // src/components/ScrollToTop.jsx
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { trackPageView } from "../utils/pixel";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Mueve el scroll al inicio
-  }, [pathname]); // Ejecuta el efecto cada vez que cambie la ruta
+    window.scrollTo(0, 0);
+    trackPageView();
+  }, [pathname]);
 
   return null;
 };

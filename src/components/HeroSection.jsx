@@ -2,10 +2,26 @@ import React from "react";
 import { motion } from "framer-motion";
 import { stagger, cardItem, viewport, ease } from "../utils/motion";
 
-const HeroSection = ({ title = "Nuestra historia", subtitle }) => (
-  <section className="relative overflow-hidden py-24"
-    style={{ background: 'linear-gradient(155deg, #0b1535 0%, #172554 55%, #1a2070 100%)' }}
-  >
+const HeroSection = ({ title = "Nuestra historia", subtitle, image }) => (
+  <section className="relative overflow-hidden py-24 text-white">
+    {/* Background image */}
+    {image && (
+      <img
+        src={image}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
+    )}
+    {/* Overlay */}
+    <div
+      className="absolute inset-0"
+      style={{
+        background: image
+          ? 'linear-gradient(155deg, rgba(11,21,53,0.82) 0%, rgba(23,37,84,0.78) 55%, rgba(26,32,112,0.75) 100%)'
+          : 'linear-gradient(155deg, #0b1535 0%, #172554 55%, #1a2070 100%)',
+      }}
+    />
     {/* Glow */}
     <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-20"
       style={{ background: 'radial-gradient(ellipse, #3b5bdb 0%, transparent 70%)' }} />
