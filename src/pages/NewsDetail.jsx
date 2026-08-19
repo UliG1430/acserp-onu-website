@@ -6,12 +6,12 @@ import ScrollToTopButton from "../components/ScrollToTopButton";
 import SEOHelmet from "../components/SEOHelmet";
 import YouTubeEmbed from "../components/YouTubeEmbed";
 import { useSiteContent } from "../context/SiteContentContext";
+import { getVisibleSortedNews } from "../utils/newsContent";
 
 const NewsDetail = () => {
   const { content: siteContent } = useSiteContent();
   const { id } = useParams();
-  const allNews = (siteContent.adminNews.length > 0 ? siteContent.adminNews : newsData)
-    .filter((item) => !item.hidden);
+  const allNews = getVisibleSortedNews(newsData, siteContent.adminNews);
   const news = allNews.find((item) => String(item.id) === String(id));
 
   if (!news) {
@@ -55,7 +55,7 @@ const NewsDetail = () => {
         title={news.title} 
         description={news.summary || "Lee esta noticia sobre el Modelo ONU La Plata"} 
         url={`https://acserp.org.ar/noticias/${news.id}`} 
-        image={news.img} 
+        image={news.headerImg || news.img} 
       />
 
       {/* Encabezado */}
@@ -79,10 +79,15 @@ const NewsDetail = () => {
         className="mb-12"
       >
         <img
-          src={news.img}
+          src={news.headerImg || news.img}
           alt={news.title}
           className="w-full h-[600px] object-cover rounded-lg shadow-lg"
         />
+        {news.headerImgDescription && (
+          <figcaption className="text-gray-600 text-sm mt-2 text-center">
+            {news.headerImgDescription}
+          </figcaption>
+        )}
       </motion.figure>
 
       {/* Contenido y Galería */}

@@ -3,6 +3,8 @@ import { isSupabaseConfigured } from "../lib/supabaseClient";
 import { contentService } from "../services/contentService";
 import { useSiteContent } from "../context/SiteContentContext";
 import parseDate from "../utils/parseDate";
+import newsData from "../assets/noticias/newsData";
+import { getNewsDateInputValue, mergeManagedNews } from "../utils/newsContent";
 
 const tabs = [
   { id: "news", label: "Noticias" },
@@ -50,6 +52,22 @@ const rgbToHex = ({ r, g, b }) => {
   const toHex = (value) => Math.max(0, Math.min(255, Number(value) || 0)).toString(16).padStart(2, "0");
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
 };
+
+const createEmptyNewsForm = () => ({
+  id: "",
+  title: "",
+  summary: "",
+  content: "",
+  date: new Date().toISOString().slice(0, 10),
+  img: "",
+  headerImg: "",
+  headerImgDescription: "",
+  carouselImg: "",
+  additionalImages: [],
+  videoUrl: "",
+  youtubeId: "",
+  hidden: false,
+});
 
 const extractImagePalette = (file) => new Promise((resolve) => {
   const reader = new FileReader();
@@ -142,13 +160,8 @@ const Admin = () => {
   const [draft, setDraft] = useState(content);
   const [session, setSession] = useState(null);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
-  const [newsForm, setNewsForm] = useState({
-    title: "",
-    summary: "",
-    content: "",
-    date: new Date().toISOString().slice(0, 10),
-    img: "",
-  });
+  const [newsForm, setNewsForm] = useState(createEmptyNewsForm);
+  const [editingNewsId, setEditingNewsId] = useState(null);
   const [status, setStatus] = useState("");
   const [uploadingAsset, setUploadingAsset] = useState("");
   const [colorModes, setColorModes] = useState({});
@@ -204,6 +217,7 @@ const Admin = () => {
     youtube: draft.socialPosts.youtube.map((video) => video.url || `https://www.youtube.com/watch?v=${video.id}`).join("\n"),
     linkedin: draft.socialPosts.linkedin.map((post) => post.postUrl || post.embedUrl).join("\n"),
   }), [draft.socialPosts]);
+  const editableNews = useMemo(() => mergeManagedNews(newsData, draft.adminNews), [draft.adminNews]);
 
   const updateDraft = (updater) => {
     setDraft((current) => {
@@ -279,18 +293,41 @@ const Admin = () => {
     }
   };
 
-  const handleNewsImageFile = async (event) => {
+  const handleNewsImageFile = async (event, field = "img") => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    setUploadingAsset("news-image");
+    setUploadingAsset(`news-${field}`);
     setStatus("Subiendo imagen de noticia...");
     try {
       const publicUrl = await contentService.uploadAsset(file, "news");
-      setNewsForm((current) => ({ ...current, img: publicUrl }));
+      setNewsForm((current) => ({ ...current, [field]: publicUrl }));
       setStatus("Imagen de noticia subida.");
     } catch (error) {
       setStatus(error.message || "No se pudo subir la imagen de noticia.");
+    } finally {
+      setUploadingAsset("");
+      event.target.value = "";
+    }
+  };
+
+  const handleAdditionalNewsImageFile = async (event, imageIndex) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadingAsset(`news-additional-${imageIndex}`);
+    setStatus("Subiendo imagen adicional...");
+    try {
+      const publicUrl = await contentService.uploadAsset(file, "news/additional");
+      setNewsForm((current) => ({
+        ...current,
+        additionalImages: current.additionalImages.map((image, index) =>
+          index === imageIndex ? { ...image, url: publicUrl } : image
+        ),
+      }));
+      setStatus("Imagen adicional subida.");
+    } catch (error) {
+      setStatus(error.message || "No se pudo subir la imagen adicional.");
     } finally {
       setUploadingAsset("");
       event.target.value = "";
@@ -429,10 +466,26 @@ const Admin = () => {
   const deleteNews = (newsItem) => {
     const confirmed = window.confirm(`¿Eliminar la noticia "${newsItem.title}"? Esta acción se aplicará cuando guardes los cambios.`);
     if (!confirmed) return;
+    const isLegacyNews = newsData.some((news) => String(news.id) === String(newsItem.id));
 
     updateDraft((current) => ({
       ...current,
-      adminNews: current.adminNews.filter((news) => news.id !== newsItem.id),
+      adminNews: isLegacyNews
+        ? [
+            { ...newsItem, hidden: true },
+            ...current.adminNews.filter((news) => String(news.id) !== String(newsItem.id)),
+          ]
+        : current.adminNews.filter((news) => String(news.id) !== String(newsItem.id)),
+    }));
+  };
+
+  const toggleNewsVisibility = (newsItem) => {
+    updateDraft((current) => ({
+      ...current,
+      adminNews: [
+        { ...newsItem, hidden: !newsItem.hidden },
+        ...current.adminNews.filter((news) => String(news.id) !== String(newsItem.id)),
+      ],
     }));
   };
 
@@ -805,35 +858,93 @@ const Admin = () => {
     setStatus("Órgano agregado al borrador. Editalo y guardá los cambios.");
   };
 
-  const addNews = () => {
+  const resetNewsForm = () => {
+    setNewsForm(createEmptyNewsForm());
+    setEditingNewsId(null);
+  };
+
+  const startEditingNews = (newsItem) => {
+    setEditingNewsId(newsItem.id);
+    setNewsForm({
+      id: newsItem.id,
+      title: newsItem.title || "",
+      summary: newsItem.summary || "",
+      content: newsItem.content || "",
+      date: getNewsDateInputValue(newsItem.date),
+      img: newsItem.img || "",
+      headerImg: newsItem.headerImg || "",
+      headerImgDescription: newsItem.headerImgDescription || "",
+      carouselImg: newsItem.carouselImg || "",
+      additionalImages: (newsItem.additionalImages || []).map((image) => ({
+        url: image.url || "",
+        description: image.description || "",
+      })),
+      videoUrl: newsItem.videoUrl || "",
+      youtubeId: newsItem.youtubeId || extractYouTubeId(newsItem.videoUrl || ""),
+      hidden: Boolean(newsItem.hidden),
+    });
+    setStatus(`Editando noticia "${newsItem.title}".`);
+  };
+
+  const updateAdditionalNewsImage = (index, field, value) => {
+    setNewsForm((current) => ({
+      ...current,
+      additionalImages: current.additionalImages.map((image, imageIndex) =>
+        imageIndex === index ? { ...image, [field]: value } : image
+      ),
+    }));
+  };
+
+  const addAdditionalNewsImage = () => {
+    setNewsForm((current) => ({
+      ...current,
+      additionalImages: [...current.additionalImages, { url: "", description: "" }],
+    }));
+  };
+
+  const deleteAdditionalNewsImage = (index) => {
+    const confirmed = window.confirm("¿Eliminar esta imagen adicional de la noticia?");
+    if (!confirmed) return;
+
+    setNewsForm((current) => ({
+      ...current,
+      additionalImages: current.additionalImages.filter((_, imageIndex) => imageIndex !== index),
+    }));
+  };
+
+  const saveNews = () => {
     if (!newsForm.title || !newsForm.summary || !newsForm.content || !newsForm.img) {
-      setStatus("Completá título, bajada, contenido e imagen.");
+      setStatus("Completá título, bajada, contenido y miniatura.");
       return;
     }
 
+    const id = editingNewsId || `admin-${Date.now()}`;
     const nextNews = {
-      id: `admin-${Date.now()}`,
+      id,
       title: newsForm.title,
       summary: newsForm.summary,
       content: newsForm.content,
       date: formatAdminDate(newsForm.date),
       img: newsForm.img,
-      hidden: false,
+      headerImg: newsForm.headerImg || newsForm.img,
+      headerImgDescription: newsForm.headerImgDescription,
+      carouselImg: newsForm.carouselImg || newsForm.img,
+      additionalImages: newsForm.additionalImages.filter((image) => image.url),
+      videoUrl: newsForm.videoUrl,
+      youtubeId: newsForm.youtubeId || extractYouTubeId(newsForm.videoUrl || ""),
+      hidden: newsForm.hidden,
     };
 
     updateDraft((current) => ({
       ...current,
-      adminNews: [nextNews, ...current.adminNews],
+      adminNews: [
+        nextNews,
+        ...current.adminNews.filter((news) => String(news.id) !== String(id)),
+      ],
     }));
 
-    setNewsForm({
-      title: "",
-      summary: "",
-      content: "",
-      date: new Date().toISOString().slice(0, 10),
-      img: "",
-    });
-    setStatus("Noticia agregada al borrador. Guardá para publicarla.");
+    resetNewsForm();
+    setStatus(editingNewsId ? "Noticia editada en el borrador. Guardá para publicarla." : "Noticia agregada al borrador. Guardá para publicarla.");
   };
 
   if (!session) {
@@ -2039,23 +2150,136 @@ const Admin = () => {
 
           {activeTab === "news" && (
             <div className="grid gap-6">
-              <div className="grid gap-4">
-                <input value={newsForm.title} onChange={(event) => setNewsForm({ ...newsForm, title: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" placeholder="Título" />
-                <input value={newsForm.summary} onChange={(event) => setNewsForm({ ...newsForm, summary: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" placeholder="Bajada" />
-                <input type="date" value={newsForm.date} onChange={(event) => setNewsForm({ ...newsForm, date: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" />
-                <input value={newsForm.img} onChange={(event) => setNewsForm({ ...newsForm, img: event.target.value })} className="rounded-md border border-gray-300 px-3 py-2" placeholder="URL de imagen" />
-                <label className="block rounded-md border border-dashed border-gray-300 px-3 py-3">
-                  <span className="text-sm font-semibold text-gray-700">O subir imagen de noticia</span>
-                  <input type="file" accept="image/*" onChange={handleNewsImageFile} className="mt-2 w-full" />
-                  {uploadingAsset === "news-image" && <span className="text-xs text-blue-700">Subiendo...</span>}
-                </label>
-                <textarea value={newsForm.content} onChange={(event) => setNewsForm({ ...newsForm, content: event.target.value })} rows={8} className="rounded-md border border-gray-300 px-3 py-2" placeholder="Contenido" />
-                <button onClick={addNews} className="w-fit rounded-md bg-blue-950 px-4 py-2 font-semibold text-white">
-                  Agregar noticia
-                </button>
-              </div>
+              <article className="rounded-lg border border-gray-200 p-4">
+                <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <h2 className="text-lg font-bold text-blue-950">{editingNewsId ? "Editar noticia" : "Crear noticia"}</h2>
+                    <p className="text-sm text-gray-600">El contenido acepta texto plano o HTML para formatos especiales.</p>
+                  </div>
+                  {editingNewsId && (
+                    <button type="button" onClick={resetNewsForm} className="w-fit rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700">
+                      Cancelar edición
+                    </button>
+                  )}
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <label className="block">
+                    <span className="text-sm font-semibold text-gray-700">Título</span>
+                    <input value={newsForm.title} onChange={(event) => setNewsForm({ ...newsForm, title: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-gray-700">Fecha</span>
+                    <input type="date" value={newsForm.date} onChange={(event) => setNewsForm({ ...newsForm, date: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                  </label>
+                  <label className="block md:col-span-2">
+                    <span className="text-sm font-semibold text-gray-700">Bajada / resumen</span>
+                    <textarea value={newsForm.summary} onChange={(event) => setNewsForm({ ...newsForm, summary: event.target.value })} rows={3} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                  </label>
+                  <label className="block md:col-span-2">
+                    <span className="text-sm font-semibold text-gray-700">Contenido</span>
+                    <textarea value={newsForm.content} onChange={(event) => setNewsForm({ ...newsForm, content: event.target.value })} rows={12} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm" placeholder="Texto plano o HTML" />
+                    <span className="mt-1 block text-xs text-gray-500">Para textos con colores, recuadros o negritas podés pegar HTML como en las noticias históricas.</span>
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-gray-700">Miniatura</span>
+                    <input value={newsForm.img} onChange={(event) => setNewsForm({ ...newsForm, img: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" placeholder="URL de imagen para cards/listados" />
+                    <FileUploadControl
+                      id="news-thumbnail-upload"
+                      onChange={(event) => handleNewsImageFile(event, "img")}
+                      buttonText={newsForm.img ? "Cambiar miniatura" : "Subir miniatura"}
+                      currentText={newsForm.img ? `Archivo actual: ${formatAssetName(newsForm.img)}` : "Sin archivo cargado"}
+                      isUploading={uploadingAsset === "news-img"}
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-gray-700">Imagen de encabezado</span>
+                    <input value={newsForm.headerImg} onChange={(event) => setNewsForm({ ...newsForm, headerImg: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" placeholder="Si se deja vacío, usa la miniatura" />
+                    <FileUploadControl
+                      id="news-header-upload"
+                      onChange={(event) => handleNewsImageFile(event, "headerImg")}
+                      buttonText={newsForm.headerImg ? "Cambiar encabezado" : "Subir encabezado"}
+                      currentText={newsForm.headerImg ? `Archivo actual: ${formatAssetName(newsForm.headerImg)}` : "Usa la miniatura si queda vacío"}
+                      isUploading={uploadingAsset === "news-headerImg"}
+                    />
+                  </label>
+                  <label className="block md:col-span-2">
+                    <span className="text-sm font-semibold text-gray-700">Descripción / epígrafe de la imagen de encabezado</span>
+                    <input
+                      value={newsForm.headerImgDescription}
+                      onChange={(event) => setNewsForm({ ...newsForm, headerImgDescription: event.target.value })}
+                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                      placeholder="Opcional"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-gray-700">Imagen para carousel principal</span>
+                    <input value={newsForm.carouselImg} onChange={(event) => setNewsForm({ ...newsForm, carouselImg: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" placeholder="Si se deja vacío, usa la miniatura" />
+                    <FileUploadControl
+                      id="news-carousel-upload"
+                      onChange={(event) => handleNewsImageFile(event, "carouselImg")}
+                      buttonText={newsForm.carouselImg ? "Cambiar imagen" : "Subir imagen"}
+                      currentText={newsForm.carouselImg ? `Archivo actual: ${formatAssetName(newsForm.carouselImg)}` : "Usa la miniatura si queda vacío"}
+                      isUploading={uploadingAsset === "news-carouselImg"}
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-gray-700">Video de YouTube</span>
+                    <input
+                      value={newsForm.videoUrl}
+                      onChange={(event) => setNewsForm({ ...newsForm, videoUrl: event.target.value, youtubeId: extractYouTubeId(event.target.value) })}
+                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                      placeholder="URL o ID del video"
+                    />
+                  </label>
+                  <div className="md:col-span-2 rounded-md border border-gray-200 p-4">
+                    <div className="mb-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <h3 className="font-bold text-blue-950">Imágenes adicionales</h3>
+                        <p className="text-sm text-gray-600">En texto plano se intercalan entre párrafos. En HTML se muestran al final.</p>
+                      </div>
+                      <button type="button" onClick={addAdditionalNewsImage} className="w-fit rounded-md bg-blue-950 px-3 py-1 text-sm font-semibold text-white">
+                        Agregar imagen
+                      </button>
+                    </div>
+                    <div className="grid gap-3">
+                      {newsForm.additionalImages.map((image, index) => (
+                        <article key={index} className="rounded-md border border-gray-200 p-3">
+                          <div className="grid gap-3 md:grid-cols-2">
+                            <label className="block">
+                              <span className="text-sm font-semibold text-gray-700">URL de imagen</span>
+                              <input value={image.url || ""} onChange={(event) => updateAdditionalNewsImage(index, "url", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                              <FileUploadControl
+                                id={`news-additional-upload-${index}`}
+                                onChange={(event) => handleAdditionalNewsImageFile(event, index)}
+                                buttonText={image.url ? "Cambiar imagen" : "Subir imagen"}
+                                currentText={image.url ? `Archivo actual: ${formatAssetName(image.url)}` : "Sin archivo cargado"}
+                                isUploading={uploadingAsset === `news-additional-${index}`}
+                              />
+                            </label>
+                            <label className="block">
+                              <span className="text-sm font-semibold text-gray-700">Descripción / epígrafe</span>
+                              <textarea value={image.description || ""} onChange={(event) => updateAdditionalNewsImage(index, "description", event.target.value)} rows={4} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                            </label>
+                          </div>
+                          {image.url && <img src={image.url} alt="" className="mt-3 h-32 w-full rounded-md object-cover" />}
+                          <button type="button" onClick={() => deleteAdditionalNewsImage(index)} className="mt-3 rounded-md border border-red-200 px-3 py-1 text-sm text-red-700">
+                            Eliminar imagen
+                          </button>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                  <label className="flex items-center gap-3 rounded-md bg-slate-50 px-3 py-2 md:col-span-2">
+                    <input type="checkbox" checked={Boolean(newsForm.hidden)} onChange={(event) => setNewsForm({ ...newsForm, hidden: event.target.checked })} className="h-4 w-4" />
+                    <span className="text-sm font-semibold text-gray-700">Ocultar noticia</span>
+                  </label>
+                  <button onClick={saveNews} className="w-fit rounded-md bg-blue-950 px-4 py-2 font-semibold text-white">
+                    {editingNewsId ? "Guardar edición" : "Agregar noticia"}
+                  </button>
+                </div>
+              </article>
               <div className="space-y-3">
-                {sortNewsByDateDesc(draft.adminNews).map((item) => (
+                {sortNewsByDateDesc(editableNews).map((item) => (
                   <article key={item.id} className={`flex items-start justify-between gap-4 rounded-md border p-4 ${item.hidden ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}>
                     <div>
                       <h3 className="font-semibold text-blue-950">
@@ -2066,12 +2290,13 @@ const Admin = () => {
                     </div>
                     <div className="flex flex-wrap justify-end gap-2">
                       <button
-                        onClick={() => updateDraft((current) => ({
-                          ...current,
-                          adminNews: current.adminNews.map((news) =>
-                            news.id === item.id ? { ...news, hidden: !news.hidden } : news
-                          ),
-                        }))}
+                        onClick={() => startEditingNews(item)}
+                        className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => toggleNewsVisibility(item)}
                         className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700"
                       >
                         {item.hidden ? "Mostrar" : "Ocultar"}

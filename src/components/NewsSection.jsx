@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import newsData from "../assets/noticias/newsData.js";
 import LazyImage from "../components/LazyImage";
-import parseDate from "../utils/parseDate";
 import { useSiteContent } from "../context/SiteContentContext";
+import { getVisibleSortedNews } from "../utils/newsContent";
 
 const NEWS_FADE_STEP_MS = 220;
 
@@ -18,10 +18,7 @@ const NewsSection = () => {
 
   const getItemsPerPage = () => (window.innerWidth < 768 ? 2 : 6);
   const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage());
-  const sourceNewsData = content.adminNews.length > 0 ? content.adminNews : newsData;
-  const sortedNewsData = sourceNewsData.filter((news) => !news.hidden).sort((a, b) => {
-    return parseDate(b.date) - parseDate(a.date);
-  });
+  const sortedNewsData = getVisibleSortedNews(newsData, content.adminNews);
 
   useEffect(() => {
     const handleResize = () => setItemsPerPage(getItemsPerPage());

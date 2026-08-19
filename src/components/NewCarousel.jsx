@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { NextArrow, PrevArrow } from "./CarouselArrow";
 import newsData from "../assets/noticias/newsData";
 import LazyImage from "./LazyImage";
-import parseDate from "../utils/parseDate";
 import { shouldUseSafeMode } from "../utils/runtimeSafety";
+import { useSiteContent } from "../context/SiteContentContext";
+import { getVisibleSortedNews } from "../utils/newsContent";
 
 const NewsCarousel = () => {
+  const { content } = useSiteContent();
   const safeMode = useMemo(() => shouldUseSafeMode(), []);
   const [isMobile, setIsMobile] = useState(false);
   const [isSliding, setIsSliding] = useState(false);
@@ -43,7 +45,7 @@ const NewsCarousel = () => {
     afterChange: () => setIsSliding(false),
   };
 
-  const sortedNews = [...newsData].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+  const sortedNews = getVisibleSortedNews(newsData, content.adminNews);
 
   return (
     <div className="relative overflow-hidden">
@@ -61,7 +63,7 @@ const NewsCarousel = () => {
                 <div className="relative w-full h-full">
                   <div className="overflow-hidden">
                     <LazyImage
-                      src={news.img}
+                      src={news.carouselImg || news.img}
                       alt={news.title}
                       className={`w-full ${isMobile ? "h-[320px]" : "h-[600px]"} object-cover ${safeMode ? "" : "animate-zoom"}`}
                     />
