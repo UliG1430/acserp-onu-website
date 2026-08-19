@@ -2276,9 +2276,9 @@ const Admin = () => {
                               />
                               <span className="mt-1 block text-xs text-gray-500">Ejemplo: 2 muestra la imagen después del segundo párrafo.</span>
                             </label>
-                            <label className="block">
+                            <label className="block md:col-span-2">
                               <span className="text-sm font-semibold text-gray-700">Descripción / epígrafe</span>
-                              <textarea value={image.description || ""} onChange={(event) => updateAdditionalNewsImage(index, "description", event.target.value)} rows={4} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
+                              <input value={image.description || ""} onChange={(event) => updateAdditionalNewsImage(index, "description", event.target.value)} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
                             </label>
                           </div>
                           {image.url && <img src={image.url} alt="" className="mt-3 h-32 w-full rounded-md object-cover" />}
