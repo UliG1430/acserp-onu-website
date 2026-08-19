@@ -875,9 +875,10 @@ const Admin = () => {
       headerImg: newsItem.headerImg || "",
       headerImgDescription: newsItem.headerImgDescription || "",
       carouselImg: newsItem.carouselImg || "",
-      additionalImages: (newsItem.additionalImages || []).map((image) => ({
+      additionalImages: (newsItem.additionalImages || []).map((image, index) => ({
         url: image.url || "",
         description: image.description || "",
+        insertAfterParagraph: image.insertAfterParagraph || index + 2,
       })),
       videoUrl: newsItem.videoUrl || "",
       youtubeId: newsItem.youtubeId || extractYouTubeId(newsItem.videoUrl || ""),
@@ -898,7 +899,10 @@ const Admin = () => {
   const addAdditionalNewsImage = () => {
     setNewsForm((current) => ({
       ...current,
-      additionalImages: [...current.additionalImages, { url: "", description: "" }],
+      additionalImages: [
+        ...current.additionalImages,
+        { url: "", description: "", insertAfterParagraph: current.additionalImages.length + 2 },
+      ],
     }));
   };
 
@@ -929,7 +933,12 @@ const Admin = () => {
       headerImg: newsForm.headerImg || newsForm.img,
       headerImgDescription: newsForm.headerImgDescription,
       carouselImg: newsForm.carouselImg || newsForm.img,
-      additionalImages: newsForm.additionalImages.filter((image) => image.url),
+      additionalImages: newsForm.additionalImages
+        .filter((image) => image.url)
+        .map((image, index) => ({
+          ...image,
+          insertAfterParagraph: Number(image.insertAfterParagraph) || index + 2,
+        })),
       videoUrl: newsForm.videoUrl,
       youtubeId: newsForm.youtubeId || extractYouTubeId(newsForm.videoUrl || ""),
       hidden: newsForm.hidden,
@@ -2171,14 +2180,20 @@ const Admin = () => {
                     <span className="text-sm font-semibold text-gray-700">Fecha</span>
                     <input type="date" value={newsForm.date} onChange={(event) => setNewsForm({ ...newsForm, date: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
                   </label>
+                  <label className="block">
+                    <span className="text-sm font-semibold text-gray-700">Imagen para carousel principal</span>
+                    <input value={newsForm.carouselImg} onChange={(event) => setNewsForm({ ...newsForm, carouselImg: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" placeholder="Si se deja vacío, usa la miniatura" />
+                    <FileUploadControl
+                      id="news-carousel-upload"
+                      onChange={(event) => handleNewsImageFile(event, "carouselImg")}
+                      buttonText={newsForm.carouselImg ? "Cambiar imagen" : "Subir imagen"}
+                      currentText={newsForm.carouselImg ? `Archivo actual: ${formatAssetName(newsForm.carouselImg)}` : "Usa la miniatura si queda vacío"}
+                      isUploading={uploadingAsset === "news-carouselImg"}
+                    />
+                  </label>
                   <label className="block md:col-span-2">
                     <span className="text-sm font-semibold text-gray-700">Bajada / resumen</span>
                     <textarea value={newsForm.summary} onChange={(event) => setNewsForm({ ...newsForm, summary: event.target.value })} rows={3} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" />
-                  </label>
-                  <label className="block md:col-span-2">
-                    <span className="text-sm font-semibold text-gray-700">Contenido</span>
-                    <textarea value={newsForm.content} onChange={(event) => setNewsForm({ ...newsForm, content: event.target.value })} rows={12} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm" placeholder="Texto plano o HTML" />
-                    <span className="mt-1 block text-xs text-gray-500">Para textos con colores, recuadros o negritas podés pegar HTML como en las noticias históricas.</span>
                   </label>
                   <label className="block">
                     <span className="text-sm font-semibold text-gray-700">Miniatura</span>
@@ -2211,16 +2226,10 @@ const Admin = () => {
                       placeholder="Opcional"
                     />
                   </label>
-                  <label className="block">
-                    <span className="text-sm font-semibold text-gray-700">Imagen para carousel principal</span>
-                    <input value={newsForm.carouselImg} onChange={(event) => setNewsForm({ ...newsForm, carouselImg: event.target.value })} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2" placeholder="Si se deja vacío, usa la miniatura" />
-                    <FileUploadControl
-                      id="news-carousel-upload"
-                      onChange={(event) => handleNewsImageFile(event, "carouselImg")}
-                      buttonText={newsForm.carouselImg ? "Cambiar imagen" : "Subir imagen"}
-                      currentText={newsForm.carouselImg ? `Archivo actual: ${formatAssetName(newsForm.carouselImg)}` : "Usa la miniatura si queda vacío"}
-                      isUploading={uploadingAsset === "news-carouselImg"}
-                    />
+                  <label className="block md:col-span-2">
+                    <span className="text-sm font-semibold text-gray-700">Contenido</span>
+                    <textarea value={newsForm.content} onChange={(event) => setNewsForm({ ...newsForm, content: event.target.value })} rows={12} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm" placeholder="Texto plano o HTML" />
+                    <span className="mt-1 block text-xs text-gray-500">En texto plano, cada Enter con texto crea un párrafo nuevo y la página agrega el espacio automáticamente. También podés pegar HTML para formatos especiales.</span>
                   </label>
                   <label className="block">
                     <span className="text-sm font-semibold text-gray-700">Video de YouTube</span>
@@ -2235,7 +2244,7 @@ const Admin = () => {
                     <div className="mb-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                       <div>
                         <h3 className="font-bold text-blue-950">Imágenes adicionales</h3>
-                        <p className="text-sm text-gray-600">En texto plano se intercalan entre párrafos. En HTML se muestran al final.</p>
+                        <p className="text-sm text-gray-600">En texto plano se intercalan después del párrafo que indiques. En HTML se muestran al final.</p>
                       </div>
                       <button type="button" onClick={addAdditionalNewsImage} className="w-fit rounded-md bg-blue-950 px-3 py-1 text-sm font-semibold text-white">
                         Agregar imagen
@@ -2255,6 +2264,17 @@ const Admin = () => {
                                 currentText={image.url ? `Archivo actual: ${formatAssetName(image.url)}` : "Sin archivo cargado"}
                                 isUploading={uploadingAsset === `news-additional-${index}`}
                               />
+                            </label>
+                            <label className="block">
+                              <span className="text-sm font-semibold text-gray-700">Insertar después del párrafo</span>
+                              <input
+                                type="number"
+                                min="1"
+                                value={image.insertAfterParagraph || ""}
+                                onChange={(event) => updateAdditionalNewsImage(index, "insertAfterParagraph", event.target.value)}
+                                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                              />
+                              <span className="mt-1 block text-xs text-gray-500">Ejemplo: 2 muestra la imagen después del segundo párrafo.</span>
                             </label>
                             <label className="block">
                               <span className="text-sm font-semibold text-gray-700">Descripción / epígrafe</span>

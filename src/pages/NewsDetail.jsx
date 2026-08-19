@@ -134,6 +134,7 @@ const NewsDetail = () => {
           } else {
             // Para contenido de texto plano, dividir por saltos de línea
             const paragraphs = articleContent.trim().split("\n").filter((p) => p.trim());
+            const additionalImages = news.additionalImages || [];
             
             return paragraphs.map((paragraph, index) => (
               <div key={index} className="space-y-6">
@@ -147,24 +148,27 @@ const NewsDetail = () => {
                 </motion.p>
 
                 {/* Imagen secundaria debajo del párrafo */}
-                {news.additionalImages && index > 0 && news.additionalImages[index - 1] && (
-                  <motion.figure
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <img
-                      src={news.additionalImages[index - 1].url}
-                      alt={`Imagen ${index}`}
-                      className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
-                    />
-                    {news.additionalImages[index - 1].description && (
-                      <figcaption className="text-gray-600 text-sm mt-2 text-center">
-                        {news.additionalImages[index - 1].description}
-                      </figcaption>
-                    )}
-                  </motion.figure>
-                )}
+                {additionalImages
+                  .filter((image, imageIndex) => Number(image.insertAfterParagraph || imageIndex + 2) === index + 1)
+                  .map((image, imageIndex) => (
+                    <motion.figure
+                      key={`${image.url}-${imageIndex}`}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <img
+                        src={image.url}
+                        alt={`Imagen ${index + 1}`}
+                        className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
+                      />
+                      {image.description && (
+                        <figcaption className="text-gray-600 text-sm mt-2 text-center">
+                          {image.description}
+                        </figcaption>
+                      )}
+                    </motion.figure>
+                  ))}
               </div>
             ));
           }
