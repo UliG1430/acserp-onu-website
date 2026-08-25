@@ -1,14 +1,13 @@
 import React from "react";
 import { useInView } from "react-intersection-observer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import SEOHelmet from "../components/SEOHelmet";
 import recursoBanner from "../assets/images/image1.webp";
-import SlideOverTrigger from "../components/SlideOverTrigger";
 import SlideOverTriggerTopics from "../components/SlideOverTriggerTopics";
 import { motion } from "framer-motion";
 import { useSiteContent } from "../context/SiteContentContext";
+import { safeExternalHref } from "../utils/contentSecurity";
 
 const Resources = () => {
   const { content } = useSiteContent();
@@ -81,7 +80,7 @@ const Resources = () => {
               <h3 className="text-lg font-bold mb-2 text-blue-900">{resource.title}</h3>
               {resource.description && <p className="text-sm text-gray-600 mb-4">{resource.description}</p>}
               <a
-                href={resource.url}
+                href={safeExternalHref(resource.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block px-4 py-2 text-sm font-medium bg-[#787ac1] text-white rounded-md hover:bg-blue-950 transition"
@@ -110,7 +109,7 @@ const Resources = () => {
         {/* Acceso al Drive general */}
         <div className="mt-20 text-center">
           <motion.a
-            href={driveLink}
+            href={safeExternalHref(driveLink)}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}

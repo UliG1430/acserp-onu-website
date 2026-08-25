@@ -84,8 +84,6 @@ export const defaultSiteContent = {
   links: {
     joinForm: "https://docs.google.com/forms/d/e/1FAIpQLSdSs6OBExmEBdEZiWE9vbNZXVkc92WqEZcmVkZpclx1AucDFw/viewform",
     resourcesDrive: "https://drive.google.com/drive/folders/1bDQ4vE3yD-5RqmBd1Tgqf-9WFKy4WEML",
-    rules: "https://drive.google.com/uc?export=download&id=1J4SGK_Hq3XaTIT6hRcjWUTRsRppTHYAi",
-    countriesByOrgan: "https://drive.google.com/file/d/17CcIvdx5EwdCgbj71OpoEiCdSC9OXWcb/view?usp=drive_link",
     additionalResources: [
       {
         id: "rules",

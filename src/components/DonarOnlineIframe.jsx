@@ -18,7 +18,6 @@ const DonarOnlineIframe = () => {
             frameBorder="0"
             scrolling="no"
             className="w-full h-[820px] border-0"
-            allowTransparency="true"
           />
         </div>
       </div>

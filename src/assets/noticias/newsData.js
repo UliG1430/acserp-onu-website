@@ -8,7 +8,6 @@ import gala_benefica from "../images/gala_benefica.webp";
 import gala_benefica2 from "../images/gala_benefica2.webp";
 import homero_manzi from "../images/homero_manzi.webp";
 import preparatorios1 from "../images/preparatorios1.webp";
-import preparatorios2 from "../images/preparatorios2.webp";
 import firma1 from "../images/firma1.webp";
 import firma2 from "../images/firma2.webp";
 import firma3 from "../images/firma3.webp";
@@ -17,7 +16,6 @@ import inscripciones_preparatorios1 from "../images/inscripciones_preparatorios.
 import voluntarios from "../images/voluntarios.webp";
 import preparatoriosFin1 from "../images/preparatoriosFin1.webp";
 import preparatoriosFin2 from "../images/preparatoriosFin2.webp";
-import preparatoriosFin3 from "../images/preparatoriosFin3.webp";
 import preparatoriosFin4 from "../images/preparatoriosFin4.webp";
 import preparatoriosFin5 from "../images/preparatoriosFin5.webp";
 import inscripciones2025_1 from "../images/inscripciones2025_1.webp";

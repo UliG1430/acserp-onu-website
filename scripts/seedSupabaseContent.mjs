@@ -28,14 +28,6 @@ const mimeByExt = {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const splitTopicText = (topicText = "") => {
-  const [title = "", ...subtitleLines] = String(topicText).split(/\r?\n/);
-  return {
-    topicTitle: title.trim(),
-    topicSubtitle: subtitleLines.join("\n").trim(),
-  };
-};
-
 const { error: loginError } = await supabase.auth.signInWithPassword({
   email: adminEmail,
   password: adminPassword,
@@ -52,7 +44,8 @@ const vite = await createServer({
 try {
   const { defaultSiteContent } = await vite.ssrLoadModule("/src/data/siteContent.js");
   const { default: newsData } = await vite.ssrLoadModule("/src/assets/noticias/newsData.js");
-  const content = structuredClone(defaultSiteContent);
+  const { mergeSiteContent } = await vite.ssrLoadModule("/src/utils/siteContent.js");
+  const content = structuredClone(mergeSiteContent(defaultSiteContent));
 
   const uploadAssetPath = async (assetPath, storagePath) => {
     if (!assetPath?.startsWith("/src/")) return assetPath;
@@ -79,12 +72,9 @@ try {
     const basePath = `organs/${organ.id.toLowerCase()}`;
     const logoExt = path.extname(organ.logoUrl || ".png") || ".png";
     const blankExt = path.extname(organ.blankLogoUrl || ".png") || ".png";
-    const splitTopic = splitTopicText(organ.topicText || "");
-
+    const { topicText: _legacyTopicText, ...normalizedOrgan } = organ;
     return {
-      ...organ,
-      topicTitle: organ.topicTitle ?? splitTopic.topicTitle,
-      topicSubtitle: organ.topicSubtitle ?? splitTopic.topicSubtitle,
+      ...normalizedOrgan,
       logoUrl: await uploadAssetPath(organ.logoUrl, `${basePath}/logo${logoExt}`),
       blankLogoUrl: await uploadAssetPath(organ.blankLogoUrl, `${basePath}/blank-logo${blankExt}`),
     };
@@ -113,8 +103,9 @@ try {
       };
     }));
 
+    const { videoUrl: _legacyVideoUrl, ...normalizedNewsItem } = newsItem;
     return {
-      ...newsItem,
+      ...normalizedNewsItem,
       hidden: false,
       img: await uploadAssetPath(newsItem.img, `${basePath}/cover${imgExt}`),
       carouselImg: await uploadAssetPath(newsItem.carouselImg, `${basePath}/carousel${path.extname(newsItem.carouselImg || ".webp") || ".webp"}`),
@@ -122,13 +113,14 @@ try {
     };
   }));
 
-  const { error: saveError } = await supabase
-    .from("site_content")
-    .upsert({
-      id: "main",
-      content,
-      updated_at: new Date().toISOString(),
-    });
+  const { data: draft, error: draftError } = await supabase.rpc("get_site_content_draft");
+
+  if (draftError) throw draftError;
+
+  const { error: saveError } = await supabase.rpc("save_site_content", {
+    next_content: content,
+    expected_updated_at: draft.updated_at,
+  });
 
   if (saveError) throw saveError;
 

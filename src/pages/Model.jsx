@@ -2,6 +2,7 @@ import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import SEOHelmet from '../components/SEOHelmet';
 import { useSiteContent } from '../context/SiteContentContext';
+import { openExternalUrl } from '../utils/contentSecurity';
 
 const OrganCard = ({ organ, index, topicEdition }) => {
   const { ref, inView } = useInView({
@@ -15,7 +16,7 @@ const OrganCard = ({ organ, index, topicEdition }) => {
   const topicSubtitle = organ.topicSubtitle ?? fallbackTopicSubtitleLines.join("\n").trim();
   const hasTopicLink = organ.topicLink && organ.topicLink !== "#";
   const openTopicLink = () => {
-    if (hasTopicLink) window.open(organ.topicLink, "_blank", "noopener,noreferrer");
+    if (hasTopicLink) openExternalUrl(organ.topicLink);
   };
 
   return (

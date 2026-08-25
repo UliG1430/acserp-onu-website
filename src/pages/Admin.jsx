@@ -1,10 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { isSupabaseConfigured } from "../lib/supabaseClient";
-import { contentService } from "../services/contentService";
+import { contentService, isAdminDemoEnabled } from "../services/contentService";
 import { useSiteContent } from "../context/SiteContentContext";
-import parseDate from "../utils/parseDate";
 import newsData from "../assets/noticias/newsData";
 import { getNewsDateInputValue, mergeManagedNews } from "../utils/newsContent";
+import FileUploadControl from "../components/admin/FileUploadControl";
+import {
+  MAX_ASSET_UPLOAD_SIZE,
+  createEmptyNewsForm,
+  extractImagePalette,
+  extractYouTubeId,
+  formatAdminDate,
+  formatAssetName,
+  formatFileSize,
+  getVerticalDropIndex,
+  hexToRgb,
+  normalizeHex,
+  prepareAdminDraft,
+  readDraggedIndex,
+  reorderItems,
+  rgbToHex,
+  sortNewsByDateDesc,
+  splitLines,
+} from "../utils/adminContent";
 
 const tabs = [
   { id: "news", label: "Noticias" },
@@ -16,149 +34,14 @@ const tabs = [
   { id: "social", label: "Redes" },
 ];
 
-const MAX_ASSET_UPLOAD_SIZE = 15 * 1024 * 1024;
-
-const formatFileSize = (bytes) => `${Math.round((bytes / 1024 / 1024) * 10) / 10} MB`;
-
-const formatAdminDate = (value) => {
-  if (!value) return "";
-  const date = new Date(`${value}T12:00:00`);
-  return new Intl.DateTimeFormat("es-AR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-};
-
-const splitLines = (value) => value.split("\n").map((item) => item.trim()).filter(Boolean);
-
-const normalizeHex = (value) => {
-  const cleanValue = value.trim().replace(/^#/, "");
-  if (!/^[0-9a-fA-F]{6}$/.test(cleanValue)) return "";
-  return `#${cleanValue.toUpperCase()}`;
-};
-
-const hexToRgb = (hex) => {
-  const normalized = normalizeHex(hex) || "#3B82F6";
-  return {
-    r: parseInt(normalized.slice(1, 3), 16),
-    g: parseInt(normalized.slice(3, 5), 16),
-    b: parseInt(normalized.slice(5, 7), 16),
-  };
-};
-
-const rgbToHex = ({ r, g, b }) => {
-  const toHex = (value) => Math.max(0, Math.min(255, Number(value) || 0)).toString(16).padStart(2, "0");
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
-};
-
-const createEmptyNewsForm = () => ({
-  id: "",
-  title: "",
-  summary: "",
-  content: "",
-  date: new Date().toISOString().slice(0, 10),
-  img: "",
-  headerImg: "",
-  headerImgDescription: "",
-  carouselImg: "",
-  additionalImages: [],
-  videoUrl: "",
-  youtubeId: "",
-  hidden: false,
-});
-
-const extractImagePalette = (file) => new Promise((resolve) => {
-  const reader = new FileReader();
-  reader.onload = () => {
-    const image = new Image();
-    image.onload = () => {
-      const canvas = document.createElement("canvas");
-      const size = 96;
-      canvas.width = size;
-      canvas.height = size;
-      const context = canvas.getContext("2d", { willReadFrequently: true });
-      context.drawImage(image, 0, 0, size, size);
-      const { data } = context.getImageData(0, 0, size, size);
-      const counts = new Map();
-
-      for (let index = 0; index < data.length; index += 16) {
-        const r = data[index];
-        const g = data[index + 1];
-        const b = data[index + 2];
-        const a = data[index + 3];
-        const max = Math.max(r, g, b);
-        const min = Math.min(r, g, b);
-
-        if (a < 128 || (max > 245 && min > 235) || (max < 35 && min < 35) || max - min < 18) continue;
-
-        const hex = rgbToHex({
-          r: Math.round(r / 16) * 16,
-          g: Math.round(g / 16) * 16,
-          b: Math.round(b / 16) * 16,
-        });
-        counts.set(hex, (counts.get(hex) || 0) + 1);
-      }
-
-      resolve([...counts.entries()].sort((a, b) => b[1] - a[1]).map(([hex]) => hex).slice(0, 6));
-    };
-    image.onerror = () => resolve([]);
-    image.src = reader.result;
-  };
-  reader.onerror = () => resolve([]);
-  reader.readAsDataURL(file);
-});
-
-const sortNewsByDateDesc = (items) => [...items].sort((a, b) => parseDate(b.date) - parseDate(a.date));
-
-const extractYouTubeId = (value = "") => {
-  const trimmed = value.trim();
-  if (!trimmed) return "";
-  const patterns = [
-    /youtu\.be\/([^?&/]+)/,
-    /youtube\.com\/watch\?v=([^?&/]+)/,
-    /youtube\.com\/embed\/([^?&/]+)/,
-    /youtube\.com\/shorts\/([^?&/]+)/,
-  ];
-  for (const pattern of patterns) {
-    const match = trimmed.match(pattern);
-    if (match) return match[1];
-  }
-  return trimmed;
-};
-
-const formatAssetName = (value = "") => {
-  if (!value) return "";
-  if (value.startsWith("data:")) return "Archivo local cargado";
-
-  try {
-    const pathname = new URL(value, "https://acserp.local").pathname;
-    return decodeURIComponent(pathname.split("/").filter(Boolean).pop() || value);
-  } catch {
-    return value.split("/").filter(Boolean).pop() || value;
-  }
-};
-
-const FileUploadControl = ({ id, accept = "image/*", multiple = false, onChange, buttonText = "Cambiar archivo", currentText, helpText, isUploading }) => (
-  <div className="mt-1">
-    <input id={id} type="file" accept={accept} multiple={multiple} onChange={onChange} className="sr-only" />
-    <div className="flex flex-wrap items-center gap-2">
-      <label htmlFor={id} className="cursor-pointer rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
-        {buttonText}
-      </label>
-      {currentText && <span className="min-w-0 break-words text-sm text-gray-600">{currentText}</span>}
-    </div>
-    {helpText && <span className="mt-1 block text-xs text-gray-500">{helpText}</span>}
-    {isUploading && <span className="mt-1 block text-xs text-blue-700">Subiendo...</span>}
-  </div>
-);
-
 const Admin = () => {
-  const { content, saveContent, refreshContent } = useSiteContent();
+  const { content, refreshContent } = useSiteContent();
   const [activeTab, setActiveTab] = useState("news");
   const [draft, setDraft] = useState(content);
   const [session, setSession] = useState(null);
+  const [sessionResolved, setSessionResolved] = useState(false);
+  const [draftRevision, setDraftRevision] = useState(null);
+  const [draftLoading, setDraftLoading] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [newsForm, setNewsForm] = useState(createEmptyNewsForm);
   const [editingNewsId, setEditingNewsId] = useState(null);
@@ -184,32 +67,38 @@ const Admin = () => {
   const [collapsedDonationItems, setCollapsedDonationItems] = useState({});
 
   useEffect(() => {
-    setDraft({
-      ...content,
-      organs: content.organs.map((organ) => ({
-        hidden: false,
-        ...organ,
-        suggestedColors: organ.suggestedColors || [organ.color || "#3B82F6"],
-      })),
-      adminNews: content.adminNews.map((news) => ({ hidden: false, ...news })),
-      photos: {
-        ...content.photos,
-        popup: { enabled: true, ...content.photos.popup },
-        carouselSections: (content.photos.carouselSections || []).map((section) => ({ hidden: false, ...section })),
-        driveFolders: (content.photos.driveFolders || []).map((folder) => ({ hidden: false, ...folder })),
-      },
-      donations: {
-        ...content.donations,
-        popup: { enabled: true, ...content.donations.popup },
-        allocationItems: (content.donations.allocationItems || []).map((item) => ({ hidden: false, ...item })),
-        faqs: (content.donations.faqs || []).map((faq) => ({ hidden: false, ...faq })),
-      },
-    });
-  }, [content]);
+    if (!session) setDraft(prepareAdminDraft(content));
+  }, [content, session]);
 
   useEffect(() => {
-    contentService.getSession().then(setSession).catch(() => setSession(null));
+    let active = true;
+    contentService.getSession()
+      .then((nextSession) => { if (active) setSession(nextSession); })
+      .catch(() => { if (active) setSession(null); })
+      .finally(() => { if (active) setSessionResolved(true); });
+    const unsubscribe = contentService.onAuthStateChange((nextSession) => {
+      if (active) setSession(nextSession);
+    });
+    return () => {
+      active = false;
+      unsubscribe();
+    };
   }, []);
+
+  useEffect(() => {
+    if (!session) return;
+    let active = true;
+    setDraftLoading(true);
+    contentService.getAdminContent()
+      .then(({ content: adminContent, updatedAt }) => {
+        if (!active) return;
+        setDraft(prepareAdminDraft(adminContent));
+        setDraftRevision(updatedAt);
+      })
+      .catch((error) => { if (active) setStatus(error.message || "No se pudo cargar el borrador."); })
+      .finally(() => { if (active) setDraftLoading(false); });
+    return () => { active = false; };
+  }, [session]);
 
   const socialText = useMemo(() => ({
     instagram: draft.socialPosts.instagram.join("\n"),
@@ -219,12 +108,7 @@ const Admin = () => {
   }), [draft.socialPosts]);
   const editableNews = useMemo(() => mergeManagedNews(newsData, draft.adminNews), [draft.adminNews]);
 
-  const updateDraft = (updater) => {
-    setDraft((current) => {
-      const next = typeof updater === "function" ? updater(current) : updater;
-      return next;
-    });
-  };
+  const updateDraft = setDraft;
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -241,7 +125,17 @@ const Admin = () => {
   const handleSave = async () => {
     setStatus("Guardando...");
     try {
-      await saveContent(draft);
+      const saved = await contentService.saveContent(draft, draftRevision);
+      setDraft(prepareAdminDraft(saved.content));
+      setDraftRevision(saved.updatedAt);
+      await refreshContent().catch(() => {});
+      const cleanupFailed = await contentService.commitPendingAssets(saved.content)
+        .then(() => false)
+        .catch(() => true);
+      if (cleanupFailed) {
+        setStatus("Cambios guardados. Algunos archivos temporales no pudieron limpiarse y se reintentará más adelante.");
+        return;
+      }
       setStatus(isSupabaseConfigured ? "Cambios guardados en Supabase." : "Cambios guardados localmente.");
     } catch (error) {
       setStatus(error.message || "No se pudieron guardar los cambios.");
@@ -249,6 +143,7 @@ const Admin = () => {
   };
 
   const handleLogout = async () => {
+    await contentService.discardPendingAssets().catch(() => {});
     await contentService.signOut();
     setSession(null);
   };
@@ -258,7 +153,10 @@ const Admin = () => {
     if (!confirmed) return;
 
     setStatus("Descartando cambios...");
-    await refreshContent();
+    await contentService.discardPendingAssets();
+    const { content: adminContent, updatedAt } = await contentService.getAdminContent();
+    setDraft(prepareAdminDraft(adminContent));
+    setDraftRevision(updatedAt);
     setStatus("Cambios no guardados descartados.");
   };
 
@@ -423,20 +321,13 @@ const Admin = () => {
   const moveOrgan = (fromIndex, toIndex) => {
     if (fromIndex === null || fromIndex === toIndex || toIndex < 0 || toIndex > draft.organs.length) return;
 
-    updateDraft((current) => {
-      const organs = [...current.organs];
-      const [movedOrgan] = organs.splice(fromIndex, 1);
-      const adjustedToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
-      organs.splice(adjustedToIndex, 0, movedOrgan);
-      return { ...current, organs };
-    });
+    updateDraft((current) => ({ ...current, organs: reorderItems(current.organs, fromIndex, toIndex) }));
     setDraggedOrganIndex(null);
     setDropIndicatorIndex(null);
   };
 
   const getDraggedIndex = (event) => {
-    const fromIndex = Number(event.dataTransfer.getData("text/plain"));
-    return Number.isNaN(fromIndex) ? draggedOrganIndex : fromIndex;
+    return readDraggedIndex(event, draggedOrganIndex);
   };
 
   const handleOrganDrop = (event, toIndex) => {
@@ -447,9 +338,7 @@ const Admin = () => {
 
   const updateDropIndicator = (event, index) => {
     if (draggedOrganIndex === null) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const isAfter = event.clientY > rect.top + rect.height / 2;
-    setDropIndicatorIndex(index + (isAfter ? 1 : 0));
+    setDropIndicatorIndex(getVerticalDropIndex(event, index));
   };
 
   const deleteOrgan = (index) => {
@@ -554,20 +443,16 @@ const Admin = () => {
   const moveCarouselSection = (fromIndex, toIndex) => {
     if (fromIndex === null || fromIndex === toIndex || toIndex < 0 || toIndex > draft.photos.carouselSections.length) return;
 
-    updateDraft((current) => {
-      const carouselSections = [...current.photos.carouselSections];
-      const [movedSection] = carouselSections.splice(fromIndex, 1);
-      const adjustedToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
-      carouselSections.splice(adjustedToIndex, 0, movedSection);
-      return { ...current, photos: { ...current.photos, carouselSections } };
-    });
+    updateDraft((current) => ({
+      ...current,
+      photos: { ...current.photos, carouselSections: reorderItems(current.photos.carouselSections, fromIndex, toIndex) },
+    }));
     setDraggedCarouselSectionIndex(null);
     setCarouselSectionDropIndex(null);
   };
 
   const getDraggedCarouselSectionIndex = (event) => {
-    const fromIndex = Number(event.dataTransfer.getData("text/plain"));
-    return Number.isNaN(fromIndex) ? draggedCarouselSectionIndex : fromIndex;
+    return readDraggedIndex(event, draggedCarouselSectionIndex);
   };
 
   const handleCarouselSectionDrop = (event, toIndex) => {
@@ -578,9 +463,7 @@ const Admin = () => {
 
   const updateCarouselSectionDropIndicator = (event, index) => {
     if (draggedCarouselSectionIndex === null) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const isAfter = event.clientY > rect.top + rect.height / 2;
-    setCarouselSectionDropIndex(index + (isAfter ? 1 : 0));
+    setCarouselSectionDropIndex(getVerticalDropIndex(event, index));
   };
 
   const updateDriveFolder = (index, field, value) => {
@@ -633,20 +516,16 @@ const Admin = () => {
   const moveDriveFolder = (fromIndex, toIndex) => {
     if (fromIndex === null || fromIndex === toIndex || toIndex < 0 || toIndex > draft.photos.driveFolders.length) return;
 
-    updateDraft((current) => {
-      const driveFolders = [...current.photos.driveFolders];
-      const [movedFolder] = driveFolders.splice(fromIndex, 1);
-      const adjustedToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
-      driveFolders.splice(adjustedToIndex, 0, movedFolder);
-      return { ...current, photos: { ...current.photos, driveFolders } };
-    });
+    updateDraft((current) => ({
+      ...current,
+      photos: { ...current.photos, driveFolders: reorderItems(current.photos.driveFolders, fromIndex, toIndex) },
+    }));
     setDraggedPhotoFolderIndex(null);
     setPhotoFolderDropIndex(null);
   };
 
   const getDraggedPhotoFolderIndex = (event) => {
-    const fromIndex = Number(event.dataTransfer.getData("text/plain"));
-    return Number.isNaN(fromIndex) ? draggedPhotoFolderIndex : fromIndex;
+    return readDraggedIndex(event, draggedPhotoFolderIndex);
   };
 
   const handlePhotoFolderDrop = (event, toIndex) => {
@@ -657,9 +536,7 @@ const Admin = () => {
 
   const updatePhotoFolderDropIndicator = (event, index) => {
     if (draggedPhotoFolderIndex === null) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const isAfter = event.clientY > rect.top + rect.height / 2;
-    setPhotoFolderDropIndex(index + (isAfter ? 1 : 0));
+    setPhotoFolderDropIndex(getVerticalDropIndex(event, index));
   };
 
   const updateResource = (index, field, value) => {
@@ -705,20 +582,16 @@ const Admin = () => {
   const moveResource = (fromIndex, toIndex) => {
     if (fromIndex === null || fromIndex === toIndex || toIndex < 0 || toIndex > draft.links.additionalResources.length) return;
 
-    updateDraft((current) => {
-      const additionalResources = [...current.links.additionalResources];
-      const [movedResource] = additionalResources.splice(fromIndex, 1);
-      const adjustedToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
-      additionalResources.splice(adjustedToIndex, 0, movedResource);
-      return { ...current, links: { ...current.links, additionalResources } };
-    });
+    updateDraft((current) => ({
+      ...current,
+      links: { ...current.links, additionalResources: reorderItems(current.links.additionalResources, fromIndex, toIndex) },
+    }));
     setDraggedResourceIndex(null);
     setResourceDropIndex(null);
   };
 
   const getDraggedResourceIndex = (event) => {
-    const fromIndex = Number(event.dataTransfer.getData("text/plain"));
-    return Number.isNaN(fromIndex) ? draggedResourceIndex : fromIndex;
+    return readDraggedIndex(event, draggedResourceIndex);
   };
 
   const handleResourceDrop = (event, toIndex) => {
@@ -729,9 +602,7 @@ const Admin = () => {
 
   const updateResourceDropIndicator = (event, index) => {
     if (draggedResourceIndex === null) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const isAfter = event.clientY > rect.top + rect.height / 2;
-    setResourceDropIndex(index + (isAfter ? 1 : 0));
+    setResourceDropIndex(getVerticalDropIndex(event, index));
   };
 
   const updateDonation = (field, value) => {
@@ -849,7 +720,6 @@ const Admin = () => {
           suggestedColors: ["#3B82F6", "#2563EB", "#1D4ED8", "#60A5FA"],
           topicTitle: "Título del tópico.",
           topicSubtitle: "Subtítulo del tópico.",
-          topicText: "Título del tópico.\nSubtítulo del tópico.",
           topicLink: "#",
           hidden: false,
         },
@@ -866,7 +736,6 @@ const Admin = () => {
   const startEditingNews = (newsItem) => {
     setEditingNewsId(newsItem.id);
     setNewsForm({
-      id: newsItem.id,
       title: newsItem.title || "",
       summary: newsItem.summary || "",
       content: newsItem.content || "",
@@ -880,7 +749,7 @@ const Admin = () => {
         description: image.description || "",
         insertAfterParagraph: image.insertAfterParagraph || index + 2,
       })),
-      videoUrl: newsItem.videoUrl || "",
+      videoUrl: newsItem.videoUrl || (newsItem.youtubeId ? `https://www.youtube.com/watch?v=${newsItem.youtubeId}` : ""),
       youtubeId: newsItem.youtubeId || extractYouTubeId(newsItem.videoUrl || ""),
       hidden: Boolean(newsItem.hidden),
     });
@@ -939,7 +808,6 @@ const Admin = () => {
           ...image,
           insertAfterParagraph: Number(image.insertAfterParagraph) || index + 2,
         })),
-      videoUrl: newsForm.videoUrl,
       youtubeId: newsForm.youtubeId || extractYouTubeId(newsForm.videoUrl || ""),
       hidden: newsForm.hidden,
     };
@@ -956,6 +824,10 @@ const Admin = () => {
     setStatus(editingNewsId ? "Noticia editada en el borrador. Guardá para publicarla." : "Noticia agregada al borrador. Guardá para publicarla.");
   };
 
+  if (!sessionResolved) {
+    return <main className="min-h-screen bg-slate-100" aria-label="Verificando sesión de administrador" />;
+  }
+
   if (!session) {
     return (
       <main className="min-h-screen bg-slate-100 px-4 py-16">
@@ -964,7 +836,9 @@ const Admin = () => {
           <p className="mb-6 text-sm text-gray-600">
             {isSupabaseConfigured
               ? "Ingresá con un usuario administrador de Supabase."
-              : "Modo demo local: ingresá cualquier email para probar el panel."}
+              : isAdminDemoEnabled
+                ? "Modo demo local habilitado: ingresá cualquier email para probar el panel."
+                : "El panel está bloqueado hasta configurar Supabase."}
           </p>
           <form onSubmit={handleLogin} className="space-y-4">
             <input
@@ -982,8 +856,9 @@ const Admin = () => {
               className="w-full rounded-md border border-gray-300 px-3 py-2"
               placeholder={isSupabaseConfigured ? "Contraseña" : "Opcional en demo"}
               required={isSupabaseConfigured}
+              disabled={!isSupabaseConfigured && !isAdminDemoEnabled}
             />
-            <button className="w-full rounded-md bg-blue-950 px-4 py-2 font-semibold text-white">
+            <button disabled={!isSupabaseConfigured && !isAdminDemoEnabled} className="w-full rounded-md bg-blue-950 px-4 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50">
               Entrar
             </button>
           </form>
@@ -991,6 +866,10 @@ const Admin = () => {
         </section>
       </main>
     );
+  }
+
+  if (draftLoading) {
+    return <main className="min-h-screen bg-slate-100" aria-label="Cargando contenido administrativo" />;
   }
 
   return (

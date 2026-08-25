@@ -5,6 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useSiteContent } from "../context/SiteContentContext";
+import { openExternalUrl } from "../utils/contentSecurity";
 
 const SlideOverTriggerTopics = () => {
   const { content } = useSiteContent();
@@ -71,7 +72,7 @@ const SlideOverTriggerTopics = () => {
                         {availableTopics.map((organ) => (
                           <button
                             key={organ.id}
-                            onClick={() => window.open(organ.topicLink, "_blank")}
+                            onClick={() => openExternalUrl(organ.topicLink)}
                             className="rounded-xl flex flex-col justify-center items-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 py-8 px-4 min-h-[160px]"
                             style={{ backgroundColor: organ.color }}
                           >

@@ -1,6 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { useMemo } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
@@ -12,9 +12,10 @@ import SocialMediaPage from "../pages/SocialMediaPage";
 import DonationsPage from "../pages/DonationsPage";
 import NewsDetail from "../pages/NewsDetail";
 import Resources from "../pages/Resources";
-import Admin from "../pages/Admin";
 import ScrollToTop from "../components/ScrollToTop";
 import { shouldUseSafeMode } from "../utils/runtimeSafety";
+
+const Admin = lazy(() => import("../pages/Admin"));
 
 function AppRoutes() {
   const location = useLocation();
@@ -33,7 +34,14 @@ function AppRoutes() {
       <Route path="/donar" element={<DonationsPage />} />
       <Route path="/recursos" element={<Resources />} />
       <Route path="/noticias/:id" element={<NewsDetail />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route
+        path="/admin"
+        element={(
+          <Suspense fallback={<main className="min-h-screen bg-slate-100" aria-label="Cargando panel administrativo" />}>
+            <Admin />
+          </Suspense>
+        )}
+      />
     </Routes>
   );
 

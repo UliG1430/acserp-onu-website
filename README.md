@@ -31,6 +31,16 @@ This repository contains the source code for the development of the association'
 - **Hosting**: Netlify
 - **Version Control**: Git
 
+## Admin y Supabase
+
+El panel `/admin` requiere Node.js 22 o superior y un proyecto Supabase configurado con las variables de `.env.example`.
+
+1. Aplicá las migraciones con `npx supabase db push` o mediante el flujo de despliegue del proyecto.
+2. Creá el usuario administrador y asigná `{"role":"admin"}` en `app_metadata` (nunca en `user_metadata`).
+3. Para la carga inicial, definí `ACSERP_ADMIN_EMAIL` y `ACSERP_ADMIN_PASSWORD` sólo en el entorno local y ejecutá `npm run seed:supabase`.
+
+Los borradores se guardan en una tabla privada. La tabla pública contiene una copia sin elementos ocultos y se actualiza atómicamente al guardar. El modo demo está deshabilitado por defecto; para usarlo durante desarrollo configurá `VITE_ENABLE_ADMIN_DEMO=true`.
+
 ## Project Structure
 
 ```bash
@@ -66,4 +76,3 @@ For any inquiries or issues, feel free to reach out to me:
 
 - **Email**: geymonatulises@gmail.com
 - **GitHub**: [UliG1430](https://github.com/UliG1430)
-

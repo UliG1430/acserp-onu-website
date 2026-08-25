@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { normalizeYouTubeId } from '../utils/contentSecurity';
 
 const YouTubeEmbed = ({ videoId, title = "Video de YouTube" }) => {
-  if (!videoId) return null;
+  const safeVideoId = normalizeYouTubeId(videoId);
+  if (!safeVideoId) return null;
 
   return (
     <motion.div
@@ -17,7 +19,7 @@ const YouTubeEmbed = ({ videoId, title = "Video de YouTube" }) => {
     >
       <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
         <iframe 
-          src={`https://www.youtube.com/embed/${videoId}`} 
+          src={`https://www.youtube.com/embed/${safeVideoId}`}
           title={title} 
           className="absolute top-0 left-0 w-full h-full rounded-lg" 
           allow="autoplay; encrypted-media"

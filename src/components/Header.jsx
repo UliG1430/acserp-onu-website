@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/Azul Viejo - Logo ACSERP + Texto.png';
-import Navbar from './Navbar';
 
 const Header = () => {
   return (

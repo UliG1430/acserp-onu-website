@@ -1,4 +1,5 @@
 import React from "react";
+import { safeExternalHref } from "../utils/contentSecurity";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCameraRetro } from "@fortawesome/free-solid-svg-icons";
@@ -36,7 +37,7 @@ const PhotoAnnouncementModal = ({ isOpen, onClose, title, subtitle, buttonUrl })
 
             {buttonUrl && (
               <a
-                href={buttonUrl}
+                href={safeExternalHref(buttonUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-[#a0c4ff] text-blue-950 font-semibold px-6 py-2.5 rounded-full shadow-md hover:bg-white transition-all duration-300"

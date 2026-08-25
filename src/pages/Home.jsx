@@ -1,7 +1,6 @@
 import React from 'react';
 import NewsCarousel from '../components/NewCarousel';
 import StatsCounter from '../components/StatsCounter';
-import SocialMediaSection from '../components/SocialMediaSection';
 import SubscriptionCallToAction from '../components/SubscriptionCallToAction';
 import NewsSection from '../components/NewsSection';
 import SEOHelmet from '../components/SEOHelmet';
@@ -29,7 +28,6 @@ function Home() {
       {/* Seccion de Diarios de la ONU */}
       <DrivePreviewSimple />
 
-      {/* <SocialMediaSection/> */}
       <NewsSection />
     </div>
   );

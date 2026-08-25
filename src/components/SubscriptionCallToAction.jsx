@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { useInView } from "react-intersection-observer";
 import { useSiteContent } from "../context/SiteContentContext";
+import { safeExternalHref } from "../utils/contentSecurity";
 
 const SubscriptionCallToAction = () => {
   const { content } = useSiteContent();
@@ -31,7 +32,7 @@ const SubscriptionCallToAction = () => {
           {donations.homeCtaText}
         </p>
         <a
-          href={donations.homeCtaButtonUrl}
+          href={safeExternalHref(donations.homeCtaButtonUrl)}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white text-blue-950 font-semibold text-lg px-8 py-3 rounded-full shadow-md hover:scale-105 hover:bg-blue-100 transition-transform duration-300"

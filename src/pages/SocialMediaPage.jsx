@@ -7,6 +7,7 @@ import { FaInstagram, FaYoutube, FaArrowUp, FaLinkedin } from "react-icons/fa";
 import TikTokLogo from "../assets/logos/tiktok_icon.svg"; 
 import SEOHelmet from "../components/SEOHelmet"; // Importamos el componente SEOHelmet
 import { useSiteContent } from "../context/SiteContentContext";
+import { normalizeYouTubeId } from "../utils/contentSecurity";
 
 // Variantes de animación
 const fadeInVariant = {
@@ -109,21 +110,25 @@ const SocialMediaPage = () => {
             <FaYoutube className="text-red-600 mr-3 text-4xl" /> YouTube
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {content.socialPosts.youtube.map((video, index) => (
-              <motion.div 
-                key={index} 
-                whileHover={{ scale: 1.05, rotate: 1 }} 
-                transition={{ duration: 0.3 }} 
-                className="overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
-              >
-                <iframe 
-                  src={`https://www.youtube.com/embed/${video.id}`} 
-                  title={video.title} 
-                  className="w-full h-72 rounded-lg" 
-                  allow="autoplay; encrypted-media">
-                </iframe>
-              </motion.div>
-            ))}
+            {content.socialPosts.youtube.map((video, index) => {
+              const safeVideoId = normalizeYouTubeId(video.id);
+              if (!safeVideoId) return null;
+              return (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.05, rotate: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden rounded-lg shadow-lg transition-transform duration-300"
+                >
+                  <iframe
+                    src={`https://www.youtube.com/embed/${safeVideoId}`}
+                    title={video.title}
+                    className="w-full h-72 rounded-lg"
+                    allow="autoplay; encrypted-media"
+                  />
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
       </div>

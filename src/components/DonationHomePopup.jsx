@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "fra
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useSiteContent } from "../context/SiteContentContext";
+import { safeExternalHref } from "../utils/contentSecurity";
 
 const HIDE_UNTIL_KEY = "donationPopupHideUntil";
 const HIDE_HOURS = 24;
@@ -102,7 +103,7 @@ const DonationHomePopup = () => {
                   {popup.buttonText}
                 </Link>
               ) : (
-                <a href={popup.buttonUrl} target="_blank" rel="noopener noreferrer" onClick={closePopup} className={popupButtonClass}>
+                <a href={safeExternalHref(popup.buttonUrl)} target="_blank" rel="noopener noreferrer" onClick={closePopup} className={popupButtonClass}>
                   {popup.buttonText}
                 </a>
               )}

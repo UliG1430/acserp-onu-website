@@ -7,12 +7,26 @@ import SEOHelmet from "../components/SEOHelmet";
 import YouTubeEmbed from "../components/YouTubeEmbed";
 import { useSiteContent } from "../context/SiteContentContext";
 import { getVisibleSortedNews } from "../utils/newsContent";
+import { sanitizeRichHtml } from "../utils/contentSecurity";
 
 const NewsDetail = () => {
   const { content: siteContent } = useSiteContent();
   const { id } = useParams();
   const allNews = getVisibleSortedNews(newsData, siteContent.adminNews);
   const news = allNews.find((item) => String(item.id) === String(id));
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.2 }
+    );
+    const section = document.getElementById("recommended-news");
+    if (section) observer.observe(section);
+    return () => observer.disconnect();
+  }, [id]);
 
   if (!news) {
     return (
@@ -29,25 +43,7 @@ const NewsDetail = () => {
     .slice(0, 3);
 
   const articleContent = news.content.trim();
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    const section = document.getElementById("recommended-news");
-    if (section) {
-      observer.observe(section);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const sanitizedArticleHtml = articleContent.includes("<") ? sanitizeRichHtml(articleContent) : "";
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
@@ -105,7 +101,7 @@ const NewsDetail = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                   className="prose prose-lg max-w-none [&_.space-y-4]:space-y-8 [&_.space-y-4>div]:mb-6"
-                  dangerouslySetInnerHTML={{ __html: articleContent }}
+                  dangerouslySetInnerHTML={{ __html: sanitizedArticleHtml }}
                 />
                 
                 {/* Imágenes adicionales al final */}

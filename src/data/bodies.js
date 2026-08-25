@@ -2,7 +2,6 @@ import acnurLogo from '../assets/logos/acnur.png'
 import agLogo from '../assets/logos/ag.png';
 import cajLogo from '../assets/logos/caj.png';
 import cdhLogo from '../assets/logos/cdh.png';
-import cedLogo from '../assets/logos/ced.png';
 import csLogo from '../assets/logos/cs.png';
 import ecosocLogo from '../assets/logos/ecosoc.png';
 import oitLogo from '../assets/logos/oit.png';
@@ -13,7 +12,6 @@ import pnumaLogo from '../assets/logos/pnuma.png';
 import stiLogo from '../assets/logos/sti.png';
 import unescoLogo from '../assets/logos/unesco.png';
 import unicefLogo from '../assets/logos/unicef.png';
-import unodaLogo from '../assets/logos/unoda.png';
 import unodaLogoCompleto from '../assets/logos/unodaCompleto.png';
 
 export const bodies = [

@@ -4,6 +4,7 @@ import { useInView } from "react-intersection-observer";
 import SEOHelmet from "../components/SEOHelmet";
 import heroDonaciones from "../assets/images/image3.webp";
 import { useSiteContent } from "../context/SiteContentContext";
+import { safeExternalHref } from "../utils/contentSecurity";
 
 const DonationsPage = () => {
   const { content } = useSiteContent();
@@ -70,7 +71,7 @@ const DonationsPage = () => {
             {donations.heroKicker}
           </p>
           <a
-            href={donations.heroButtonUrl}
+            href={safeExternalHref(donations.heroButtonUrl)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center bg-white text-blue-950 font-extrabold text-xl md:text-2xl px-12 md:px-16 py-4 md:py-5 rounded-full shadow-2xl ring-1 ring-blue-200/70 hover:shadow-[0_20px_45px_rgba(12,24,72,0.45)] hover:-translate-y-0.5 hover:bg-slate-50 transition-all duration-300 whitespace-nowrap tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white opacity-0 animate-fade-in"
