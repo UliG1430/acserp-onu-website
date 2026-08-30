@@ -102,7 +102,7 @@ const AdminResetPassword = () => {
 
         {(state === "ready" || state === "saving") && (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <p className="text-sm text-gray-600">Usá al menos 12 caracteres, con mayúscula, minúscula y número.</p>
+            <p className="text-sm text-gray-600">Usá al menos 8 caracteres, con mayúscula, minúscula y número.</p>
             <label className="block">
               <span className="text-sm font-semibold text-gray-700">Nueva contraseña</span>
               <input
@@ -111,7 +111,7 @@ const AdminResetPassword = () => {
                 autoComplete="new-password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                minLength={12}
+                minLength={8}
                 maxLength={128}
                 required
                 disabled={state === "saving"}
@@ -126,7 +126,7 @@ const AdminResetPassword = () => {
                 autoComplete="new-password"
                 value={confirmation}
                 onChange={(event) => setConfirmation(event.target.value)}
-                minLength={12}
+                minLength={8}
                 maxLength={128}
                 required
                 disabled={state === "saving"}

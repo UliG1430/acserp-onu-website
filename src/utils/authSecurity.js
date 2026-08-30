@@ -14,7 +14,7 @@ export const buildPasswordResetRedirect = (origin) => {
 };
 
 export const getPasswordValidationError = (password = "") => {
-  if (password.length < 12) return "La contraseña debe tener al menos 12 caracteres.";
+  if (password.length < 8) return "La contraseña debe tener al menos 8 caracteres.";
   if (password.length > 128) return "La contraseña no puede superar los 128 caracteres.";
   if (!/[a-z]/.test(password)) return "La contraseña debe incluir una letra minúscula.";
   if (!/[A-Z]/.test(password)) return "La contraseña debe incluir una letra mayúscula.";

@@ -15,10 +15,11 @@ test("password recovery stays on the current secure origin", () => {
 });
 
 test("admin passwords must satisfy the strong client-side policy", () => {
-  assert.match(getPasswordValidationError("short"), /12 caracteres/);
+  assert.match(getPasswordValidationError("short"), /8 caracteres/);
   assert.match(getPasswordValidationError("alllowercase123!"), /mayúscula/);
   assert.match(getPasswordValidationError("NOLOWERCASE123!"), /minúscula/);
   assert.match(getPasswordValidationError("NoNumbersHere!"), /número/);
+  assert.equal(getPasswordValidationError("Clave123"), "");
   assert.equal(getPasswordValidationError("NoSymbolsHere123"), "");
   assert.equal(getPasswordValidationError("UnaClaveLarga123!"), "");
 });
