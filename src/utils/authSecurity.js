@@ -19,6 +19,5 @@ export const getPasswordValidationError = (password = "") => {
   if (!/[a-z]/.test(password)) return "La contraseña debe incluir una letra minúscula.";
   if (!/[A-Z]/.test(password)) return "La contraseña debe incluir una letra mayúscula.";
   if (!/[0-9]/.test(password)) return "La contraseña debe incluir un número.";
-  if (!/[^A-Za-z0-9]/.test(password)) return "La contraseña debe incluir un símbolo.";
   return "";
 };

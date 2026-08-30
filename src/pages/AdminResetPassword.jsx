@@ -102,7 +102,7 @@ const AdminResetPassword = () => {
 
         {(state === "ready" || state === "saving") && (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <p className="text-sm text-gray-600">Usá al menos 12 caracteres, con mayúscula, minúscula, número y símbolo.</p>
+            <p className="text-sm text-gray-600">Usá al menos 12 caracteres, con mayúscula, minúscula y número.</p>
             <label className="block">
               <span className="text-sm font-semibold text-gray-700">Nueva contraseña</span>
               <input
