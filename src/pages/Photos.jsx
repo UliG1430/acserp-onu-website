@@ -114,7 +114,7 @@ const Photos = () => {
                     animate={{ opacity: 1, y: 8, scale: 1 }}
                     exit={{ opacity: 0, y: -8, scale: 0.98 }}
                     transition={{ duration: 0.18, ease: "easeOut" }}
-                    className="absolute left-0 right-0 top-full z-20 overflow-hidden rounded-lg border border-indigo-100 bg-white text-left shadow-2xl ring-1 ring-blue-950/5"
+                    className="absolute left-0 right-0 top-full z-20 max-h-[min(20rem,50vh)] overflow-y-auto overscroll-contain rounded-lg border border-indigo-100 bg-white text-left shadow-2xl ring-1 ring-blue-950/5"
                     role="listbox"
                   >
                     {visibleDriveFolders.map((folder) => {
