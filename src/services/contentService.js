@@ -1,7 +1,8 @@
 import { defaultSiteContent } from "../data/siteContent";
-import { isSupabaseConfigured, supabase } from "../lib/supabaseClient";
+import { getCapturedPasswordRecoverySession, isSupabaseConfigured, supabase } from "../lib/supabaseClient";
 import { sanitizeRichHtml, validateSiteContentUrls } from "../utils/contentSecurity";
 import { collectAssetUrls, mergeSiteContent, toPublishedSiteContent } from "../utils/siteContent";
+import { buildPasswordResetRedirect } from "../utils/authSecurity";
 
 const LOCAL_DRAFT_KEY = "acserp_admin_content";
 const LOCAL_PUBLIC_KEY = "acserp_public_content";
@@ -151,6 +152,33 @@ export const contentService = {
     return data;
   },
 
+  async requestPasswordReset(email) {
+    if (!isSupabaseConfigured) throw new Error("La recuperación de contraseña no está configurada.");
+    const redirectTo = buildPasswordResetRedirect(window.location.origin);
+    const { error } = await supabase.auth.resetPasswordForEmail(String(email || "").trim(), { redirectTo });
+    if (error) throw error;
+  },
+
+  async getRecoverySession() {
+    if (!isSupabaseConfigured) return null;
+    const { error } = await supabase.auth.getSession();
+    if (error) throw error;
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    return getCapturedPasswordRecoverySession();
+  },
+
+  onRecoveryStateChange(callback) {
+    if (!isSupabaseConfigured) return () => {};
+    const { data } = supabase.auth.onAuthStateChange((event, session) => callback(event, session));
+    return () => data.subscription.unsubscribe();
+  },
+
+  async updatePassword(password) {
+    if (!isSupabaseConfigured) throw new Error("La recuperación de contraseña no está configurada.");
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) throw error;
+  },
+
   async signOut() {
     if (!isSupabaseConfigured) {
       window.localStorage.removeItem("acserp_demo_admin");
@@ -176,7 +204,7 @@ export const contentService = {
 
   onAuthStateChange(callback) {
     if (!isSupabaseConfigured) return () => {};
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => callback(isAdminUser(session?.user) ? session : null));
+    const { data } = supabase.auth.onAuthStateChange((event, session) => callback(isAdminUser(session?.user) ? session : null, event));
     return () => data.subscription.unsubscribe();
   },
 

@@ -16,6 +16,7 @@ import ScrollToTop from "../components/ScrollToTop";
 import { shouldUseSafeMode } from "../utils/runtimeSafety";
 
 const Admin = lazy(() => import("../pages/Admin"));
+const AdminResetPassword = lazy(() => import("../pages/AdminResetPassword"));
 
 function AppRoutes() {
   const location = useLocation();
@@ -34,6 +35,14 @@ function AppRoutes() {
       <Route path="/donar" element={<DonationsPage />} />
       <Route path="/recursos" element={<Resources />} />
       <Route path="/noticias/:id" element={<NewsDetail />} />
+      <Route
+        path="/admin/reset-password"
+        element={(
+          <Suspense fallback={<main className="min-h-screen bg-slate-100" aria-label="Verificando enlace de recuperación" />}>
+            <AdminResetPassword />
+          </Suspense>
+        )}
+      />
       <Route
         path="/admin"
         element={(

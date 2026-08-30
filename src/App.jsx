@@ -23,7 +23,7 @@ function AppShell() {
           <Header />
           <Navbar />
           <main className="flex-grow">
-            {loading ? (
+            {loading && !isAdminRoute ? (
               <div className="min-h-[60vh] bg-white" aria-label="Cargando contenido" />
             ) : (
               <AppRoutes />

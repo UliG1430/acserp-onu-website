@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { isSupabaseConfigured } from "../lib/supabaseClient";
 import { contentService, isAdminDemoEnabled } from "../services/contentService";
 import { useSiteContent } from "../context/SiteContentContext";
@@ -46,6 +47,7 @@ const Admin = () => {
   const [newsForm, setNewsForm] = useState(createEmptyNewsForm);
   const [editingNewsId, setEditingNewsId] = useState(null);
   const [status, setStatus] = useState("");
+  const [resetSending, setResetSending] = useState(false);
   const [uploadingAsset, setUploadingAsset] = useState("");
   const [colorModes, setColorModes] = useState({});
   const [collapsedOrgans, setCollapsedOrgans] = useState({});
@@ -119,6 +121,25 @@ const Admin = () => {
       setStatus(isSupabaseConfigured ? "Sesión iniciada." : "Modo demo local activo.");
     } catch (error) {
       setStatus(error.message || "No se pudo iniciar sesión.");
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const email = loginForm.email.trim();
+    if (!email) {
+      setStatus("Ingresá tu correo para solicitar la recuperación.");
+      return;
+    }
+
+    setResetSending(true);
+    setStatus("");
+    try {
+      await contentService.requestPasswordReset(email);
+    } catch {
+      // Keep the response indistinguishable to avoid exposing registered emails.
+    } finally {
+      setResetSending(false);
+      setStatus("Si el correo corresponde a una cuenta, recibirás un enlace para cambiar la contraseña.");
     }
   };
 
@@ -843,6 +864,8 @@ const Admin = () => {
           <form onSubmit={handleLogin} className="space-y-4">
             <input
               type="email"
+              name="email"
+              autoComplete="username"
               value={loginForm.email}
               onChange={(event) => setLoginForm({ ...loginForm, email: event.target.value })}
               className="w-full rounded-md border border-gray-300 px-3 py-2"
@@ -851,6 +874,8 @@ const Admin = () => {
             />
             <input
               type="password"
+              name="password"
+              autoComplete="current-password"
               value={loginForm.password}
               onChange={(event) => setLoginForm({ ...loginForm, password: event.target.value })}
               className="w-full rounded-md border border-gray-300 px-3 py-2"
@@ -858,11 +883,22 @@ const Admin = () => {
               required={isSupabaseConfigured}
               disabled={!isSupabaseConfigured && !isAdminDemoEnabled}
             />
+            {isSupabaseConfigured && (
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={resetSending}
+                className="text-sm font-semibold text-blue-800 underline-offset-4 hover:underline disabled:cursor-wait disabled:opacity-60"
+              >
+                {resetSending ? "Enviando enlace..." : "Olvidé mi contraseña"}
+              </button>
+            )}
             <button disabled={!isSupabaseConfigured && !isAdminDemoEnabled} className="w-full rounded-md bg-blue-950 px-4 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50">
               Entrar
             </button>
           </form>
-          {status && <p className="mt-4 text-sm text-blue-900">{status}</p>}
+          {status && <p className="mt-4 text-sm text-blue-900" role="status" aria-live="polite">{status}</p>}
+          <Link to="/" className="mt-5 inline-block text-sm text-gray-600 hover:text-blue-900">Volver al sitio</Link>
         </section>
       </main>
     );
