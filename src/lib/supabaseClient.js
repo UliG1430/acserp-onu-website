@@ -14,6 +14,7 @@ export const passwordRecoveryCallbackHasError = Boolean(
 );
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseKey);
+export const supabaseProjectOrigin = supabaseUrl ? new URL(supabaseUrl).origin : "";
 
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseKey)

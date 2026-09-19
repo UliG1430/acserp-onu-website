@@ -10,8 +10,8 @@ const settings = {
   speed: 1000,
   slidesToShow: 1,
   slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 5000,
+  autoplay: false,
+  lazyLoad: "ondemand",
 };
 
 const sectionStyles = [
@@ -70,7 +70,11 @@ const CarouselMedia = ({ section }) => {
 };
 
 const CarouselSection = ({ section, index }) => {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const { ref, inView } = useInView({
+    triggerOnce: false,
+    threshold: 0,
+    rootMargin: "240px 0px",
+  });
   const style = sectionStyles[index % sectionStyles.length];
   const isReversed = index % 2 === 1;
   const layout = isReversed ? "flex-col md:flex-row-reverse" : "flex-col md:flex-row";
@@ -79,7 +83,11 @@ const CarouselSection = ({ section, index }) => {
   return (
     <section ref={ref} className={`flex w-full items-center py-16 md:py-24 ${layout} ${style.background}`}>
       <div className={`w-full md:w-1/2 p-8 ${inView ? animation : "opacity-0"}`}>
-        <CarouselMedia section={section} />
+        {inView ? (
+          <CarouselMedia section={section} />
+        ) : (
+          <div className="h-[450px] w-full rounded-lg bg-white/40" aria-hidden="true" />
+        )}
       </div>
       <div className={`w-full md:w-1/2 p-8 text-center md:text-left ${inView ? animation : "opacity-0"}`}>
         <h2 className={`mb-4 text-4xl font-bold ${style.title}`}>{section.title}</h2>

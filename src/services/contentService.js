@@ -1,22 +1,26 @@
 import { defaultSiteContent } from "../data/siteContent";
-import { getCapturedPasswordRecoverySession, isSupabaseConfigured, supabase } from "../lib/supabaseClient";
+import { getCapturedPasswordRecoverySession, isSupabaseConfigured, supabase, supabaseProjectOrigin } from "../lib/supabaseClient";
 import { sanitizeRichHtml, validateSiteContentUrls } from "../utils/contentSecurity";
 import { collectAssetUrls, mergeSiteContent, toPublishedSiteContent } from "../utils/siteContent";
 import { buildPasswordResetRedirect } from "../utils/authSecurity";
+import { optimizeImageFile } from "../utils/imageOptimization";
 
 const LOCAL_DRAFT_KEY = "acserp_admin_content";
 const LOCAL_PUBLIC_KEY = "acserp_public_content";
 const LOCAL_REVISION_KEY = "acserp_admin_content_revision";
 const STORAGE_BUCKET = "site-assets";
-const MAX_ASSET_UPLOAD_SIZE = 15 * 1024 * 1024;
 const allowedImageTypes = new Map([
   ["image/png", "png"],
   ["image/jpeg", "jpg"],
   ["image/webp", "webp"],
   ["image/gif", "gif"],
   ["image/svg+xml", "svg"],
+  ["image/avif", "avif"],
+  ["image/heic", "heic"],
+  ["image/heif", "heif"],
 ]);
 const pendingUploads = new Map();
+const pendingRemovals = new Map();
 
 export const isAdminDemoEnabled = !isSupabaseConfigured
   && import.meta.env.DEV
@@ -75,15 +79,45 @@ const sanitizeSvg = async (file) => {
 };
 
 const validateAsset = async (file) => {
-  if (file.size > MAX_ASSET_UPLOAD_SIZE) throw new Error("El archivo supera el máximo permitido de 15 MB.");
-  if (!allowedImageTypes.has(file.type)) throw new Error("El formato debe ser PNG, JPG, WebP, GIF o SVG.");
+  const extension = file?.name?.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
+  const knownImageExtension = ["avif", "bmp", "gif", "heic", "heif", "jpeg", "jpg", "png", "svg", "webp"].includes(extension);
+  if (!file?.type?.startsWith("image/") && !knownImageExtension) throw new Error("Seleccioná un archivo de imagen.");
   return file.type === "image/svg+xml" ? sanitizeSvg(file) : file;
+};
+
+const getFileExtension = (file) => {
+  const knownExtension = allowedImageTypes.get(file.type);
+  if (knownExtension) return knownExtension;
+  const fileExtension = file.name.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
+  return fileExtension || "img";
 };
 
 const removeStoredPaths = async (paths) => {
   if (!isSupabaseConfigured || paths.length === 0) return;
   const { error } = await supabase.storage.from(STORAGE_BUCKET).remove(paths);
   if (error) throw error;
+};
+
+const getManagedStoragePath = (value) => {
+  if (typeof value !== "string") return "";
+  try {
+    const url = new URL(value);
+    if (url.origin !== supabaseProjectOrigin) return "";
+    const marker = `/storage/v1/object/public/${STORAGE_BUCKET}/`;
+    const markerIndex = url.pathname.indexOf(marker);
+    return markerIndex === -1 ? "" : decodeURIComponent(url.pathname.slice(markerIndex + marker.length));
+  } catch {
+    return "";
+  }
+};
+
+const replaceAssetUrls = (value, replacements) => {
+  if (typeof value === "string") return replacements.get(value) || value;
+  if (Array.isArray(value)) return value.map((item) => replaceAssetUrls(item, replacements));
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, replaceAssetUrls(item, replacements)]));
+  }
+  return value;
 };
 
 export const contentService = {
@@ -208,45 +242,97 @@ export const contentService = {
     return () => data.subscription.unsubscribe();
   },
 
-  async uploadAsset(originalFile, folder = "uploads") {
-    const file = await validateAsset(originalFile);
+  async uploadAsset(originalFile, folder = "uploads", { profile = "content" } = {}) {
+    const validatedFile = await validateAsset(originalFile);
+    const optimization = await optimizeImageFile(validatedFile, profile);
+    const file = optimization.file;
     if (!isSupabaseConfigured) {
       if (!isAdminDemoEnabled) throw new Error("Los uploads locales están deshabilitados.");
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
+        reader.onload = () => resolve({ publicUrl: reader.result, optimization });
         reader.onerror = () => reject(new Error("No se pudo leer el archivo."));
         reader.readAsDataURL(file);
       });
     }
 
-    const extension = allowedImageTypes.get(file.type);
+    const extension = getFileExtension(file);
     const safeName = file.name.replace(/\.[^/.]+$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48) || "asset";
     const uniqueId = crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const path = `${sanitizeStorageFolder(folder)}/${uniqueId}-${safeName}.${extension}`;
+    const sanitizedFolder = sanitizeStorageFolder(folder);
+    const optimizedFolder = sanitizedFolder.startsWith("optimized/") ? sanitizedFolder : `optimized/${sanitizedFolder}`;
+    const path = `${optimizedFolder}/${uniqueId}-${safeName}.${extension}`;
 
     const { error } = await supabase.storage.from(STORAGE_BUCKET).upload(path, file, {
       cacheControl: "31536000",
       upsert: false,
-      contentType: file.type,
+      contentType: file.type || undefined,
     });
     if (error) throw error;
 
     const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(path);
     pendingUploads.set(data.publicUrl, path);
-    return data.publicUrl;
+    return { publicUrl: data.publicUrl, optimization };
+  },
+
+  async optimizeExistingAssets(content, onProgress = () => {}) {
+    if (!isSupabaseConfigured) throw new Error("La optimización de archivos publicados requiere Supabase.");
+
+    const urls = [...collectAssetUrls(content)].filter((url) => {
+      const path = getManagedStoragePath(url);
+      return path && !path.startsWith("optimized/");
+    });
+    const replacements = new Map();
+    let originalBytes = 0;
+    let outputBytes = 0;
+
+    try {
+      for (let index = 0; index < urls.length; index += 1) {
+        const url = urls[index];
+        const path = getManagedStoragePath(url);
+        onProgress({ current: index + 1, total: urls.length, path });
+
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error(`No se pudo descargar ${path} para optimizarlo.`);
+        const blob = await response.blob();
+        const fileName = path.split("/").pop() || `imagen-${index + 1}`;
+        const file = new File([blob], fileName, { type: blob.type || "image/jpeg" });
+        const { publicUrl, optimization } = await this.uploadAsset(file, "optimized/migrated", { profile: "content" });
+        replacements.set(url, publicUrl);
+        pendingRemovals.set(url, path);
+        originalBytes += optimization.originalSize;
+        outputBytes += optimization.outputSize;
+      }
+    } catch (error) {
+      const uploadedUrls = [...replacements.values()];
+      const uploadedPaths = uploadedUrls.map((url) => pendingUploads.get(url)).filter(Boolean);
+      await removeStoredPaths(uploadedPaths).catch(() => {});
+      uploadedUrls.forEach((url) => pendingUploads.delete(url));
+      replacements.forEach((_, originalUrl) => pendingRemovals.delete(originalUrl));
+      throw error;
+    }
+
+    return {
+      content: replaceAssetUrls(content, replacements),
+      migrated: replacements.size,
+      originalBytes,
+      outputBytes,
+    };
   },
 
   async commitPendingAssets(content) {
     const referencedUrls = collectAssetUrls(content);
     const orphanPaths = [...pendingUploads].filter(([url]) => !referencedUrls.has(url)).map(([, path]) => path);
-    await removeStoredPaths(orphanPaths);
+    const replacedPaths = [...pendingRemovals].filter(([url]) => !referencedUrls.has(url)).map(([, path]) => path);
+    await removeStoredPaths([...new Set([...orphanPaths, ...replacedPaths])]);
     pendingUploads.clear();
+    pendingRemovals.clear();
   },
 
   async discardPendingAssets() {
     const paths = [...pendingUploads.values()];
     await removeStoredPaths(paths);
     pendingUploads.clear();
+    pendingRemovals.clear();
   },
 };

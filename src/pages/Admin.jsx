@@ -6,14 +6,13 @@ import { useSiteContent } from "../context/SiteContentContext";
 import newsData from "../assets/noticias/newsData";
 import { getNewsDateInputValue, mergeManagedNews } from "../utils/newsContent";
 import FileUploadControl from "../components/admin/FileUploadControl";
+import { formatOptimizationSummary } from "../utils/imageOptimization";
 import {
-  MAX_ASSET_UPLOAD_SIZE,
   createEmptyNewsForm,
   extractImagePalette,
   extractYouTubeId,
   formatAdminDate,
   formatAssetName,
-  formatFileSize,
   getVerticalDropIndex,
   hexToRgb,
   normalizeHex,
@@ -49,6 +48,7 @@ const Admin = () => {
   const [status, setStatus] = useState("");
   const [resetSending, setResetSending] = useState(false);
   const [uploadingAsset, setUploadingAsset] = useState("");
+  const [optimizingExisting, setOptimizingExisting] = useState(false);
   const [colorModes, setColorModes] = useState({});
   const [collapsedOrgans, setCollapsedOrgans] = useState({});
   const [isModelHeaderCollapsed, setIsModelHeaderCollapsed] = useState(false);
@@ -181,6 +181,32 @@ const Admin = () => {
     setStatus("Cambios no guardados descartados.");
   };
 
+  const handleOptimizeExistingAssets = async () => {
+    const confirmed = window.confirm(
+      "Se crearán copias optimizadas y se actualizará el borrador. Nada se publica ni se elimina durante la conversión; al guardar correctamente, se reemplazarán las referencias y se retirarán los originales reemplazados. ¿Continuar?"
+    );
+    if (!confirmed) return;
+
+    setOptimizingExisting(true);
+    setStatus("Preparando la optimización de imágenes publicadas...");
+    try {
+      const result = await contentService.optimizeExistingAssets(draft, ({ current, total, path }) => {
+        setStatus(`Optimizando imagen ${current} de ${total}: ${path.split("/").pop()}`);
+      });
+      setDraft(result.content);
+      const savedMegabytes = Math.max(0, result.originalBytes - result.outputBytes) / 1024 / 1024;
+      setStatus(
+        result.migrated > 0
+          ? `${result.migrated} imágenes preparadas; se redujeron aproximadamente ${savedMegabytes.toFixed(1)} MB. Revisá y guardá los cambios para publicarlas.`
+          : "No hay imágenes pendientes de optimización."
+      );
+    } catch (error) {
+      setStatus(error.message || "No se pudieron optimizar las imágenes publicadas.");
+    } finally {
+      setOptimizingExisting(false);
+    }
+  };
+
   const handleLogoFile = async (event, organIndex, field) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -188,7 +214,11 @@ const Admin = () => {
     setUploadingAsset(`${field}-${organIndex}`);
     setStatus("Subiendo imagen...");
     try {
-      const publicUrl = await contentService.uploadAsset(file, `organs/${draft.organs[organIndex]?.id || "organ"}`);
+      const { publicUrl, optimization } = await contentService.uploadAsset(
+        file,
+        `organs/${draft.organs[organIndex]?.id || "organ"}`,
+        { profile: "logo" }
+      );
       const palette = field === "logoUrl" ? await extractImagePalette(file) : [];
       updateDraft((current) => ({
         ...current,
@@ -203,7 +233,7 @@ const Admin = () => {
             : organ
         ),
       }));
-      setStatus("Imagen subida. Guardá los cambios para publicarla.");
+      setStatus(`Imagen ${formatOptimizationSummary(optimization)}. Guardá los cambios para publicarla.`);
     } catch (error) {
       setStatus(error.message || "No se pudo subir la imagen.");
     } finally {
@@ -219,9 +249,11 @@ const Admin = () => {
     setUploadingAsset(`news-${field}`);
     setStatus("Subiendo imagen de noticia...");
     try {
-      const publicUrl = await contentService.uploadAsset(file, "news");
+      const { publicUrl, optimization } = await contentService.uploadAsset(file, "news", {
+        profile: field === "img" ? "thumbnail" : "content",
+      });
       setNewsForm((current) => ({ ...current, [field]: publicUrl }));
-      setStatus("Imagen de noticia subida.");
+      setStatus(`Imagen de noticia ${formatOptimizationSummary(optimization)}.`);
     } catch (error) {
       setStatus(error.message || "No se pudo subir la imagen de noticia.");
     } finally {
@@ -237,14 +269,14 @@ const Admin = () => {
     setUploadingAsset(`news-additional-${imageIndex}`);
     setStatus("Subiendo imagen adicional...");
     try {
-      const publicUrl = await contentService.uploadAsset(file, "news/additional");
+      const { publicUrl, optimization } = await contentService.uploadAsset(file, "news/additional", { profile: "content" });
       setNewsForm((current) => ({
         ...current,
         additionalImages: current.additionalImages.map((image, index) =>
           index === imageIndex ? { ...image, url: publicUrl } : image
         ),
       }));
-      setStatus("Imagen adicional subida.");
+      setStatus(`Imagen adicional ${formatOptimizationSummary(optimization)}.`);
     } catch (error) {
       setStatus(error.message || "No se pudo subir la imagen adicional.");
     } finally {
@@ -256,26 +288,29 @@ const Admin = () => {
   const handleCarouselImageFiles = async (event, sectionIndex) => {
     const files = Array.from(event.target.files || []);
     if (files.length === 0) return;
-    const oversizedFiles = files.filter((file) => file.size > MAX_ASSET_UPLOAD_SIZE);
-
-    if (oversizedFiles.length > 0) {
-      setStatus(`No se subieron fotos. El máximo por archivo es ${formatFileSize(MAX_ASSET_UPLOAD_SIZE)}: ${oversizedFiles.map((file) => file.name).join(", ")}`);
-      event.target.value = "";
-      return;
-    }
 
     setUploadingAsset(`carousel-images-${sectionIndex}`);
-    setStatus("Subiendo fotos del carousel...");
+    setStatus("Optimizando y subiendo fotos del carousel...");
     try {
       const section = draft.photos.carouselSections[sectionIndex];
-      const uploadedImages = await Promise.all(files.map(async (file) => {
-        const publicUrl = await contentService.uploadAsset(file, `photos/carousel/${section?.id || "section"}`);
-        return {
+      const uploadedImages = [];
+      let originalBytes = 0;
+      let outputBytes = 0;
+      for (const [fileIndex, file] of files.entries()) {
+        setStatus(`Optimizando y subiendo foto ${fileIndex + 1} de ${files.length}...`);
+        const { publicUrl, optimization } = await contentService.uploadAsset(
+          file,
+          `photos/carousel/${section?.id || "section"}`,
+          { profile: "content" }
+        );
+        originalBytes += optimization.originalSize;
+        outputBytes += optimization.outputSize;
+        uploadedImages.push({
           src: publicUrl,
           alt: file.name.replace(/\.[^/.]+$/, ""),
           fileName: file.name,
-        };
-      }));
+        });
+      }
 
       updateDraft((current) => ({
         ...current,
@@ -291,7 +326,8 @@ const Admin = () => {
           ),
         },
       }));
-      setStatus("Fotos subidas. Guardá los cambios para publicarlas.");
+      const percentage = originalBytes > 0 ? Math.max(0, Math.round((1 - outputBytes / originalBytes) * 100)) : 0;
+      setStatus(`Fotos preparadas${percentage > 0 ? ` (${percentage}% menos peso)` : ""}. Guardá los cambios para publicarlas.`);
     } catch (error) {
       setStatus(error.message || "No se pudieron subir las fotos.");
     } finally {
@@ -919,10 +955,20 @@ const Admin = () => {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button onClick={handleSave} className="rounded-md bg-blue-950 px-4 py-2 font-semibold text-white">
+            {isSupabaseConfigured && (
+              <button
+                type="button"
+                onClick={handleOptimizeExistingAssets}
+                disabled={optimizingExisting || Boolean(uploadingAsset)}
+                className="rounded-md border border-blue-300 bg-blue-50 px-4 py-2 font-semibold text-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {optimizingExisting ? "Optimizando imágenes..." : "Optimizar imágenes existentes"}
+              </button>
+            )}
+            <button disabled={optimizingExisting} onClick={handleSave} className="rounded-md bg-blue-950 px-4 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50">
               Guardar cambios
             </button>
-            <button onClick={handleDiscardChanges} className="rounded-md border border-gray-300 px-4 py-2 text-gray-700">
+            <button disabled={optimizingExisting} onClick={handleDiscardChanges} className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 disabled:cursor-not-allowed disabled:opacity-50">
               Descartar cambios
             </button>
             <button onClick={handleLogout} className="rounded-md border border-gray-300 px-4 py-2 text-gray-700">
@@ -1286,7 +1332,7 @@ const Admin = () => {
                                   onChange={(event) => handleCarouselImageFiles(event, index)}
                                   buttonText="Agregar fotos"
                                   currentText={`${(section.images || []).length} foto${(section.images || []).length === 1 ? "" : "s"} cargada${(section.images || []).length === 1 ? "" : "s"}`}
-                                  helpText={`Subí una selección de fotos. La página las mostrará de a una, alternando automáticamente. Máximo ${formatFileSize(MAX_ASSET_UPLOAD_SIZE)} por foto.`}
+                                  helpText="Elegí las fotos en su tamaño original. Se optimizan automáticamente antes de subirlas."
                                   isUploading={uploadingAsset === `carousel-images-${index}`}
                                 />
                               </label>

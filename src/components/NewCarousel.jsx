@@ -65,6 +65,8 @@ const NewsCarousel = () => {
                     <LazyImage
                       src={news.carouselImg || news.img}
                       alt={news.title}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      fetchPriority={index === 0 ? "high" : "auto"}
                       className={`w-full ${isMobile ? "h-[320px]" : "h-[600px]"} object-cover ${safeMode ? "" : "animate-zoom"}`}
                     />
                   </div>

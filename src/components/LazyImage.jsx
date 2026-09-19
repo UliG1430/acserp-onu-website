@@ -10,6 +10,7 @@ const LazyImage = ({ src, alt, className = "", ...props }) => {
         src={src}
         alt={alt}
         loading="lazy"
+        decoding="async"
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         className={`transition-all duration-700 ease-out ${isLoaded ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-105 blur-sm"} ${className}`}
