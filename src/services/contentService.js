@@ -4,6 +4,7 @@ import { sanitizeRichHtml, validateSiteContentUrls } from "../utils/contentSecur
 import { collectAssetUrls, mergeSiteContent, toPublishedSiteContent } from "../utils/siteContent";
 import { buildPasswordResetRedirect } from "../utils/authSecurity";
 import { optimizeImageFile } from "../utils/imageOptimization";
+import { mapAssetDelivery } from "../utils/assetDelivery";
 
 const LOCAL_DRAFT_KEY = "acserp_admin_content";
 const LOCAL_PUBLIC_KEY = "acserp_public_content";
@@ -129,7 +130,8 @@ export const contentService = {
 
     const { data, error } = await supabase.from("site_content").select("content").eq("id", "main").single();
     if (error && error.code !== "PGRST116") throw error;
-    return mergeSiteContent(defaultSiteContent, data?.content || {});
+    const content = mergeSiteContent(defaultSiteContent, data?.content || {});
+    return import.meta.env.PROD ? mapAssetDelivery(content, supabaseProjectOrigin) : content;
   },
 
   async getAdminContent() {
