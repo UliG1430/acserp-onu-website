@@ -7,6 +7,7 @@ const SEOHelmet = ({
   url = "https://acserp.org.ar/",
   image = "https://acserp.org.ar/og-image.png",
 }) => {
+  const socialImage = image.startsWith("/media/") ? `https://acserp.org.ar${image}` : image;
   const keywords =
     "modelo ONU, La Plata, simulacro educativo, Naciones Unidas, estudiantes, diplomacia, debate, VI Edicion, acserp, ACSERP, ONU, onu";
 
@@ -23,13 +24,13 @@ const SEOHelmet = ({
       <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={image} />
+      <meta property="og:image" content={socialImage} />
 
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={socialImage} />
 
       {/* Datos estructurados de la organizacion */}
       <script type="application/ld+json">
