@@ -77,6 +77,9 @@ const NewsDetail = () => {
         <img
           src={news.headerImg || news.img}
           alt={news.title}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-[600px] object-cover rounded-lg shadow-lg"
         />
         {news.headerImgDescription && (
@@ -116,6 +119,8 @@ const NewsDetail = () => {
                     <img
                       src={image.url}
                       alt={`Imagen ${index + 1}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
                     />
                     {image.description && (
@@ -156,6 +161,8 @@ const NewsDetail = () => {
                       <img
                         src={image.url}
                         alt={`Imagen ${index + 1}`}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-[600px] object-cover rounded-xl shadow-lg transition-transform duration-500 hover:scale-105"
                       />
                       {image.description && (
@@ -211,6 +218,8 @@ const NewsDetail = () => {
                 <img
                   src={item.img}
                   alt={item.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-40 object-cover"
                 />
                 <div className="p-4">

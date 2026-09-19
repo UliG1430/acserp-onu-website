@@ -1,8 +1,6 @@
 import parseDate from "./parseDate";
 import { normalizeYouTubeId } from "./contentSecurity";
 
-export const MAX_ASSET_UPLOAD_SIZE = 15 * 1024 * 1024;
-export const formatFileSize = (bytes) => `${Math.round((bytes / 1024 / 1024) * 10) / 10} MB`;
 export const splitLines = (value) => value.split("\n").map((item) => item.trim()).filter(Boolean);
 
 export const reorderItems = (items, fromIndex, toIndex) => {
